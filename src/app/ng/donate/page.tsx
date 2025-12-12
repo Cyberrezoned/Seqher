@@ -50,13 +50,14 @@ export default function DonatePage() {
     setLoading(true);
     console.log(values);
     // This is where you would integrate with a payment processor.
-    // For now, we'll just simulate a delay and show a message.
+    // For now, we'll just simulate a delay and show a success message.
     setTimeout(() => {
         toast({
-            title: "Coming Soon!",
-            description: "Live payment processing is not yet enabled. Thank you for your support!",
+            title: "Thank You For Your Support!",
+            description: `Your generous donation of $${values.amount} is greatly appreciated.`,
         });
         setLoading(false);
+        form.reset();
     }, 1500);
   }
 
