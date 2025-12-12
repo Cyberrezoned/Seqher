@@ -20,6 +20,13 @@ export type BlogPost = {
   imageId: string;
 };
 
+export type Announcement = {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string; // ISO string
+};
+
 export type UserProfile = {
   uid: string;
   email: string | null;

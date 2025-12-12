@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Newspaper, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Settings, LogOut, Megaphone } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -39,6 +39,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const adminNavItems = [
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/blog', label: 'Blog Management', icon: Newspaper },
+    { href: '/admin/announcements', label: 'Announcements', icon: Megaphone },
     { href: '/admin/settings', label: 'Settings', icon: Settings },
   ]
 

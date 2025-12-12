@@ -2,16 +2,17 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Handshake, Target, Leaf, HeartHandshake, ArrowRight } from 'lucide-react';
+import { Handshake, Target, Leaf, HeartHandshake, ArrowRight, Megaphone } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, limit, query } from 'firebase/firestore';
-import type { Program } from '@/lib/types';
+import { collection, getDocs, limit, query, orderBy } from 'firebase/firestore';
+import type { Program, Announcement } from '@/lib/types';
 import { useEffect, useState } from 'react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const heroImage = PlaceHolderImages.find(p => p.id === 'hero-community');
 const programImage1 = PlaceHolderImages.find(p => p.id === 'program-education');
@@ -23,6 +24,20 @@ async function getFeaturedPrograms(): Promise<Program[]> {
   const programList = programSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Program));
   return programList;
 }
+
+async function getAnnouncements(): Promise<Announcement[]> {
+  const announcementsQuery = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(1));
+  const snapshot = await getDocs(announcementsQuery);
+  return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return { 
+          id: doc.id, 
+          ...data,
+          createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
+      } as Announcement
+  });
+}
+
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -42,9 +57,11 @@ const cardVariants = {
 
 export default function Home() {
   const [featuredPrograms, setFeaturedPrograms] = useState<Program[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
   useEffect(() => {
     getFeaturedPrograms().then(setFeaturedPrograms);
+    getAnnouncements().then(setAnnouncements);
   }, []);
 
   const impactStats = [
@@ -95,6 +112,23 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
+
+      {announcements.length > 0 && (
+        <section className="py-8 bg-accent/10">
+          <div className="container mx-auto px-4">
+              {announcements.map(announcement => (
+                <Alert key={announcement.id}>
+                  <Megaphone className="h-4 w-4" />
+                  <AlertTitle>{announcement.title}</AlertTitle>
+                  <AlertDescription>
+                    {announcement.content}
+                  </AlertDescription>
+                </Alert>
+              ))}
+          </div>
+        </section>
+      )}
+
 
       {/* About Us Section */}
       <motion.section 
