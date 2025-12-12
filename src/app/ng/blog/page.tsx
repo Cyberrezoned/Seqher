@@ -10,8 +10,8 @@ import type { BlogPost } from '@/lib/types';
 
 
 export const metadata = {
-  title: 'Blog | SEQHER',
-  description: 'Insights, stories, and updates from the SEQHER team and community.',
+  title: 'Blog | SEQHER Nigeria',
+  description: 'Insights, stories, and updates from the SEQHER team and community in Nigeria.',
 };
 
 const blogHeroImage = PlaceHolderImages.find(p => p.id === 'blog-hero');
@@ -46,7 +46,7 @@ export default async function BlogPage() {
         )}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white p-4">
-          <h1 className="font-headline text-4xl md:text-5xl font-bold">SEQHER Blog</h1>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold">SEQHER Blog - Nigeria</h1>
           <p className="mt-2 max-w-2xl text-lg text-primary-foreground">
             Stories of impact, community voices, and organizational updates.
           </p>
@@ -61,7 +61,7 @@ export default async function BlogPage() {
               const authorAvatar = PlaceHolderImages.find(p => p.id.startsWith('avatar-'));
 
               return (
-                <Link key={post.id} href={`/blog/${post.slug}`} className="group">
+                <Link key={post.id} href={`/ng/blog/${post.slug}`} className="group">
                   <Card className="flex flex-col h-full overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     <CardHeader className="p-0">
                       {postImage && (

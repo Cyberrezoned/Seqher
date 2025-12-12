@@ -17,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { createCheckoutSession } from './actions';
+import { createCheckoutSession } from '@/app/donate/actions';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useToast } from '@/hooks/use-toast';
 
@@ -76,7 +76,7 @@ export default function DonatePage() {
         )}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white p-4">
-          <h1 className="font-headline text-4xl md:text-5xl font-bold">Support Our Mission</h1>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold">Support Our Mission in Nigeria</h1>
           <p className="mt-2 max-w-2xl text-lg text-primary-foreground">
             Your generosity fuels our work and creates lasting change.
           </p>

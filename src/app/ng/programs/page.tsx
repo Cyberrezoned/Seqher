@@ -11,8 +11,8 @@ import type { Program } from '@/lib/types';
 
 
 export const metadata = {
-  title: 'Our Programs | SEQHER',
-  description: 'Explore the various programs and initiatives by SEQHER aimed at fostering sustainable development.',
+  title: 'Our Programs | SEQHER Nigeria',
+  description: 'Explore the various programs and initiatives by SEQHER in Nigeria.',
 };
 
 const programsHeroImage = PlaceHolderImages.find(p => p.id === 'programs-hero');
@@ -40,7 +40,7 @@ export default async function ProgramsPage() {
         )}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white p-4">
-          <h1 className="font-headline text-4xl md:text-5xl font-bold">Our Programs</h1>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold">Our Programs in Nigeria</h1>
           <p className="mt-2 max-w-2xl text-lg text-primary-foreground">
             Driving change through targeted, sustainable initiatives.
           </p>
@@ -78,7 +78,7 @@ export default async function ProgramsPage() {
                     </CardContent>
                     <div className="pt-4 mt-auto">
                       <Button asChild variant="link" className="p-0 text-primary">
-                          <Link href={`/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                          <Link href={`/ng/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
                       </Button>
                     </div>
                   </div>

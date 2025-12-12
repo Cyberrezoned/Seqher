@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="max-w-3xl mx-auto">
         <article className="space-y-8">
             <div className="space-y-4 text-center">
-                <Link href="/blog" className="text-sm text-primary hover:underline">
+                <Link href="/ng/blog" className="text-sm text-primary hover:underline">
                     &larr; Back to Blog
                 </Link>
                 <h1 className="font-headline text-3xl md:text-5xl font-extrabold tracking-tight">{post.title}</h1>
@@ -103,7 +103,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="text-center">
                 <h3 className="font-headline text-xl font-bold mb-2">Join the Conversation</h3>
                 <p className="text-muted-foreground mb-4">Support our mission to create a better world.</p>
-                <Link href="/donate" className="inline-flex items-center justify-center rounded-md bg-accent px-6 py-3 text-lg font-medium text-accent-foreground shadow-sm transition-colors hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2">
+                <Link href="/ng/donate" className="inline-flex items-center justify-center rounded-md bg-accent px-6 py-3 text-lg font-medium text-accent-foreground shadow-sm transition-colors hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2">
                     Donate Now
                 </Link>
             </div>

@@ -21,9 +21,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 
 const navLinks = [
-  { href: '/programs', label: 'Programs' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/appointment', label: 'Book Appointment' },
+  { href: '/ng/programs', label: 'Programs' },
+  { href: '/ng/blog', label: 'Blog' },
+  { href: '/ng/appointment', label: 'Book Appointment' },
 ];
 
 export default function Header() {
@@ -68,7 +68,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-          <Logo className="h-8 w-8 text-primary" />
+          <Logo className="h-8 w-8" />
           <span className="font-bold text-xl font-headline tracking-tight">SEQHER</span>
         </Link>
         
@@ -90,7 +90,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2">
                  <Button asChild variant="ghost" className="text-accent-foreground hover:bg-accent/10">
-                    <Link href="/donate">Donate</Link>
+                    <Link href="/ng/donate">Donate</Link>
                 </Button>
                 {user && <UserMenu />}
             </div>
@@ -123,7 +123,7 @@ export default function Header() {
                 ))}
                 <div className="border-t pt-4 flex flex-col gap-4">
                     <Button asChild variant="outline">
-                        <Link href="/donate" onClick={() => setIsMenuOpen(false)}>Donate</Link>
+                        <Link href="/ng/donate" onClick={() => setIsMenuOpen(false)}>Donate</Link>
                     </Button>
                      {user && (
                          <>

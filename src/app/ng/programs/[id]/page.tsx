@@ -54,7 +54,7 @@ export default async function ProgramDetailPage({ params }: Props) {
     <div className="container mx-auto px-4 py-12 md:py-20">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <Link href="/programs" className="text-sm text-primary hover:underline">
+          <Link href="/ng/programs" className="text-sm text-primary hover:underline">
             &larr; Back to Programs
           </Link>
         </div>
@@ -92,10 +92,10 @@ export default async function ProgramDetailPage({ params }: Props) {
               <p className="mb-6 text-muted-foreground">Your support can make a real difference in the success of this program and others like it.</p>
               <div className="flex gap-4">
                 <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href="/donate">Donate Now</Link>
+                    <Link href="/ng/donate">Donate Now</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                    <Link href="/appointment">Volunteer</Link>
+                    <Link href="/ng/appointment">Volunteer</Link>
                 </Button>
               </div>
           </div>
