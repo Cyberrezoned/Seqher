@@ -19,16 +19,24 @@ const db = getFirestore(app);
 const functions = getFunctions(app);
 
 // Connect to emulators in development
+// IMPORTANT: This check MUST be outside of a function and must
+// be consistent on both server and client, which process.env.NODE_ENV is.
 if (process.env.NODE_ENV === 'development') {
-    // Point to the emulators running on localhost.
-    // Ensure you have the emulators running with `firebase emulators:start`
-    try {
-        connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-        connectFirestoreEmulator(db, '127.0.0.1', 8080);
-        connectFunctionsEmulator(functions, '127.0.0.1', 5001);
-    } catch (error) {
-        console.error("Error connecting to Firebase emulators. Is `firebase emulators:start` running?", error);
+    // Check if emulators are already running to avoid re-connecting
+    // @ts-ignore
+    if (!globalThis.EMULATORS_STARTED) {
+        // @ts-ignore
+        globalThis.EMULATORS_STARTED = true;
+        try {
+            connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+            connectFirestoreEmulator(db, '127.0.0.1', 8080);
+            connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+            console.log("Connected to Firebase emulators.");
+        } catch (error) {
+            console.error("Error connecting to Firebase emulators. Is `firebase emulators:start` running?", error);
+        }
     }
 }
+
 
 export { app, auth, db, functions };
