@@ -53,21 +53,23 @@ export default async function ProgramsPage() {
             {programs.map((program) => {
               const programImage = PlaceHolderImages.find(p => p.id === program.imageId);
               return (
-                <Card key={program.id} className="flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <Card key={program.id} className="group flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300">
                    <CardHeader className="p-0">
                     {programImage && (
-                      <Image
-                        src={programImage.imageUrl}
-                        alt={program.title}
-                        width={400}
-                        height={250}
-                        className="w-full h-48 object-cover"
-                        data-ai-hint={programImage.imageHint}
-                      />
+                      <div className="overflow-hidden">
+                        <Image
+                          src={programImage.imageUrl}
+                          alt={program.title}
+                          width={400}
+                          height={250}
+                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                          data-ai-hint={programImage.imageHint}
+                        />
+                      </div>
                     )}
                   </CardHeader>
                   <div className="p-6 flex flex-col flex-grow">
-                    <CardTitle className="font-headline text-xl mb-2">{program.title}</CardTitle>
+                    <CardTitle className="font-headline text-xl mb-2 group-hover:text-primary transition-colors">{program.title}</CardTitle>
                     <div className="flex flex-wrap gap-2 mb-4">
                         {program.sdgGoals.map(goal => (
                             <Badge key={goal} variant="secondary">SDG {goal}</Badge>
@@ -78,7 +80,7 @@ export default async function ProgramsPage() {
                     </CardContent>
                     <div className="pt-4 mt-auto">
                       <Button asChild variant="link" className="p-0 text-primary">
-                          <Link href={`/ng/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                          <Link href={`/ng/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
                       </Button>
                     </div>
                   </div>

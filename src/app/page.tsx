@@ -59,37 +59,59 @@ export default function GlobalLandingPage() {
         <div className="absolute inset-0 bg-black/50" />
         <motion.div
           className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4"
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight">
+          <motion.h1 
+            className="font-headline text-4xl md:text-6xl font-bold tracking-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.7 }}
+            >
             Empowering Communities, Sustaining Futures
-          </h1>
-          <p className="mt-4 max-w-3xl text-lg md:text-xl text-primary-foreground">
+          </motion.h1>
+          <motion.p 
+            className="mt-4 max-w-3xl text-lg md:text-xl text-primary-foreground"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.7 }}
+            >
             SEQHER is a global organization dedicated to fostering sustainable
             development and creating lasting change in alignment with the UN's
             SDGs.
-          </p>
+          </motion.p>
         </motion.div>
       </section>
 
       {/* Portal Selection */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <h2 className="font-headline text-3xl md:text-4xl font-bold text-center mb-4">
+          <motion.h2 
+            className="font-headline text-3xl md:text-4xl font-bold text-center mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             Choose Your Region
-          </h2>
-          <p className="mt-2 mb-10 max-w-2xl mx-auto text-center text-muted-foreground">
+          </motion.h2>
+          <motion.p 
+            className="mt-2 mb-10 max-w-2xl mx-auto text-center text-muted-foreground"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            >
             Access resources, programs, and events tailored to your location.
-          </p>
+          </motion.p>
 
           {suggestedRegion && (
             <motion.div
               className="mb-12"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
               <Card className="max-w-md mx-auto border-primary/50 shadow-lg bg-secondary">
                 <CardHeader className="flex flex-row items-center gap-4 pb-4">
@@ -113,7 +135,14 @@ export default function GlobalLandingPage() {
           )}
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
+            <motion.div 
+              whileHover={{ y: -5, scale: 1.02 }} 
+              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               <Link href="/ng" className="block group">
                 <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
                   <CardHeader>
@@ -138,7 +167,14 @@ export default function GlobalLandingPage() {
                 </Card>
               </Link>
             </motion.div>
-            <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
+            <motion.div 
+              whileHover={{ y: -5, scale: 1.02 }} 
+              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              >
               <Link href="/ca" className="block group">
                 <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
                   <CardHeader>

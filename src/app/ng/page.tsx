@@ -45,14 +45,16 @@ const sectionVariants = {
 };
 
 const cardVariants = {
-  rest: { scale: 1, boxShadow: '0px 10px 15px -3px rgba(0, 0, 0, 0.1)', rotateY: 0, rotateX: 0 },
-  hover: { 
-    scale: 1.05, 
-    boxShadow: '0px 20px 25px -5px rgba(0, 0, 0, 0.2)',
-    rotateY: -5,
-    rotateX: 5,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  },
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  }),
 };
 
 export default function NigeriaHomePage() {
@@ -92,13 +94,22 @@ export default function NigeriaHomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight">
+          <motion.h1 
+            className="font-headline text-4xl md:text-6xl font-bold tracking-tight"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.7 }}
+            >
             Welcome to SEQHER Nigeria
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground">
+          </motion.h1>
+          <motion.p 
+            className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.7 }}
+            >
             Driving localized impact and sustainable solutions across Nigeria.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          </motion.p>
+          <motion.div 
+            className="mt-8 flex flex-wrap justify-center gap-4"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.7 }}
+            >
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
                 <Link href="/ng/donate">Donate Now</Link>
@@ -109,12 +120,18 @@ export default function NigeriaHomePage() {
                 <Link href="/ng/programs">Our Programs</Link>
                 </Button>
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </section>
 
       {announcements.length > 0 && (
-        <section className="py-8 bg-accent/10">
+        <motion.section 
+          className="py-8 bg-accent/10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          variants={sectionVariants}
+          >
           <div className="container mx-auto px-4">
               {announcements.map(announcement => (
                 <Alert key={announcement.id}>
@@ -126,13 +143,13 @@ export default function NigeriaHomePage() {
                 </Alert>
               ))}
           </div>
-        </section>
+        </motion.section>
       )}
 
 
       {/* About Us Section */}
       <motion.section 
-        className="py-16 md:py-24 bg-background"
+        className="py-16 md:py-24 bg-background overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -154,11 +171,22 @@ export default function NigeriaHomePage() {
                 </Button>
               </motion.div>
             </div>
-            <div className="grid grid-cols-2 gap-4" style={{ perspective: '1000px' }}>
-              <motion.div initial="rest" whileHover="hover" animate="rest" variants={cardVariants} >
+            <div className="grid grid-cols-2 gap-4">
+               <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
                 {programImage1 && <Image src={programImage1.imageUrl} alt={programImage1.description} data-ai-hint={programImage1.imageHint} width={400} height={500} className="rounded-lg shadow-lg object-cover aspect-[4/5]"/>}
               </motion.div>
-              <motion.div initial="rest" whileHover="hover" animate="rest" variants={cardVariants} className="mt-8">
+              <motion.div
+                 initial={{ opacity: 0, x: 20 }}
+                 whileInView={{ opacity: 1, x: 0 }}
+                 transition={{ duration: 0.6, delay: 0.4 }}
+                 viewport={{ once: true }}
+                 className="mt-8"
+                >
                 {programImage2 && <Image src={programImage2.imageUrl} alt={programImage2.description} data-ai-hint={programImage2.imageHint} width={400} height={500} className="rounded-lg shadow-lg object-cover aspect-[4/5]"/>}
               </motion.div>
             </div>
@@ -184,9 +212,10 @@ export default function NigeriaHomePage() {
               <motion.div 
                 key={stat.id} 
                 className="flex flex-col items-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                custom={index}
+                initial="hidden"
+                whileInView="visible"
+                variants={cardVariants}
                 viewport={{ once: true }}
               >
                 {stat.icon}
@@ -211,19 +240,20 @@ export default function NigeriaHomePage() {
           <p className="mt-2 mb-12 max-w-3xl mx-auto text-center text-muted-foreground">
             Explore some of our key initiatives that are transforming communities and empowering individuals.
           </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" style={{ perspective: '1200px' }}>
-            {featuredPrograms.map((program) => {
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredPrograms.map((program, index) => {
               const programImage = PlaceHolderImages.find(p => p.id === program.imageId);
               return (
                 <motion.div
                   key={program.id}
-                  initial="rest"
-                  whileHover="hover"
-                  animate="rest"
+                  custom={index}
+                  initial="hidden"
+                  whileInView="visible"
                   variants={cardVariants}
+                  viewport={{ once: true }}
                   className="h-full"
                 >
-                  <Card className="flex flex-col h-full overflow-hidden transition-shadow duration-300">
+                  <Card className="group flex flex-col h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
                     <CardHeader className="p-0">
                       {programImage && (
                         <div className="overflow-hidden">
@@ -232,20 +262,20 @@ export default function NigeriaHomePage() {
                             alt={program.title}
                             width={400}
                             height={250}
-                            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                         </div>
                       )}
-                      <div className="p-6">
-                        <CardTitle className="font-headline text-xl">{program.title}</CardTitle>
-                      </div>
                     </CardHeader>
-                    <CardContent className="flex-grow">
-                      <p className="text-muted-foreground line-clamp-3">{program.summary}</p>
-                    </CardContent>
-                    <div className="p-6 pt-0">
+                    <div className="p-6 flex flex-col flex-grow">
+                        <CardTitle className="font-headline text-xl mb-2 group-hover:text-primary transition-colors">{program.title}</CardTitle>
+                        <CardContent className="p-0 flex-grow">
+                            <p className="text-muted-foreground line-clamp-3">{program.summary}</p>
+                        </CardContent>
+                    </div>
+                    <div className="p-6 pt-0 mt-auto">
                        <Button asChild variant="link" className="p-0 text-primary">
-                          <Link href={`/ng/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                          <Link href={`/ng/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
                       </Button>
                     </div>
                   </Card>
