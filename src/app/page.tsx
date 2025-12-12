@@ -120,7 +120,12 @@ export default function GlobalLandingPage() {
               <Link href="/ng">
                 <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all">
                   <CardHeader>
-                    <CardTitle className="text-2xl font-headline">
+                    <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className="h-6 w-9 rounded">
+                            <rect width="900" height="600" fill="#fff"/>
+                            <rect width="300" height="600" fill="#008751"/>
+                            <rect x="600" width="300" height="600" fill="#008751"/>
+                        </svg>
                       Nigeria Portal
                     </CardTitle>
                   </CardHeader>
@@ -140,7 +145,13 @@ export default function GlobalLandingPage() {
               <Link href="/ca">
                 <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all">
                   <CardHeader>
-                    <CardTitle className="text-2xl font-headline">
+                    <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" className="h-6 w-9 rounded">
+                        <rect width="1200" height="600" fill="#fff"/>
+                        <rect width="300" height="600" fill="#d52b1e"/>
+                        <rect x="900" width="300" height="600" fill="#d52b1e"/>
+                        <path fill="#d52b1e" d="M600 400.9l-52.5-30.3-13.3 58.7-41.9-41.9-30.3 52.5-41.9-41.9-58.7 13.3 13.3-58.7-52.5-30.3 52.5-30.3-13.3-58.7 58.7 13.3 41.9-41.9 30.3 52.5 41.9-41.9L547.5 370.6l52.5 30.3zm0-100.9v-52.5h-13.3v52.5l-58.7 58.7V250h-52.5v150h36.1l75-75 75 75h36.1V250h-52.5v50.2l-58.7-58.7z"/>
+                      </svg>
                       Canada Portal
                     </CardTitle>
                   </CardHeader>
