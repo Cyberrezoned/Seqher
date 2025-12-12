@@ -94,7 +94,7 @@ export default function Header() {
                 </Button>
                 {user ? <UserMenu /> : (
                     <Button asChild>
-                        <Link href="/login">Login</Link>
+                        <Link href="/admin">Admin Login</Link>
                     </Button>
                 )}
             </div>
@@ -140,7 +140,7 @@ export default function Header() {
                          </>
                      ) : (
                         <Button asChild>
-                            <Link href="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>
+                            <Link href="/admin" onClick={() => setIsMenuOpen(false)}>Admin Login</Link>
                         </Button>
                      )}
                 </div>

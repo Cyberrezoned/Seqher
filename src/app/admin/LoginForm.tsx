@@ -58,7 +58,7 @@ export default function LoginForm() {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, values.email, values.password);
         toast({ title: "Success", description: "Logged in successfully." });
-        router.push('/appointment');
+        router.refresh();
       } else {
         if (!values.name) {
           form.setError("name", { message: "Name is required for sign up."});
@@ -72,14 +72,14 @@ export default function LoginForm() {
         );
         await updateProfile(userCredential.user, { displayName: values.name });
         toast({ title: "Welcome!", description: "Account created successfully." });
-        router.push('/appointment');
+        router.push('/admin');
       }
     } catch (error: any) {
         console.error(error);
         const errorCode = error.code;
         let errorMessage = "An unknown error occurred.";
-        if (errorCode === 'auth/user-not-found') {
-            errorMessage = "No account found with this email. Please sign up.";
+        if (errorCode === 'auth/user-not-found' || errorCode === 'auth/invalid-credential') {
+            errorMessage = "No account found with this email or incorrect password. Please try again or sign up.";
         } else if (errorCode === 'auth/wrong-password') {
             errorMessage = "Incorrect password. Please try again.";
         } else if (errorCode === 'auth/email-already-in-use') {
@@ -98,11 +98,11 @@ export default function LoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{isLogin ? 'Welcome Back!' : 'Create an Account'}</CardTitle>
+        <CardTitle>{isLogin ? 'Admin Login' : 'Create Admin Account'}</CardTitle>
         <CardDescription>
           {isLogin
-            ? 'Log in to book appointments and manage your profile.'
-            : 'Sign up to get started with SEQHER.'}
+            ? 'Log in to manage the SEQHER website.'
+            : 'Sign up to become the first administrator.'}
         </CardDescription>
       </CardHeader>
       <CardContent>

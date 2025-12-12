@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import Logo from '@/components/icons/Logo';
 import { usePathname } from 'next/navigation';
+import LoginForm from './LoginForm';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -23,18 +24,41 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!loading && !isAdmin) {
-      router.push('/login');
+    if (!loading && !user) {
+      // Don't redirect, show login form
     }
-  }, [user, isAdmin, loading, router]);
+  }, [user, loading, router]);
 
-  if (loading || !isAdmin) {
+  if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p>Loading and verifying access...</p>
+        <p>Loading...</p>
       </div>
     );
   }
+
+  if (!user) {
+    return (
+        <div className="container mx-auto flex min-h-[70vh] items-center justify-center px-4 py-12">
+            <div className="w-full max-w-md">
+                <LoginForm />
+            </div>
+        </div>
+    )
+  }
+  
+  if (!isAdmin) {
+    return (
+         <div className="flex h-screen items-center justify-center text-center">
+            <div>
+                <h1 className="text-2xl font-bold">Access Denied</h1>
+                <p className="text-muted-foreground">You do not have permission to view this page.</p>
+                <Button onClick={signOut} className="mt-4">Logout</Button>
+            </div>
+        </div>
+    )
+  }
+
 
   const adminNavItems = [
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -56,7 +80,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <SidebarMenu>
             {adminNavItems.map(item => (
                 <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{children: item.label}}>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href) && (pathname === item.href || pathname.startsWith(item.href + '/'))} tooltip={{children: item.label}}>
                         <Link href={item.href}><item.icon /> <span>{item.label}</span></Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>

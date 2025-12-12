@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
-import { AppUser } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { bookAppointment } from './actions';
@@ -48,19 +47,16 @@ const appointmentSchema = z.object({
   message: z.string().max(500).optional(),
 });
 
-type AppointmentFormProps = {
-  user: AppUser;
-};
 
-export default function AppointmentForm({ user }: AppointmentFormProps) {
+export default function AppointmentForm() {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof appointmentSchema>>({
     resolver: zodResolver(appointmentSchema),
     defaultValues: {
-      name: user.displayName || '',
-      email: user.email || '',
+      name: '',
+      email: '',
       appointmentType: 'general',
       message: '',
     },

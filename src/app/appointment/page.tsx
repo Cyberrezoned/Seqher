@@ -1,7 +1,4 @@
 'use client';
-import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import AppointmentForm from './AppointmentForm';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
@@ -9,22 +6,6 @@ import Image from 'next/image';
 const heroImage = PlaceHolderImages.find(p => p.id === 'appointment-hero');
 
 export default function AppointmentPage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  if (loading || !user) {
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <p>Loading...</p>
-        </div>
-    );
-  }
 
   return (
     <>
@@ -48,7 +29,7 @@ export default function AppointmentPage() {
       </section>
       <div className="container mx-auto flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-2xl">
-          <AppointmentForm user={user} />
+          <AppointmentForm />
         </div>
       </div>
     </>

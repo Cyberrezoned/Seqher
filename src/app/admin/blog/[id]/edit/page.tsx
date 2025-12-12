@@ -17,7 +17,7 @@ async function getPost(id: string): Promise<BlogPost | null> {
         return {
             id: docSnap.id,
             ...data,
-            createdAt: data.createdAt.toDate().toISOString(),
+            createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
         } as BlogPost;
     }
     return null;
