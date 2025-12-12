@@ -17,6 +17,7 @@ import {
 import Logo from '@/components/icons/Logo';
 import { usePathname } from 'next/navigation';
 import LoginForm from './LoginForm';
+import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { user, isAdmin, loading, signOut } = useAuth();

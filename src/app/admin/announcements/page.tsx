@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { MoreHorizontal, PlusCircle } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Megaphone } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { db } from "@/lib/firebase";
@@ -48,9 +48,12 @@ export default async function AdminAnnouncementsPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <div>
-            <h1 className="text-3xl font-bold font-headline">Announcements</h1>
-            <p className="text-muted-foreground">Create, edit, and manage site-wide announcements.</p>
+        <div className="flex items-center gap-4">
+            <Megaphone className="h-8 w-8 text-primary" />
+            <div>
+                <h1 className="text-3xl font-bold font-headline">Announcements</h1>
+                <p className="text-muted-foreground">Create, edit, and manage site-wide announcements.</p>
+            </div>
         </div>
         <Button asChild>
           <Link href="/admin/announcements/new">

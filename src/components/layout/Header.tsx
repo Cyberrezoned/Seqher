@@ -1,8 +1,9 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Newspaper, CalendarPlus, Heart, LayoutGrid } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -21,9 +22,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 
 const navLinks = [
-  { href: '/ng/programs', label: 'Programs' },
-  { href: '/ng/blog', label: 'Blog' },
-  { href: '/ng/appointment', label: 'Book Appointment' },
+  { href: '/ng/programs', label: 'Programs', icon: <LayoutGrid className="h-4 w-4" /> },
+  { href: '/ng/blog', label: 'Blog', icon: <Newspaper className="h-4 w-4" /> },
+  { href: '/ng/appointment', label: 'Book Appointment', icon: <CalendarPlus className="h-4 w-4" /> },
 ];
 
 export default function Header() {
@@ -72,25 +73,27 @@ export default function Header() {
           <span className="font-bold text-xl font-headline tracking-tight">SEQHER</span>
         </Link>
         
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'text-sm font-medium transition-colors hover:text-primary',
-                pathname === link.href ? 'text-primary' : 'text-muted-foreground'
-              )}
-            >
-              {link.label}
-            </Link>
+            <Button key={link.href} asChild variant="ghost" className={cn(pathname.startsWith(link.href) ? 'text-primary' : 'text-muted-foreground')}>
+                <Link
+                href={link.href}
+                className='flex items-center gap-2'
+                >
+                {link.icon}
+                {link.label}
+                </Link>
+            </Button>
           ))}
         </div>
 
         <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2">
-                 <Button asChild variant="ghost" className="text-accent-foreground hover:bg-accent/10">
-                    <Link href="/ng/donate">Donate</Link>
+                 <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Link href="/ng/donate">
+                        <Heart className="mr-2 h-4 w-4" />
+                        Donate
+                    </Link>
                 </Button>
                 {user && <UserMenu />}
             </div>
@@ -113,17 +116,21 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                        'text-lg font-medium transition-colors hover:text-primary',
+                        'flex items-center gap-3 text-lg font-medium transition-colors hover:text-primary',
                         pathname === link.href ? 'text-primary' : 'text-foreground'
                     )}
                     onClick={() => setIsMenuOpen(false)}
                     >
+                    {link.icon}
                     {link.label}
                     </Link>
                 ))}
                 <div className="border-t pt-4 flex flex-col gap-4">
-                    <Button asChild variant="outline">
-                        <Link href="/ng/donate" onClick={() => setIsMenuOpen(false)}>Donate</Link>
+                    <Button asChild>
+                        <Link href="/ng/donate" onClick={() => setIsMenuOpen(false)}>
+                            <Heart className="mr-2 h-4 w-4" />
+                            Donate
+                        </Link>
                     </Button>
                      {user && (
                          <>
@@ -142,3 +149,4 @@ export default function Header() {
     </header>
   );
 }
+
