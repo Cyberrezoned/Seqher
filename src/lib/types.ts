@@ -27,6 +27,17 @@ export type Announcement = {
   createdAt: string; // ISO string
 };
 
+export type AppointmentRequest = {
+    id: string;
+    name: string;
+    email: string;
+    appointmentDate: string; // ISO string
+    appointmentType: 'volunteering' | 'partnership' | 'general';
+    message?: string;
+    createdAt: string; // ISO string
+    status: 'pending' | 'contacted' | 'resolved';
+}
+
 export type UserProfile = {
   uid: string;
   email: string | null;
