@@ -92,11 +92,7 @@ export default function Header() {
                  <Button asChild variant="ghost" className="text-accent-foreground hover:bg-accent/10">
                     <Link href="/donate">Donate</Link>
                 </Button>
-                {user ? <UserMenu /> : (
-                    <Button asChild>
-                        <Link href="/admin">Admin Login</Link>
-                    </Button>
-                )}
+                {user && <UserMenu />}
             </div>
 
             <button
@@ -129,7 +125,7 @@ export default function Header() {
                     <Button asChild variant="outline">
                         <Link href="/donate" onClick={() => setIsMenuOpen(false)}>Donate</Link>
                     </Button>
-                     {user ? (
+                     {user && (
                          <>
                             {isAdmin && 
                                 <Button asChild variant="secondary">
@@ -138,10 +134,6 @@ export default function Header() {
                             }
                             <Button onClick={() => { signOut(); setIsMenuOpen(false); }}>Logout</Button>
                          </>
-                     ) : (
-                        <Button asChild>
-                            <Link href="/admin" onClick={() => setIsMenuOpen(false)}>Admin Login</Link>
-                        </Button>
                      )}
                 </div>
             </div>
