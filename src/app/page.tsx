@@ -11,7 +11,6 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -25,6 +24,7 @@ export default function GlobalLandingPage() {
   } | null>(null);
 
   useEffect(() => {
+    // To avoid hydration errors, we only run the fetch on the client
     fetch('https://ipapi.co/json/')
       .then((res) => res.json())
       .then((data) => {
@@ -91,8 +91,8 @@ export default function GlobalLandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <Card className="max-w-md mx-auto border-primary shadow-lg">
-                <CardHeader className="flex flex-row items-center gap-4">
+              <Card className="max-w-md mx-auto border-primary/50 shadow-lg bg-secondary">
+                <CardHeader className="flex flex-row items-center gap-4 pb-4">
                   <MapPin className="h-6 w-6 text-primary" />
                   <CardTitle>Suggested Region for You</CardTitle>
                 </CardHeader>
@@ -113,15 +113,12 @@ export default function GlobalLandingPage() {
           )}
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Link href="/ng">
-                <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all">
+            <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
+              <Link href="/ng" className="block group">
+                <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className="h-6 w-9 rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
                             <rect width="900" height="600" fill="#fff"/>
                             <rect width="300" height="600" fill="#008751"/>
                             <rect x="600" width="300" height="600" fill="#008751"/>
@@ -134,19 +131,19 @@ export default function GlobalLandingPage() {
                       Explore local initiatives, opportunities, and resources
                       for Nigeria.
                     </p>
+                    <span className="mt-4 inline-flex items-center text-primary font-semibold group-hover:underline">
+                        Explore Nigeria <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </CardContent>
                 </Card>
               </Link>
             </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Link href="/ca">
-                <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all">
+            <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
+              <Link href="/ca" className="block group">
+                <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" className="h-6 w-9 rounded">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
                         <rect width="1200" height="600" fill="#fff"/>
                         <rect width="300" height="600" fill="#d52b1e"/>
                         <rect x="900" width="300" height="600" fill="#d52b1e"/>
@@ -160,6 +157,9 @@ export default function GlobalLandingPage() {
                       Discover programs, events, and ways to get involved in
                       Canada.
                     </p>
+                     <span className="mt-4 inline-flex items-center text-primary font-semibold group-hover:underline">
+                        Explore Canada <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </CardContent>
                 </Card>
               </Link>
