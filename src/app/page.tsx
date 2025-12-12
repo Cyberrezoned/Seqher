@@ -1,6 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Handshake, Target, Leaf, HeartHandshake, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +11,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, limit, query } from 'firebase/firestore';
 import type { Program } from '@/lib/types';
-
+import { useEffect, useState } from 'react';
 
 const heroImage = PlaceHolderImages.find(p => p.id === 'hero-community');
 const programImage1 = PlaceHolderImages.find(p => p.id === 'program-education');
@@ -21,8 +24,28 @@ async function getFeaturedPrograms(): Promise<Program[]> {
   return programList;
 }
 
-export default async function Home() {
-  const featuredPrograms = await getFeaturedPrograms();
+const sectionVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+};
+
+const cardVariants = {
+  rest: { scale: 1, boxShadow: '0px 10px 15px -3px rgba(0, 0, 0, 0.1)', rotateY: 0, rotateX: 0 },
+  hover: { 
+    scale: 1.05, 
+    boxShadow: '0px 20px 25px -5px rgba(0, 0, 0, 0.2)',
+    rotateY: -5,
+    rotateX: 5,
+    transition: { duration: 0.3, ease: 'easeOut' }
+  },
+};
+
+export default function Home() {
+  const [featuredPrograms, setFeaturedPrograms] = useState<Program[]>([]);
+
+  useEffect(() => {
+    getFeaturedPrograms().then(setFeaturedPrograms);
+  }, []);
 
   const impactStats = [
     { id: 1, icon: <Handshake className="h-10 w-10 text-primary" />, value: '10,000+', label: 'Lives Impacted' },
@@ -46,7 +69,12 @@ export default async function Home() {
           />
         )}
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
+        <motion.div 
+            className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+        >
           <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight">
             Empowering Communities, Sustaining Futures
           </h1>
@@ -54,18 +82,28 @@ export default async function Home() {
             SEQHER is dedicated to fostering sustainable development and creating lasting change in alignment with global goals.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link href="/donate">Donate Now</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-              <Link href="/programs">Our Programs</Link>
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <Link href="/donate">Donate Now</Link>
+                </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Link href="/programs">Our Programs</Link>
+                </Button>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* About Us Section */}
-      <section className="py-16 md:py-24 bg-background">
+      <motion.section 
+        className="py-16 md:py-24 bg-background"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-4">
@@ -76,94 +114,140 @@ export default async function Home() {
               <p className="text-muted-foreground">
                 We believe in a collaborative approach, working hand-in-hand with local partners and volunteers to ensure our initiatives are both effective and sustainable.
               </p>
-              <Button asChild className="mt-4">
-                <Link href="/about">Learn More <ArrowRight className="ml-2" /></Link>
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
+                <Button asChild className="mt-4">
+                  <Link href="/about">Learn More <ArrowRight className="ml-2" /></Link>
+                </Button>
+              </motion.div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {programImage1 && <Image src={programImage1.imageUrl} alt={programImage1.description} data-ai-hint={programImage1.imageHint} width={400} height={500} className="rounded-lg shadow-lg object-cover aspect-[4/5]"/>}
-              {programImage2 && <Image src={programImage2.imageUrl} alt={programImage2.description} data-ai-hint={programImage2.imageHint} width={400} height={500} className="rounded-lg shadow-lg object-cover aspect-[4/5] mt-8"/>}
+            <div className="grid grid-cols-2 gap-4" style={{ perspective: '1000px' }}>
+              <motion.div initial="rest" whileHover="hover" animate="rest" variants={cardVariants} >
+                {programImage1 && <Image src={programImage1.imageUrl} alt={programImage1.description} data-ai-hint={programImage1.imageHint} width={400} height={500} className="rounded-lg shadow-lg object-cover aspect-[4/5]"/>}
+              </motion.div>
+              <motion.div initial="rest" whileHover="hover" animate="rest" variants={cardVariants} className="mt-8">
+                {programImage2 && <Image src={programImage2.imageUrl} alt={programImage2.description} data-ai-hint={programImage2.imageHint} width={400} height={500} className="rounded-lg shadow-lg object-cover aspect-[4/5]"/>}
+              </motion.div>
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Impact Section */}
-      <section className="py-16 md:py-24 bg-secondary">
+      <motion.section 
+        className="py-16 md:py-24 bg-secondary"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4 text-center">
           <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Impact at a Glance</h2>
           <p className="mt-2 mb-12 max-w-3xl mx-auto text-muted-foreground">
             Through dedicated effort and generous support, we are making a tangible difference. Here are some of our key achievements.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {impactStats.map((stat) => (
-              <div key={stat.id} className="flex flex-col items-center">
+            {impactStats.map((stat, index) => (
+              <motion.div 
+                key={stat.id} 
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
                 {stat.icon}
                 <p className="mt-2 text-3xl font-bold text-primary">{stat.value}</p>
                 <p className="text-muted-foreground">{stat.label}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Programs Section */}
-      <section className="py-16 md:py-24">
+      <motion.section 
+        className="py-16 md:py-24"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
           <h2 className="font-headline text-3xl md:text-4xl font-bold text-center">Featured Programs</h2>
           <p className="mt-2 mb-12 max-w-3xl mx-auto text-center text-muted-foreground">
             Explore some of our key initiatives that are transforming communities and empowering individuals.
           </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" style={{ perspective: '1200px' }}>
             {featuredPrograms.map((program) => {
               const programImage = PlaceHolderImages.find(p => p.id === program.imageId);
               return (
-                <Card key={program.id} className="flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  <CardHeader className="p-0">
-                    {programImage && (
-                      <Image
-                        src={programImage.imageUrl}
-                        alt={program.title}
-                        width={400}
-                        height={250}
-                        className="w-full h-48 object-cover"
-                        data-ai-hint={programImage.imageHint}
-                      />
-                    )}
-                    <div className="p-6">
-                      <CardTitle className="font-headline text-xl">{program.title}</CardTitle>
+                <motion.div
+                  key={program.id}
+                  initial="rest"
+                  whileHover="hover"
+                  animate="rest"
+                  variants={cardVariants}
+                  className="h-full"
+                >
+                  <Card className="flex flex-col h-full overflow-hidden transition-shadow duration-300">
+                    <CardHeader className="p-0">
+                      {programImage && (
+                        <div className="overflow-hidden">
+                          <Image
+                            src={programImage.imageUrl}
+                            alt={program.title}
+                            width={400}
+                            height={250}
+                            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                          />
+                        </div>
+                      )}
+                      <div className="p-6">
+                        <CardTitle className="font-headline text-xl">{program.title}</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <p className="text-muted-foreground line-clamp-3">{program.summary}</p>
+                    </CardContent>
+                    <div className="p-6 pt-0">
+                       <Button asChild variant="link" className="p-0 text-primary">
+                          <Link href={`/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      </Button>
                     </div>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <p className="text-muted-foreground line-clamp-3">{program.summary}</p>
-                  </CardContent>
-                  <div className="p-6 pt-0">
-                     <Button asChild variant="link" className="p-0 text-primary">
-                        <Link href={`/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                    </Button>
-                  </div>
-                </Card>
+                  </Card>
+                </motion.div>
               );
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
        {/* Call to Action Section */}
       <section className="bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 py-16 text-center">
-          <h2 className="font-headline text-3xl md:text-4xl font-bold">Ready to Make a Difference?</h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg">
-            Join us in our mission to create a sustainable and equitable world. Your contribution, big or small, can change lives.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link href="/donate">Donate</Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
-              <Link href="/appointment">Get Involved</Link>
-            </Button>
-          </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            variants={sectionVariants}
+          >
+            <h2 className="font-headline text-3xl md:text-4xl font-bold">Ready to Make a Difference?</h2>
+            <p className="mt-4 max-w-2xl mx-auto text-lg">
+              Join us in our mission to create a sustainable and equitable world. Your contribution, big or small, can change lives.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Link href="/donate">Donate</Link>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button asChild size="lg" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
+                  <Link href="/appointment">Get Involved</Link>
+                </Button>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>
