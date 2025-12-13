@@ -33,7 +33,7 @@ const authAdmin = admin.apps.length > 0 ? admin.auth() : null;
 
 // This guard is essential for server-side rendering, where dbAdmin might be null.
 if (!dbAdmin) {
-    throw new Error('Firebase Admin SDK is not initialized. Check your environment variables.');
+    console.warn('Firebase Admin SDK is not initialized. Any server-side Firebase calls will fail.');
 }
 
 export { dbAdmin, authAdmin };
