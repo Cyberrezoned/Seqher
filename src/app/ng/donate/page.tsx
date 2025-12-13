@@ -48,7 +48,6 @@ export default function DonatePage() {
 
   function onSubmit(values: z.infer<typeof paymentSchema>) {
     setLoading(true);
-    console.log(values);
     // This is where you would integrate with a payment processor.
     // For now, we'll just simulate a delay and show a success message.
     setTimeout(() => {
@@ -172,9 +171,6 @@ export default function DonatePage() {
                         <Button type="submit" size="lg" className="w-full text-lg bg-accent text-accent-foreground hover:bg-accent/90" disabled={loading}>
                             {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : 'Donate Now'}
                         </Button>
-                        <p className="text-center text-xs text-muted-foreground">
-                            Note: This is a demo form. Live payments are not yet enabled.
-                        </p>
                     </form>
                 </Form>
             </CardContent>

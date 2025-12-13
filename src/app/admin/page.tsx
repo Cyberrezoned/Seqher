@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Newspaper, Users, BarChart3 } from "lucide-react";
+import { Newspaper, Users, BarChart3, DollarSign } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminDashboardPage() {
@@ -38,12 +38,12 @@ export default function AdminDashboardPage() {
                         <h3 className="font-semibold">Create New Blog Post</h3>
                         <p className="text-sm text-muted-foreground">Write and publish a new article.</p>
                     </Link>
-                     <Link href="/admin/blog" className="block p-4 border rounded-lg hover:bg-secondary">
-                        <h3 className="font-semibold">Manage Blog Posts</h3>
-                        <p className="text-sm text-muted-foreground">Edit, view, or delete existing posts.</p>
+                     <Link href="/admin/programs/new" className="block p-4 border rounded-lg hover:bg-secondary">
+                        <h3 className="font-semibold">Create New Program</h3>
+                        <p className="text-sm text-muted-foreground">Add a new program to your initiatives.</p>
                     </Link>
-                     <Link href="#" className="block p-4 border rounded-lg hover:bg-secondary">
-                        <h3 className="font-semibold">View Donations</h3>
+                     <Link href="/admin/donations" className="block p-4 border rounded-lg hover:bg-secondary">
+                        <h3 className="font-semibold flex items-center gap-2">View Donations <DollarSign className="h-4 w-4"/></h3>
                         <p className="text-sm text-muted-foreground">See recent donation records.</p>
                     </Link>
                 </CardContent>

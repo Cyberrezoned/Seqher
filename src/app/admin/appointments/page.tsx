@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+'use client';
+
 import {
   Card,
   CardContent,
@@ -14,12 +15,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { CalendarCheck, MoreHorizontal } from "lucide-react";
+import { CalendarCheck } from "lucide-react";
 import { format } from "date-fns";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import type { AppointmentRequest } from "@/lib/types";
+import { useEffect, useState } from "react";
+import AppointmentDetails from "./AppointmentDetails";
 
 
 async function getAppointments(): Promise<AppointmentRequest[]> {
@@ -37,8 +39,13 @@ async function getAppointments(): Promise<AppointmentRequest[]> {
   return list;
 }
 
-export default async function AdminAppointmentsPage() {
-  const appointments = await getAppointments();
+export default function AdminAppointmentsPage() {
+  const [appointments, setAppointments] = useState<AppointmentRequest[]>([]);
+  
+  useEffect(() => {
+    getAppointments().then(setAppointments);
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -88,10 +95,7 @@ export default async function AdminAppointmentsPage() {
                     {format(new Date(item.createdAt), 'PPpp')}
                   </TableCell>
                   <TableCell>
-                    <Button aria-haspopup="true" size="icon" variant="ghost" disabled title="Coming soon">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
-                    </Button>
+                    <AppointmentDetails appointment={item} />
                   </TableCell>
                 </TableRow>
               ))}

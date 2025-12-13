@@ -77,13 +77,13 @@ export default function CanadaHomePage() {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.7 }}
             >
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" disabled>
-                  <Link href="#">Donate (Coming Soon)</Link>
+                <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Link href="/appointment">Get in Touch</Link>
                 </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10" disabled>
-                  <Link href="#">Our Programs</Link>
+                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Link href="/ca/programs">Our Programs</Link>
                 </Button>
             </motion.div>
           </motion.div>
@@ -106,11 +106,11 @@ export default function CanadaHomePage() {
                 SEQHER Canada is committed to adapting our global mission to the unique context of Canadian communities. We focus on environmental stewardship, social equity, and economic innovation in line with the UN's Sustainable Development Goals.
               </p>
               <p className="text-muted-foreground">
-                Our goal is to build partnerships that foster resilience and create a sustainable future for all Canadians. The portal for Canadian programs, grants, and volunteer opportunities is currently under development.
+                Our goal is to build partnerships that foster resilience and create a sustainable future for all Canadians. We are actively developing programs, grants, and volunteer opportunities.
               </p>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
-                <Button asChild className="mt-4" disabled>
-                  <Link href="#">Learn More <ArrowRight className="ml-2" /></Link>
+                <Button asChild className="mt-4">
+                  <Link href="/ng/about">Learn More <ArrowRight className="ml-2" /></Link>
                 </Button>
               </motion.div>
             </div>
@@ -170,7 +170,7 @@ export default function CanadaHomePage() {
         </div>
       </motion.section>
 
-      {/* Coming Soon Section */}
+      {/* Development Section */}
        <motion.section 
         className="py-16 md:py-24"
         initial="hidden"
@@ -179,7 +179,7 @@ export default function CanadaHomePage() {
         variants={sectionVariants}
       >
         <div className="container mx-auto px-4 text-center">
-           <h2 className="font-headline text-3xl md:text-4xl font-bold">Features Coming Soon</h2>
+           <h2 className="font-headline text-3xl md:text-4xl font-bold">What We're Building</h2>
             <p className="mt-2 mb-12 max-w-3xl mx-auto text-muted-foreground">
                 We're actively developing a full suite of resources for our Canadian partners and volunteers.
             </p>
