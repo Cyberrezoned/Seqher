@@ -18,8 +18,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const functions = getFunctions(app);
 
-// Connect to emulators in development if the flag is set
-if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true') {
+// Connect to emulators in local development if the flag is set and we're in a browser environment
+if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true' && typeof window !== 'undefined') {
     // Check if emulators are already running to avoid re-connecting
     // @ts-ignore
     if (!globalThis.EMULATORS_STARTED) {
