@@ -14,6 +14,7 @@ const newsArticleSchema = z.object({
   link: z.string().url("Please enter a valid URL"),
   imageId: z.string().min(1, "Please select an image"),
   publishedDate: z.date(),
+  category: z.enum(['Climate Action', 'Global Health', 'Education', 'Economic Growth', 'Peace and Justice', 'Sustainability']),
 });
 
 async function getAdminUser(): Promise<AppUser | null> {

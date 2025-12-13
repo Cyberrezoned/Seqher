@@ -46,6 +46,7 @@ export type NewsArticle = {
   summary: string;
   imageId: string;
   link: string;
+  category: 'Climate Action' | 'Global Health' | 'Education' | 'Economic Growth' | 'Peace and Justice' | 'Sustainability';
 };
 
 

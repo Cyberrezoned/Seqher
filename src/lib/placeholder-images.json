@@ -93,19 +93,19 @@
     {
       "id": "hero-canada",
       "description": "A stunning view of mountains and a lake in Canada.",
-      "imageUrl": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce",
+      "imageUrl": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=2070&auto=format&fit=crop",
       "imageHint": "canada landscape"
     },
     {
       "id": "about-canada-1",
       "description": "A Canadian city skyline at dusk.",
-      "imageUrl": "https://images.unsplash.com/photo-1500930287299-e45f94921676",
+      "imageUrl": "https://images.unsplash.com/photo-1500930287299-e45f94921676?q=80&w=1974&auto=format&fit=crop",
       "imageHint": "canadian city"
     },
     {
       "id": "about-canada-2",
       "description": "A close-up of a maple leaf, the symbol of Canada.",
-      "imageUrl": "https://images.unsplash.com/photo-1479832912903-35697a2e5052",
+      "imageUrl": "https://images.unsplash.com/photo-1479832912903-35697a2e5052?q=80&w=2070&auto=format&fit=crop",
       "imageHint": "maple leaf"
     },
     {
@@ -161,6 +161,108 @@
       "description": "An elderly person learning to use a tablet computer with help.",
       "imageUrl": "https://images.unsplash.com/photo-1605328227916-2a9a7ab2572c",
       "imageHint": "digital inclusion"
+    },
+    {
+      "id": "news-health-innovation",
+      "description": "A scientist looking at a sample in a lab.",
+      "imageUrl": "https://images.unsplash.com/photo-1579154230198-95800538a54d",
+      "imageHint": "health innovation"
+    },
+    {
+      "id": "news-peace-justice",
+      "description": "A gavel and scales of justice on a desk.",
+      "imageUrl": "https://images.unsplash.com/photo-1589994965851-a8f483d51e8a",
+      "imageHint": "peace justice"
+    },
+    {
+      "id": "news-sustainable-cities",
+      "description": "A modern city with green spaces and bike lanes.",
+      "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+      "imageHint": "sustainable city"
+    },
+    {
+      "id": "news-gender-equality",
+      "description": "A group of diverse women marching for their rights.",
+      "imageUrl": "https://images.unsplash.com/photo-1581092892233-be7f73a7e5f1",
+      "imageHint": "gender equality"
+    },
+    {
+      "id": "news-decent-work",
+      "description": "A construction worker smiling at a job site.",
+      "imageUrl": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f",
+      "imageHint": "decent work"
+    },
+    {
+      "id": "news-no-poverty",
+      "description": "A volunteer hands a bowl of food to a person in need.",
+      "imageUrl": "https://images.unsplash.com/photo-1593113598332-cd288d649433",
+      "imageHint": "no poverty"
+    },
+    {
+      "id": "news-zero-hunger",
+      "description": "A field of wheat under a blue sky.",
+      "imageUrl": "https://images.unsplash.com/photo-1505826759037-4f6b8a377395",
+      "imageHint": "zero hunger"
+    },
+    {
+      "id": "news-good-health",
+      "description": "A person meditating in a serene outdoor setting.",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b",
+      "imageHint": "good health"
+    },
+    {
+      "id": "news-quality-education",
+      "description": "A teacher helping a young student in a classroom.",
+      "imageUrl": "https://images.unsplash.com/photo-1580582932707-520aed93a94d",
+      "imageHint": "quality education"
+    },
+    {
+      "id": "news-clean-water-sanitation",
+      "description": "A child drinking clean water from a cup.",
+      "imageUrl": "https://images.unsplash.com/photo-1576043289048-a0063d831518",
+      "imageHint": "clean water"
+    },
+    {
+      "id": "news-affordable-clean-energy",
+      "description": "Solar panels on a roof against a blue sky.",
+      "imageUrl": "https://images.unsplash.com/photo-1508514177221-188b1cf16e9c",
+      "imageHint": "clean energy"
+    },
+    {
+      "id": "news-industry-innovation",
+      "description": "A futuristic factory with robots and automation.",
+      "imageUrl": "https://images.unsplash.com/photo-1581092921462-683933b093e0",
+      "imageHint": "industry innovation"
+    },
+    {
+      "id": "news-reduced-inequalities",
+      "description": "People from different backgrounds holding hands.",
+      "imageUrl": "https://images.unsplash.com/photo-1556742512-1a4a6b251a3d",
+      "imageHint": "reduced inequalities"
+    },
+    {
+      "id": "news-responsible-consumption",
+      "description": "A person sorting waste for recycling.",
+      "imageUrl": "https://images.unsplash.com/photo-1599878174113-17a41d7b1f5a",
+      "imageHint": "responsible consumption"
+    },
+    {
+      "id": "news-life-below-water",
+      "description": "A colorful coral reef with fish.",
+      "imageUrl": "https://images.unsplash.com/photo-1551202816-9a2c35a6d36e",
+      "imageHint": "life below water"
+    },
+    {
+      "id": "news-life-on-land",
+      "description": "A majestic elephant walking through a savanna.",
+      "imageUrl": "https://images.unsplash.com/photo-1564760822396-48c264c12521",
+      "imageHint": "life on land"
+    },
+    {
+      "id": "news-partnerships-for-goals",
+      "description": "A diverse group of people in a meeting, shaking hands.",
+      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
+      "imageHint": "partnerships for goals"
     }
   ]
 }

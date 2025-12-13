@@ -20,6 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge";
 
 import { MoreHorizontal, PlusCircle, Globe } from "lucide-react";
 import Link from "next/link";
@@ -72,6 +73,7 @@ export default async function AdminNewsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
+                <TableHead className="hidden lg:table-cell">Category</TableHead>
                 <TableHead className="hidden md:table-cell">Source</TableHead>
                 <TableHead className="hidden md:table-cell">Published Date</TableHead>
                 <TableHead>
@@ -85,9 +87,12 @@ export default async function AdminNewsPage() {
                   <TableCell className="font-medium">
                     <Link href={item.link} className="hover:underline" target="_blank">{item.title}</Link>
                   </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    <Badge variant="secondary">{item.category}</Badge>
+                  </TableCell>
                   <TableCell className="hidden md:table-cell">{item.source}</TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {format(new Date(item.publishedDate), 'PPpp')}
+                    {format(new Date(item.publishedDate), 'PP')}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>

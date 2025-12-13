@@ -37,9 +37,11 @@ const newsArticleSchema = z.object({
   link: z.string().url("Please enter a valid URL."),
   imageId: z.string().min(1, 'Please select an image.'),
   publishedDate: z.date({ required_error: 'A published date is required.'}),
+  category: z.enum(['Climate Action', 'Global Health', 'Education', 'Economic Growth', 'Peace and Justice', 'Sustainability']),
 });
 
 const imageOptions = PlaceHolderImages.filter(p => p.id.startsWith('news-'));
+const categoryOptions = ['Climate Action', 'Global Health', 'Education', 'Economic Growth', 'Peace and Justice', 'Sustainability'] as const;
 
 type NewsFormProps = {
   article?: NewsArticle;
@@ -59,6 +61,7 @@ export default function NewsForm({ article }: NewsFormProps) {
       link: article?.link || '',
       imageId: article?.imageId || '',
       publishedDate: article?.publishedDate ? new Date(article.publishedDate) : new Date(),
+      category: article?.category || 'Sustainability',
     },
   });
 
@@ -152,27 +155,26 @@ export default function NewsForm({ article }: NewsFormProps) {
             </div>
             <div className="grid md:grid-cols-2 gap-8">
                 <FormField
-                control={form.control}
-                name="imageId"
-                render={({ field }) => (
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Article Image</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormLabel>Category</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a cover image" />
-                        </SelectTrigger>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                        {imageOptions.map(image => (
-                            <SelectItem key={image.id} value={image.id}>{image.description}</SelectItem>
-                        ))}
+                          {categoryOptions.map(category => (
+                            <SelectItem key={category} value={category}>{category}</SelectItem>
+                          ))}
                         </SelectContent>
-                    </Select>
-                    <FormDescription>Select a placeholder image that represents the article.</FormDescription>
-                    <FormMessage />
+                      </Select>
+                      <FormMessage />
                     </FormItem>
-                )}
+                  )}
                 />
                 <FormField
                     control={form.control}
@@ -213,6 +215,29 @@ export default function NewsForm({ article }: NewsFormProps) {
                     )}
                 />
             </div>
+             <FormField
+                control={form.control}
+                name="imageId"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Article Image</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a cover image" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {imageOptions.map(image => (
+                            <SelectItem key={image.id} value={image.id}>{image.description}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    <FormDescription>Select a placeholder image that represents the article.</FormDescription>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
             <div className="flex justify-end gap-4">
                 <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
                 <Button type="submit" disabled={loading}>
