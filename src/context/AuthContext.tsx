@@ -21,6 +21,7 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
+
 // This function needs to run on the client, so we can't use the admin SDK here.
 // It checks if a 'users' collection exists and has any documents.
 const isFirstUserClient = async (): Promise<boolean> => {
@@ -32,8 +33,15 @@ const isFirstUserClient = async (): Promise<boolean> => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [clientSide, setClientSide] = useState(false);
 
   useEffect(() => {
+    setClientSide(true);
+  }, []);
+
+  useEffect(() => {
+    if (!clientSide) return;
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
       if (firebaseUser) {
         const userRef = doc(db, 'users', firebaseUser.uid);
@@ -71,15 +79,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [clientSide]);
 
   const signOut = async () => {
     await firebaseSignOut(auth);
   };
 
   const isAdmin = user?.role === 'admin';
-
-  if (loading) {
+  
+  if (!clientSide || loading) {
     return (
         <div className="w-full h-screen flex flex-col">
             <header className="border-b">
@@ -103,6 +111,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         </div>
     );
   }
+
 
   return (
     <AuthContext.Provider value={{ user, loading, isAdmin, signOut }}>
