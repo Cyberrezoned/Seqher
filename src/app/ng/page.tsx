@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { db } from '@/lib/firebase';
+import { useFirebase } from '@/context/FirebaseContext';
 import { collection, getDocs, limit, query, orderBy } from 'firebase/firestore';
 import type { Program, Announcement } from '@/lib/types';
 import { useEffect, useState } from 'react';
@@ -17,27 +17,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 const heroImage = PlaceHolderImages.find(p => p.id === 'hero-community');
 const programImage1 = PlaceHolderImages.find(p => p.id === 'program-education');
 const programImage2 = PlaceHolderImages.find(p => p.id === 'program-health');
-
-async function getFeaturedPrograms(): Promise<Program[]> {
-  const programsQuery = query(collection(db, 'programs'), limit(3));
-  const programSnapshot = await getDocs(programsQuery);
-  const programList = programSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Program));
-  return programList;
-}
-
-async function getAnnouncements(): Promise<Announcement[]> {
-  const announcementsQuery = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(1));
-  const snapshot = await getDocs(announcementsQuery);
-  return snapshot.docs.map(doc => {
-      const data = doc.data();
-      return { 
-          id: doc.id, 
-          ...data,
-          createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-      } as Announcement
-  });
-}
-
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -58,13 +37,38 @@ const cardVariants = {
 };
 
 export default function NigeriaHomePage() {
+  const { db } = useFirebase();
   const [featuredPrograms, setFeaturedPrograms] = useState<Program[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
   useEffect(() => {
+    if (!db) return;
+    
+    async function getFeaturedPrograms(): Promise<Program[]> {
+      if (!db) return [];
+      const programsQuery = query(collection(db, 'programs'), limit(3));
+      const programSnapshot = await getDocs(programsQuery);
+      const programList = programSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Program));
+      return programList;
+    }
+
+    async function getAnnouncements(): Promise<Announcement[]> {
+      if (!db) return [];
+      const announcementsQuery = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(1));
+      const snapshot = await getDocs(announcementsQuery);
+      return snapshot.docs.map(doc => {
+          const data = doc.data();
+          return { 
+              id: doc.id, 
+              ...data,
+              createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
+          } as Announcement
+      });
+    }
+
     getFeaturedPrograms().then(setFeaturedPrograms);
     getAnnouncements().then(setAnnouncements);
-  }, []);
+  }, [db]);
 
   const impactStats = [
     { id: 1, icon: <Handshake className="h-10 w-10 text-primary" />, value: '10,000+', label: 'Lives Impacted' },

@@ -11,7 +11,7 @@ import type { NewsArticle } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { collection, getDocs, orderBy, query, writeBatch, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { useFirebase } from '@/context/FirebaseContext';
 import { Badge } from '@/components/ui/badge';
 
 const newsHeroImage = PlaceHolderImages.find((p) => p.id === 'news-hero');
@@ -40,44 +40,6 @@ const newArticlesData: Omit<NewsArticle, 'id'>[] = [
     { title: "COP29 Concludes with New Agreement on Climate Finance", source: "UNFCCC", publishedDate: "2024-11-22", summary: "The latest UN Climate Change Conference has concluded with a landmark agreement on a new collective quantified goal for climate finance, aiming to support developing countries in their climate actions.", imageId: "news-partnerships-for-goals", link: "#", category: "Climate Action" }
   ];
 
-async function seedNewsData() {
-    const newsQuery = query(collection(db, 'news'));
-    const snapshot = await getDocs(newsQuery);
-    // Only seed if the collection is empty
-    if (snapshot.empty) {
-        console.log('Seeding news data...');
-        const batch = writeBatch(db);
-        newArticlesData.forEach(articleData => {
-            const newRef = doc(collection(db, 'news'));
-            batch.set(newRef, {
-                ...articleData,
-                id: newRef.id,
-            });
-        });
-        await batch.commit();
-        console.log('News data seeded successfully.');
-        // Return true to indicate seeding happened
-        return true;
-    }
-    // Return false if no seeding was done
-    return false;
-}
-
-
-async function getNewsArticles(): Promise<NewsArticle[]> {
-  const newsQuery = query(collection(db, 'news'), orderBy('publishedDate', 'desc'));
-  const snapshot = await getDocs(newsQuery);
-  const list = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return { 
-          id: doc.id, 
-          ...data,
-          publishedDate: data.publishedDate?.toDate ? data.publishedDate.toDate().toISOString() : new Date().toISOString(),
-      } as NewsArticle
-  });
-  return list;
-}
-
 
 const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -93,19 +55,59 @@ const cardVariants = {
   };
 
 export default function NewsPage() {
+    const { db } = useFirebase();
     const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!db) return;
+
+        async function seedNewsData() {
+            const newsQuery = query(collection(db, 'news'));
+            const snapshot = await getDocs(newsQuery);
+            // Only seed if the collection is empty
+            if (snapshot.empty) {
+                console.log('Seeding news data...');
+                const batch = writeBatch(db);
+                newArticlesData.forEach(articleData => {
+                    const newRef = doc(collection(db, 'news'));
+                    batch.set(newRef, {
+                        ...articleData,
+                        id: newRef.id,
+                    });
+                });
+                await batch.commit();
+                console.log('News data seeded successfully.');
+                // Return true to indicate seeding happened
+                return true;
+            }
+            // Return false if no seeding was done
+            return false;
+        }
+
+        async function getNewsArticles(): Promise<NewsArticle[]> {
+            const newsQuery = query(collection(db, 'news'), orderBy('publishedDate', 'desc'));
+            const snapshot = await getDocs(newsQuery);
+            const list = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return { 
+                    id: doc.id, 
+                    ...data,
+                    publishedDate: data.publishedDate?.toDate ? data.publishedDate.toDate().toISOString() : new Date().toISOString(),
+                } as NewsArticle
+            });
+            return list;
+        }
+
         async function loadNews() {
             setLoading(true);
-            const seeded = await seedNewsData();
+            await seedNewsData();
             const articles = await getNewsArticles();
             setNewsArticles(articles);
             setLoading(false);
         }
         loadNews();
-    }, []);
+    }, [db]);
 
   return (
     <div>

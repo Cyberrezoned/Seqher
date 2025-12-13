@@ -3,9 +3,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User, signOut as firebaseSignOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
 import type { AppUser, UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useFirebase } from './FirebaseContext';
 
 interface AuthContextType {
   user: AppUser | null;
@@ -14,33 +14,32 @@ interface AuthContextType {
   signOut: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   isAdmin: false,
   signOut: async () => {},
 });
 
-
-// This function needs to run on the client, so we can't use the admin SDK here.
-// It checks if a 'users' collection exists and has any documents.
-const isFirstUserClient = async (): Promise<boolean> => {
-    const userCountRef = doc(db, 'internal', 'user_count');
-    const docSnap = await getDoc(userCountRef);
-    return !docSnap.exists() || docSnap.data().count === 0;
-}
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const { auth, db } = useFirebase();
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [clientSide, setClientSide] = useState(false);
+
+  // This function needs to run on the client, so we can't use the admin SDK here.
+  // It checks if a 'users' collection exists and has any documents.
+  const isFirstUserClient = async (): Promise<boolean> => {
+      if (!db) return false;
+      const userCountRef = doc(db, 'internal', 'user_count');
+      const docSnap = await getDoc(userCountRef);
+      return !docSnap.exists() || docSnap.data().count === 0;
+  }
 
   useEffect(() => {
-    setClientSide(true);
-  }, []);
-
-  useEffect(() => {
-    if (!clientSide) return;
+    if (!auth || !db) {
+        // Firebase might not be initialized yet
+        return;
+    }
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
       if (firebaseUser) {
@@ -79,15 +78,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, [clientSide]);
+  }, [auth, db]);
 
   const signOut = async () => {
-    await firebaseSignOut(auth);
+    if (auth) {
+        await firebaseSignOut(auth);
+    }
   };
 
   const isAdmin = user?.role === 'admin';
   
-  if (!clientSide || loading) {
+  if (loading) {
     return (
         <div className="w-full h-screen flex flex-col">
             <header className="border-b">
@@ -119,5 +120,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import { Toaster } from "@/components/ui/toaster";
 import { MotionProvider } from '@/context/MotionContext';
 import { usePathname } from 'next/navigation';
+import { FirebaseProvider } from '@/context/FirebaseContext';
 
 
 // This cannot be a client component
@@ -32,14 +33,16 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col bg-background')}>
-        <AuthProvider>
-            <Header />
-            <MotionProvider key={pathname}>
-              <main className="flex-grow">{children}</main>
-            </MotionProvider>
-            <Footer />
-            <Toaster />
-        </AuthProvider>
+        <FirebaseProvider>
+            <AuthProvider>
+                <Header />
+                <MotionProvider key={pathname}>
+                  <main className="flex-grow">{children}</main>
+                </MotionProvider>
+                <Footer />
+                <Toaster />
+            </AuthProvider>
+        </FirebaseProvider>
       </body>
     </html>
   );

@@ -9,7 +9,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { useFirebase } from '@/context/FirebaseContext';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 
@@ -42,6 +42,7 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const { auth } = useFirebase();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -53,6 +54,10 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!auth) {
+        toast({ title: "Error", description: "Firebase is not ready. Please try again in a moment.", variant: "destructive"});
+        return;
+    }
     setLoading(true);
     try {
       if (isLogin) {
@@ -153,7 +158,7 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading || !auth}>
               {loading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : isLogin ? (

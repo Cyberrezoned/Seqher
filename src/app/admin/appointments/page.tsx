@@ -17,34 +17,37 @@ import {
 } from "@/components/ui/table";
 import { CalendarCheck } from "lucide-react";
 import { format } from "date-fns";
-import { db } from "@/lib/firebase";
+import { useFirebase } from "@/context/FirebaseContext";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import type { AppointmentRequest } from "@/lib/types";
 import { useEffect, useState } from "react";
 import AppointmentDetails from "./AppointmentDetails";
 
 
-async function getAppointments(): Promise<AppointmentRequest[]> {
-  const appointmentsQuery = query(collection(db, 'appointments'), orderBy('createdAt', 'desc'));
-  const snapshot = await getDocs(appointmentsQuery);
-  const list = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return { 
-          id: doc.id, 
-          ...data,
-          createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-          appointmentDate: data.appointmentDate?.toDate ? data.appointmentDate.toDate().toISOString() : new Date().toISOString(),
-      } as AppointmentRequest
-  });
-  return list;
-}
-
 export default function AdminAppointmentsPage() {
+  const { db } = useFirebase();
   const [appointments, setAppointments] = useState<AppointmentRequest[]>([]);
   
   useEffect(() => {
+    if (!db) return;
+
+    async function getAppointments(): Promise<AppointmentRequest[]> {
+      const appointmentsQuery = query(collection(db, 'appointments'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(appointmentsQuery);
+      const list = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return { 
+              id: doc.id, 
+              ...data,
+              createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
+              appointmentDate: data.appointmentDate?.toDate ? data.appointmentDate.toDate().toISOString() : new Date().toISOString(),
+          } as AppointmentRequest
+      });
+      return list;
+    }
+
     getAppointments().then(setAppointments);
-  }, []);
+  }, [db]);
 
   return (
     <div className="space-y-8">
