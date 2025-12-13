@@ -18,10 +18,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const functions = getFunctions(app);
 
-// Connect to emulators in development
-// IMPORTANT: This check MUST be outside of a function and must
-// be consistent on both server and client, which process.env.NODE_ENV is.
-if (process.env.NODE_ENV === 'development') {
+// Connect to emulators in development if the flag is set
+if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true') {
     // Check if emulators are already running to avoid re-connecting
     // @ts-ignore
     if (!globalThis.EMULATORS_STARTED) {
