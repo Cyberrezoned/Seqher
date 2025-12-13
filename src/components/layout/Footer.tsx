@@ -12,10 +12,10 @@ export default function Footer() {
   ];
 
   const footerLinks = [
-      { title: 'About Us', href: '/about' },
-      { title: 'Programs', href: '/programs' },
-      { title: 'Blog', href: '/blog' },
-      { title: 'Contact', href: '/contact' },
+      { title: 'About Us', href: '/ng/about' },
+      { title: 'Programs', href: '/ng/programs' },
+      { title: 'Blog', href: '/ng/blog' },
+      { title: 'News', href: '/ng/news' },
   ]
 
   return (
@@ -47,12 +47,12 @@ export default function Footer() {
             <h3 className="font-semibold font-headline text-lg mb-4">Get Involved</h3>
             <ul className="space-y-2">
                <li>
-                    <Link href="/donate" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Link href="/ng/donate" className="text-muted-foreground hover:text-primary transition-colors">
                         Donate
                     </Link>
                 </li>
                 <li>
-                    <Link href="/appointment" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Link href="/ng/appointment" className="text-muted-foreground hover:text-primary transition-colors">
                         Volunteer
                     </Link>
                 </li>

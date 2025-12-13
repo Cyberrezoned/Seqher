@@ -107,6 +107,24 @@
       "description": "A close-up of a maple leaf, the symbol of Canada.",
       "imageUrl": "https://images.unsplash.com/photo-1479832912903-35697a2e5052?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjYW5hZGlhbiUyMG1hcGxlJTIwbGVhZnxlbnwwfHx8fDE3NjQxNjIyMzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "maple leaf"
+    },
+    {
+      "id": "about-hero",
+      "description": "A team of diverse volunteers planning a project together.",
+      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx0ZWFtJTIwY29sbGFib3JhdGlvbnxlbnwwfHx8fDE3NjQxOTg1MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "team collaboration"
+    },
+    {
+      "id": "about-mission",
+      "description": "A close-up shot of a compass pointing towards a goal.",
+      "imageUrl": "https://images.unsplash.com/photo-1504992963429-56f2d776d3ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtaXNzaW9uJTIwZ29hbHxlbnwwfHx8fDE3NjQxOTg1MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mission goal"
+    },
+    {
+      "id": "news-hero",
+      "description": "A satellite image of the earth, highlighting global connectivity.",
+      "imageUrl": "https://images.unsplash.com/photo-1564053489984-723fe21f3170?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxnbG9iYWwlMjBuZXdzfGVufDB8fHx8MTc2NDE5OTQwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "global news"
     }
   ]
 }

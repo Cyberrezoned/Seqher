@@ -38,6 +38,18 @@ export type AppointmentRequest = {
     status: 'pending' | 'contacted' | 'resolved';
 }
 
+export type NewsArticle = {
+  id: string;
+  title: string;
+  source: string;
+  publishedDate: string; // ISO string
+  summary: string;
+  imageUrl: string;
+  imageHint: string;
+  link: string;
+};
+
+
 export type UserProfile = {
   uid: string;
   email: string | null;

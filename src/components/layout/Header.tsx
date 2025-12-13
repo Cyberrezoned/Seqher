@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Newspaper, CalendarPlus, Heart, LayoutGrid } from 'lucide-react';
+import { Menu, X, Newspaper, CalendarPlus, Heart, LayoutGrid, Globe, Info } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -22,8 +22,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 
 const navLinks = [
+  { href: '/ng/about', label: 'About Us', icon: <Info className="h-4 w-4" /> },
   { href: '/ng/programs', label: 'Programs', icon: <LayoutGrid className="h-4 w-4" /> },
   { href: '/ng/blog', label: 'Blog', icon: <Newspaper className="h-4 w-4" /> },
+  { href: '/ng/news', label: 'News', icon: <Globe className="h-4 w-4" /> },
   { href: '/ng/appointment', label: 'Book Appointment', icon: <CalendarPlus className="h-4 w-4" /> },
 ];
 
@@ -149,4 +151,3 @@ export default function Header() {
     </header>
   );
 }
-
