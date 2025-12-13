@@ -3,55 +3,55 @@
     {
       "id": "hero-community",
       "description": "A diverse group of community members working together on a project.",
-      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
       "imageHint": "community volunteers"
     },
     {
       "id": "program-education",
       "description": "Children in an outdoor classroom learning about nature.",
-      "imageUrl": "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1542810634-71277d95dcbb",
       "imageHint": "children education"
     },
     {
       "id": "program-health",
       "description": "A healthcare worker providing a check-up to a smiling elderly person.",
-      "imageUrl": "https://images.unsplash.com/photo-1588776814546-da6202451333?q=80&w=1974",
+      "imageUrl": "https://images.unsplash.com/photo-1588776814546-da6202451333",
       "imageHint": "healthcare community"
     },
     {
       "id": "program-empowerment",
       "description": "A woman starting her own small business at a local market.",
-      "imageUrl": "https://images.unsplash.com/photo-1504711331084-a73353b34213?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1504711331084-a73353b34213",
       "imageHint": "small business"
     },
     {
       "id": "program-sustainability",
       "description": "Volunteers planting trees in a deforested area.",
-      "imageUrl": "https://images.unsplash.com/photo-1618997324227-9575859754f9?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1618997324227-9575859754f9",
       "imageHint": "tree planting"
     },
     {
       "id": "program-water",
       "description": "A newly installed clean water pump in a village.",
-      "imageUrl": "https://images.unsplash.com/photo-1481498065453-500c9f1367b8?q=80&w=2062",
+      "imageUrl": "https://images.unsplash.com/photo-1481498065453-500c9f1367b8",
       "imageHint": "clean water"
     },
     {
       "id": "blog-climate-action",
       "description": "A dramatic photo of a glacier melting into the ocean.",
-      "imageUrl": "https://images.unsplash.com/photo-1542317132-77054f9d0563?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1542317132-77054f9d0563",
       "imageHint": "climate change"
     },
     {
       "id": "blog-community-gardens",
       "description": "An urban community garden with fresh vegetables.",
-      "imageUrl": "https://images.unsplash.com/photo-1516253457493-243171d319a9?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1516253457493-243171d319a9",
       "imageHint": "community garden"
     },
     {
       "id": "blog-volunteer-story",
       "description": "A portrait of a smiling volunteer.",
-      "imageUrl": "https://images.unsplash.com/photo-1628882724933-446b7a58189c?q=80&w=1974",
+      "imageUrl": "https://images.unsplash.com/photo-1628882724933-446b7a58189c",
       "imageHint": "volunteer portrait"
     },
     {
@@ -69,25 +69,25 @@
     {
       "id": "donate-hero",
       "description": "Hands holding a small plant sprouting from the soil.",
-      "imageUrl": "https://images.unsplash.com/photo-1463947628408-f8581a2f4aca?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1463947628408-f8581a2f4aca",
       "imageHint": "hands plant"
     },
     {
       "id": "appointment-hero",
       "description": "A person writing in a planner at a desk.",
-      "imageUrl": "https://images.unsplash.com/photo-1516534775-7489C665214c?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1516534775-7489C665214c",
       "imageHint": "planning schedule"
     },
     {
       "id": "programs-hero",
       "description": "A panoramic view of a diverse landscape showing mountains and a village.",
-      "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070",
+      "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
       "imageHint": "landscape village"
     },
     {
       "id": "blog-hero",
       "description": "A person writing in a notebook with a laptop nearby.",
-      "imageUrl": "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1973",
+      "imageUrl": "https://images.unsplash.com/photo-1455390582262-044cdead277a",
       "imageHint": "writing blog"
     },
     {

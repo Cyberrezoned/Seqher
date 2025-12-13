@@ -66,7 +66,6 @@ export async function createOrUpdateAnnouncement(
         return { success: true, message: 'Announcement saved successfully' };
 
     } catch (error: any) {
-        console.error("Error saving announcement:", error);
         return { success: false, message: error.message || 'Failed to save announcement.' };
     }
 }
@@ -91,7 +90,6 @@ export async function deleteAnnouncement(id: string) {
         
         return { success: true, message: 'Announcement deleted successfully.' };
     } catch (error: any) {
-        console.error("Error deleting announcement:", error);
         return { success: false, message: 'Failed to delete announcement.' };
     }
 }

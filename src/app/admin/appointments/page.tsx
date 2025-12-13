@@ -88,8 +88,7 @@ export default async function AdminAppointmentsPage() {
                     {format(new Date(item.createdAt), 'PPpp')}
                   </TableCell>
                   <TableCell>
-                    {/* Placeholder for future actions like 'Mark as Contacted' or 'Delete' */}
-                     <Button aria-haspopup="true" size="icon" variant="ghost" disabled>
+                    <Button aria-haspopup="true" size="icon" variant="ghost" disabled title="Coming soon">
                         <MoreHorizontal className="h-4 w-4" />
                         <span className="sr-only">Toggle menu</span>
                     </Button>

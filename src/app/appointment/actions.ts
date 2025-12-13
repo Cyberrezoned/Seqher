@@ -53,14 +53,6 @@ export async function bookAppointment(
       status: 'pending',
     });
 
-    console.log('Booking appointment for:', {
-      name,
-      email,
-      appointmentDate,
-      appointmentType,
-      message,
-    });
-    
     return { success: true, message: 'Appointment requested successfully!' };
 
   } catch (error) {

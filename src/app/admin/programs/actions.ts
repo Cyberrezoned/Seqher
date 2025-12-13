@@ -67,7 +67,6 @@ export async function createOrUpdateProgram(
         return { success: true, message: 'Program saved successfully' };
 
     } catch (error: any) {
-        console.error("Error saving program:", error);
         return { success: false, message: error.message || 'Failed to save program.' };
     }
 }
@@ -94,7 +93,6 @@ export async function deleteProgram(id: string) {
         
         return { success: true, message: 'Program deleted successfully.' };
     } catch (error: any) {
-        console.error("Error deleting program:", error);
         return { success: false, message: 'Failed to delete program.' };
     }
 }
