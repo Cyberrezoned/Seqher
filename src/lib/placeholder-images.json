@@ -89,6 +89,24 @@
       "description": "A person writing in a notebook with a laptop nearby.",
       "imageUrl": "https://images.unsplash.com/photo-1485322551133-3a4c27a9d925?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3cml0aW5nJTIwYmxvZ3xlbnwwfHx8fDE3NjQxNTg4Njh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "writing blog"
+    },
+    {
+      "id": "hero-canada",
+      "description": "A stunning view of mountains and a lake in Canada.",
+      "imageUrl": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjYW5hZGF8ZW58MHx8fHwxNzY0MTYyMjM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "canada landscape"
+    },
+    {
+      "id": "about-canada-1",
+      "description": "A Canadian city skyline at dusk.",
+      "imageUrl": "https://images.unsplash.com/photo-1500930287299-e45f94921676?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW5hZGlhbiUyMGNpdHl8ZW58MHx8fHwxNzY0MTYyMjM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "canadian city"
+    },
+    {
+      "id": "about-canada-2",
+      "description": "A close-up of a maple leaf, the symbol of Canada.",
+      "imageUrl": "https://images.unsplash.com/photo-1479832912903-35697a2e5052?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjYW5hZGlhbiUyMG1hcGxlJTIwbGVhZnxlbnwwfHx8fDE3NjQxNjIyMzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "maple leaf"
     }
   ]
 }
