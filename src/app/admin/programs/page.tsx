@@ -29,6 +29,9 @@ import type { Program } from "@/lib/types";
 import DeleteProgramButton from "./DeleteProgramButton";
 
 async function getPrograms(): Promise<Program[]> {
+  if (!dbAdmin) {
+    return [];
+  }
   const programsQuery = dbAdmin.collection('programs').orderBy('title', 'asc');
   const snapshot = await programsQuery.get();
   const list = snapshot.docs.map(doc => {
@@ -66,6 +69,11 @@ export default async function AdminProgramsPage() {
           <CardDescription>A list of all programs in the system.</CardDescription>
         </CardHeader>
         <CardContent>
+          {!dbAdmin ? (
+            <div className="text-center p-8 text-destructive">
+                Firebase Admin is not configured. Unable to load programs.
+            </div>
+          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -109,13 +117,16 @@ export default async function AdminProgramsPage() {
                   </TableCell>
                 </TableRow>
               ))}
+              {programs.length === 0 && (
+                 <TableRow>
+                    <TableCell colSpan={3} className="text-center p-8 text-muted-foreground">
+                        No programs created yet.
+                    </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
-            {programs.length === 0 && (
-                <div className="text-center p-8 text-muted-foreground">
-                    No programs created yet.
-                </div>
-            )}
+          )}
         </CardContent>
       </Card>
     </div>

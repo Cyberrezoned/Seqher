@@ -30,6 +30,9 @@ import type { NewsArticle } from "@/lib/types";
 import DeleteNewsButton from "./DeleteNewsButton";
 
 async function getNewsArticles(): Promise<NewsArticle[]> {
+  if (!dbAdmin) {
+    return [];
+  }
   const articlesQuery = dbAdmin.collection('news').orderBy('publishedDate', 'desc');
   const snapshot = await articlesQuery.get();
   const list = snapshot.docs.map(doc => {
@@ -68,6 +71,11 @@ export default async function AdminNewsPage() {
           <CardDescription>A list of all news articles in the system.</CardDescription>
         </CardHeader>
         <CardContent>
+          {!dbAdmin ? (
+             <div className="text-center p-8 text-destructive">
+                Firebase Admin is not configured. Unable to load news articles.
+            </div>
+          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -113,13 +121,16 @@ export default async function AdminNewsPage() {
                   </TableCell>
                 </TableRow>
               ))}
+               {articles.length === 0 && (
+                    <TableRow>
+                        <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">
+                            No news articles created yet.
+                        </TableCell>
+                    </TableRow>
+                )}
             </TableBody>
           </Table>
-          {articles.length === 0 && (
-                <div className="text-center p-8 text-muted-foreground">
-                    No news articles created yet.
-                </div>
-            )}
+          )}
         </CardContent>
       </Card>
     </div>

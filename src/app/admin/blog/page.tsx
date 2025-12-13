@@ -29,6 +29,9 @@ import type { BlogPost } from "@/lib/types";
 import DeletePostButton from "./DeletePostButton";
 
 async function getBlogPosts(): Promise<BlogPost[]> {
+  if (!dbAdmin) {
+    return [];
+  }
   const postsQuery = dbAdmin.collection('blogPosts').orderBy('createdAt', 'desc');
   const postsSnapshot = await postsQuery.get();
   const postsList = postsSnapshot.docs.map(doc => {
@@ -67,6 +70,11 @@ export default async function AdminBlogPage() {
           <CardDescription>A list of all blog posts in the system.</CardDescription>
         </CardHeader>
         <CardContent>
+          {!dbAdmin ? (
+             <div className="text-center p-8 text-destructive">
+                Firebase Admin is not configured. Unable to load blog posts.
+            </div>
+          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -111,6 +119,7 @@ export default async function AdminBlogPage() {
               ))}
             </TableBody>
           </Table>
+          )}
         </CardContent>
       </Card>
     </div>

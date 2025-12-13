@@ -9,6 +9,9 @@ type Props = {
 }
 
 async function getNewsArticle(id: string): Promise<NewsArticle | null> {
+    if (!dbAdmin) {
+        return null;
+    }
     const docRef = dbAdmin.collection('news').doc(id);
     const docSnap = await docRef.get();
     if (docSnap.exists) {
@@ -26,6 +29,19 @@ async function getNewsArticle(id: string): Promise<NewsArticle | null> {
 export default async function EditNewsArticlePage({ params }: Props) {
     const article = await getNewsArticle(params.id);
     if (!article) {
+         if (!dbAdmin) {
+             return (
+                <div className="space-y-8">
+                    <div>
+                        <h1 className="text-3xl font-bold font-headline">Edit News Article</h1>
+                        <p className="text-muted-foreground">Make changes to the news article below.</p>
+                    </div>
+                     <div className="text-center p-8 text-destructive">
+                        Firebase Admin is not configured. Unable to edit article.
+                    </div>
+                </div>
+            )
+        }
         notFound();
     }
 

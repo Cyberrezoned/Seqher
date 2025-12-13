@@ -16,6 +16,10 @@ export const metadata = {
 const blogHeroImage = PlaceHolderImages.find(p => p.id === 'blog-hero');
 
 async function getBlogPosts(): Promise<BlogPost[]> {
+  if (!dbAdmin) {
+    console.warn("Firebase Admin is not initialized. Skipping blog post fetch.");
+    return [];
+  }
   const postsQuery = dbAdmin.collection('blogPosts').orderBy('createdAt', 'desc');
   const postsSnapshot = await postsQuery.get();
   const postsList = postsSnapshot.docs.map(doc => {
@@ -54,6 +58,18 @@ export default async function BlogPage() {
 
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
+          {!dbAdmin && (
+            <div className="text-center p-8 text-destructive border-dashed border-2 border-destructive/50 rounded-lg">
+                <h2 className="text-2xl font-bold font-headline mb-4">Firebase Not Configured</h2>
+                <p>Could not connect to the database. Please ensure server environment variables are set.</p>
+            </div>
+          )}
+          {dbAdmin && blogPosts.length === 0 && (
+             <div className="text-center p-8 text-muted-foreground border-dashed border-2 rounded-lg">
+                <h2 className="text-2xl font-bold font-headline mb-4">No Posts Yet</h2>
+                <p>There are no blog posts available at the moment. Check back soon!</p>
+            </div>
+          )}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => {
               const postImage = PlaceHolderImages.find((p) => p.id === post.imageId);

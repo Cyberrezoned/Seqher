@@ -14,6 +14,9 @@ type Props = {
 };
 
 export async function generateStaticParams() {
+    if (!dbAdmin) {
+        return [];
+    }
     const postsQuery = dbAdmin.collection('blogPosts');
     const postsSnapshot = await postsQuery.get();
     return postsSnapshot.docs.map((doc) => ({
@@ -22,6 +25,9 @@ export async function generateStaticParams() {
 }
 
 async function getPost(slug: string): Promise<BlogPost | null> {
+    if (!dbAdmin) {
+        return null;
+    }
     const postsQuery = dbAdmin.collection('blogPosts').where('slug', '==', slug);
     const querySnapshot = await postsQuery.get();
     if (querySnapshot.empty) {
@@ -52,6 +58,16 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPost(params.slug);
 
   if (!post) {
+      if (!dbAdmin) {
+        return (
+            <div className="container mx-auto px-4 py-12 md:py-20">
+                <div className="max-w-3xl mx-auto text-center">
+                    <h1 className="font-headline text-3xl font-bold text-destructive">Firebase Not Configured</h1>
+                    <p className="mt-4 text-muted-foreground">The connection to the database could not be established. Please check server environment variables.</p>
+                </div>
+            </div>
+        )
+      }
     notFound();
   }
 

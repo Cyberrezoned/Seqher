@@ -29,6 +29,9 @@ import type { Announcement } from "@/lib/types";
 import DeleteAnnouncementButton from "./DeleteAnnouncementButton";
 
 async function getAnnouncements(): Promise<Announcement[]> {
+  if (!dbAdmin) {
+    return [];
+  }
   const announcementsQuery = dbAdmin.collection('announcements').orderBy('createdAt', 'desc');
   const snapshot = await announcementsQuery.get();
   const list = snapshot.docs.map(doc => {
@@ -67,6 +70,11 @@ export default async function AdminAnnouncementsPage() {
           <CardDescription>A list of all announcements in the system.</CardDescription>
         </CardHeader>
         <CardContent>
+          {!dbAdmin ? (
+            <div className="text-center p-8 text-destructive">
+                Firebase Admin is not configured. Unable to load announcements.
+            </div>
+          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -108,6 +116,7 @@ export default async function AdminAnnouncementsPage() {
               ))}
             </TableBody>
           </Table>
+          )}
         </CardContent>
       </Card>
     </div>
