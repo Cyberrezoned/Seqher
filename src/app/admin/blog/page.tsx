@@ -24,20 +24,18 @@ import {
 import { MoreHorizontal, PlusCircle, Newspaper } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { dbAdmin } from "@/lib/firebase-admin";
 import type { BlogPost } from "@/lib/types";
 import DeletePostButton from "./DeletePostButton";
 
 async function getBlogPosts(): Promise<BlogPost[]> {
-  const postsQuery = query(collection(db, 'blogPosts'), orderBy('createdAt', 'desc'));
-  const postsSnapshot = await getDocs(postsQuery);
+  const postsQuery = dbAdmin.collection('blogPosts').orderBy('createdAt', 'desc');
+  const postsSnapshot = await postsQuery.get();
   const postsList = postsSnapshot.docs.map(doc => {
       const data = doc.data();
       return { 
           id: doc.id, 
           ...data,
-          // Convert Firestore Timestamp to ISO string, if it's not already a string
           createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
       } as BlogPost
   });

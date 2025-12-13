@@ -24,14 +24,13 @@ import {
 import { MoreHorizontal, PlusCircle, Megaphone } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { dbAdmin } from "@/lib/firebase-admin";
 import type { Announcement } from "@/lib/types";
 import DeleteAnnouncementButton from "./DeleteAnnouncementButton";
 
 async function getAnnouncements(): Promise<Announcement[]> {
-  const announcementsQuery = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'));
-  const snapshot = await getDocs(announcementsQuery);
+  const announcementsQuery = dbAdmin.collection('announcements').orderBy('createdAt', 'desc');
+  const snapshot = await announcementsQuery.get();
   const list = snapshot.docs.map(doc => {
       const data = doc.data();
       return { 

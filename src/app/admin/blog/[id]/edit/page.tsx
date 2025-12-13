@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import BlogForm from "../../BlogForm";
-import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { BlogPost } from '@/lib/types';
 
 
@@ -10,10 +9,11 @@ type Props = {
 }
 
 async function getPost(id: string): Promise<BlogPost | null> {
-    const docRef = doc(db, 'blogPosts', id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
+    const docRef = dbAdmin.collection('blogPosts').doc(id);
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
         const data = docSnap.data();
+        if (!data) return null;
         return {
             id: docSnap.id,
             ...data,

@@ -4,8 +4,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { BlogPost } from '@/lib/types';
 
 
@@ -17,8 +16,8 @@ export const metadata = {
 const blogHeroImage = PlaceHolderImages.find(p => p.id === 'blog-hero');
 
 async function getBlogPosts(): Promise<BlogPost[]> {
-  const postsQuery = query(collection(db, 'blogPosts'), orderBy('createdAt', 'desc'));
-  const postsSnapshot = await getDocs(postsQuery);
+  const postsQuery = dbAdmin.collection('blogPosts').orderBy('createdAt', 'desc');
+  const postsSnapshot = await postsQuery.get();
   const postsList = postsSnapshot.docs.map(doc => {
       const data = doc.data();
       return { 

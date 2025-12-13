@@ -24,14 +24,13 @@ import { Badge } from "@/components/ui/badge";
 
 import { MoreHorizontal, PlusCircle, ClipboardList } from "lucide-react";
 import Link from "next/link";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { dbAdmin } from "@/lib/firebase-admin";
 import type { Program } from "@/lib/types";
 import DeleteProgramButton from "./DeleteProgramButton";
 
 async function getPrograms(): Promise<Program[]> {
-  const programsQuery = query(collection(db, 'programs'), orderBy('title', 'asc'));
-  const snapshot = await getDocs(programsQuery);
+  const programsQuery = dbAdmin.collection('programs').orderBy('title', 'asc');
+  const snapshot = await programsQuery.get();
   const list = snapshot.docs.map(doc => {
       const data = doc.data();
       return { 

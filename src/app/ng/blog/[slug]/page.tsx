@@ -5,8 +5,7 @@ import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { BlogPost } from '@/lib/types';
 
 
@@ -15,16 +14,16 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-    const postsQuery = collection(db, 'blogPosts');
-    const postsSnapshot = await getDocs(postsQuery);
+    const postsQuery = dbAdmin.collection('blogPosts');
+    const postsSnapshot = await postsQuery.get();
     return postsSnapshot.docs.map((doc) => ({
         slug: doc.data().slug,
     }));
 }
 
 async function getPost(slug: string): Promise<BlogPost | null> {
-    const postsQuery = query(collection(db, 'blogPosts'), where('slug', '==', slug));
-    const querySnapshot = await getDocs(postsQuery);
+    const postsQuery = dbAdmin.collection('blogPosts').where('slug', '==', slug);
+    const querySnapshot = await postsQuery.get();
     if (querySnapshot.empty) {
         return null;
     }

@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import { validateEmail } from '@/ai/flows/validate-email-with-llm';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
+import { FieldValue } from 'firebase-admin/firestore';
 
 const appointmentSchema = z.object({
   name: z.string().min(2),
@@ -42,14 +42,14 @@ export async function bookAppointment(
       };
     }
 
-    // Save the appointment to Firestore
-    await addDoc(collection(db, 'appointments'), {
+    // Save the appointment to Firestore using the admin SDK
+    await dbAdmin.collection('appointments').add({
       name,
       email,
       appointmentDate,
       appointmentType,
       message,
-      createdAt: serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(),
       status: 'pending',
     });
 

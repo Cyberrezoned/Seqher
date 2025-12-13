@@ -4,8 +4,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { Program } from '@/lib/types';
 
 type Props = {
@@ -13,17 +12,17 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  const programsCol = collection(db, 'programs');
-  const programSnapshot = await getDocs(programsCol);
+  const programsCol = dbAdmin.collection('programs');
+  const programSnapshot = await programsCol.get();
   return programSnapshot.docs.map((doc) => ({
     id: doc.id,
   }));
 }
 
 async function getProgram(id: string): Promise<Program | null> {
-    const docRef = doc(db, 'programs', id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
+    const docRef = dbAdmin.collection('programs').doc(id);
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
         return { id: docSnap.id, ...docSnap.data() } as Program;
     }
     return null;

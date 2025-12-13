@@ -25,14 +25,13 @@ import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal, PlusCircle, Globe } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { dbAdmin } from "@/lib/firebase-admin";
 import type { NewsArticle } from "@/lib/types";
 import DeleteNewsButton from "./DeleteNewsButton";
 
 async function getNewsArticles(): Promise<NewsArticle[]> {
-  const articlesQuery = query(collection(db, 'news'), orderBy('publishedDate', 'desc'));
-  const snapshot = await getDocs(articlesQuery);
+  const articlesQuery = dbAdmin.collection('news').orderBy('publishedDate', 'desc');
+  const snapshot = await articlesQuery.get();
   const list = snapshot.docs.map(doc => {
       const data = doc.data();
       return { 

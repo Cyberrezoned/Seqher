@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import ProgramForm from "../../ProgramForm";
-import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { Program } from '@/lib/types';
 
 
@@ -10,9 +9,9 @@ type Props = {
 }
 
 async function getProgram(id: string): Promise<Program | null> {
-    const docRef = doc(db, 'programs', id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
+    const docRef = dbAdmin.collection('programs').doc(id);
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
         const data = docSnap.data();
         return {
             id: docSnap.id,

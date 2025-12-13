@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import NewsForm from "../../NewsForm";
-import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { NewsArticle } from '@/lib/types';
 
 
@@ -10,14 +9,15 @@ type Props = {
 }
 
 async function getNewsArticle(id: string): Promise<NewsArticle | null> {
-    const docRef = doc(db, 'news', id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
+    const docRef = dbAdmin.collection('news').doc(id);
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
         const data = docSnap.data();
+        if (!data) return null;
         return {
             id: docSnap.id,
             ...data,
-            publishedDate: data.publishedDate.toDate().toISOString(),
+            publishedDate: (data.publishedDate.toDate() as Date).toISOString(),
         } as NewsArticle;
     }
     return null;

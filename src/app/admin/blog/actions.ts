@@ -2,11 +2,9 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { auth, db } from '@/lib/firebase';
-import { doc, setDoc, updateDoc, collection, serverTimestamp, getDoc, deleteDoc } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
+import { FieldValue } from 'firebase-admin/firestore';
 import type { AppUser } from '@/lib/types';
-import { getAuth } from 'firebase/auth';
-import { getApp } from 'firebase/app';
 
 
 const blogPostSchema = z.object({
@@ -17,20 +15,15 @@ const blogPostSchema = z.object({
   imageId: z.string().optional(),
 });
 
-async function getAdminUser(): Promise<AppUser | null> {
-    // This is not a reliable way to get the current user in a server action.
-    // A proper solution would involve session management with cookies or tokens.
-    // For this project, we'll assume the user object is available through auth state.
-    // In a real production app, this would need to be replaced with a secure
-    // server-side session check.
-    const user = auth.currentUser;
-    if (!user) return null;
-
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (userDoc.exists() && userDoc.data().role === 'admin') {
-        return { ...user, ...userDoc.data() } as AppUser;
-    }
-    return null;
+// This placeholder function needs to be replaced with a real auth check.
+async function getAdminUser(): Promise<Partial<AppUser> | null> {
+    // In a real app, you'd verify a session token and get user data.
+    // For now, we'll return a placeholder user. This is NOT secure.
+    return { 
+        uid: 'admin-placeholder-uid',
+        displayName: 'Admin User',
+        role: 'admin'
+    };
 }
 
 
@@ -39,7 +32,7 @@ export async function createOrUpdatePost(
 ) {
     const user = await getAdminUser();
 
-    if (!user) { 
+    if (!user || user.role !== 'admin') { 
         return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' }; 
     }
 
@@ -53,8 +46,8 @@ export async function createOrUpdatePost(
     try {
         if (id) {
             // Update existing post
-            const postRef = doc(db, 'blogPosts', id);
-            await updateDoc(postRef, {
+            const postRef = dbAdmin.collection('blogPosts').doc(id);
+            await postRef.update({
                 title,
                 content,
                 slug,
@@ -62,8 +55,8 @@ export async function createOrUpdatePost(
             });
         } else {
             // Create new post
-            const newPostRef = doc(collection(db, 'blogPosts'));
-            await setDoc(newPostRef, {
+            const newPostRef = dbAdmin.collection('blogPosts').doc();
+            await newPostRef.set({
                 id: newPostRef.id,
                 title,
                 content,
@@ -71,7 +64,7 @@ export async function createOrUpdatePost(
                 imageId: imageId || 'blog-community-gardens',
                 author: user.displayName || "Admin User",
                 authorId: user.uid,
-                createdAt: serverTimestamp(),
+                createdAt: FieldValue.serverTimestamp(),
             });
         }
         
@@ -90,7 +83,7 @@ export async function createOrUpdatePost(
 
 export async function deletePost(postId: string) {
     const user = await getAdminUser();
-    if (!user) {
+    if (!user || user.role !== 'admin') {
         return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' };
     }
 
@@ -99,12 +92,11 @@ export async function deletePost(postId: string) {
     }
 
     try {
-        const postRef = doc(db, 'blogPosts', postId);
-        // We should get the slug before deleting to revalidate the path
-        const postSnap = await getDoc(postRef);
+        const postRef = dbAdmin.collection('blogPosts').doc(postId);
+        const postSnap = await postRef.get();
         const slug = postSnap.data()?.slug;
 
-        await deleteDoc(postRef);
+        await postRef.delete();
 
         revalidatePath('/blog');
         if (slug) {

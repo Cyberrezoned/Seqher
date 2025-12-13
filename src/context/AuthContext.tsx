@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User, signOut as firebaseSignOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, onSnapshot, getDocs, collection } from 'firebase/firestore';
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { AppUser, UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -21,10 +21,12 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
-const isFirstUser = async (): Promise<boolean> => {
-    const usersCollection = collection(db, 'users');
-    const userSnapshot = await getDocs(usersCollection);
-    return userSnapshot.empty;
+// This function needs to run on the client, so we can't use the admin SDK here.
+// It checks if a 'users' collection exists and has any documents.
+const isFirstUserClient = async (): Promise<boolean> => {
+    const userCountRef = doc(db, 'internal', 'user_count');
+    const docSnap = await getDoc(userCountRef);
+    return !docSnap.exists() || docSnap.data().count === 0;
 }
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -36,15 +38,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (firebaseUser) {
         const userRef = doc(db, 'users', firebaseUser.uid);
         
-        // Listen for real-time updates to the user's profile
         const unsubSnapshot = onSnapshot(userRef, async (docSnap) => {
             if (docSnap.exists()) {
-                // User profile exists, merge it with firebase user
                 const userProfile = docSnap.data() as UserProfile;
                 setUser({ ...firebaseUser, ...userProfile });
             } else {
-                // New user, create a profile in Firestore
-                const firstUser = await isFirstUser();
+                const firstUser = await isFirstUserClient();
                 const newUserProfile: UserProfile = {
                     uid: firebaseUser.uid,
                     email: firebaseUser.email,
@@ -52,6 +51,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     role: firstUser ? 'admin' : 'user',
                 };
                 await setDoc(userRef, newUserProfile);
+                // Also update the count
+                const userCountRef = doc(db, 'internal', 'user_count');
+                const countSnap = await getDoc(userCountRef);
+                const currentCount = countSnap.exists() ? countSnap.data().count : 0;
+                await setDoc(userCountRef, { count: currentCount + 1 }, { merge: true });
+
                 setUser({ ...firebaseUser, ...newUserProfile });
             }
             setLoading(false);

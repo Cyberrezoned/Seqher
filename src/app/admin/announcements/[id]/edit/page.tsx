@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import AnnouncementForm from "../../AnnouncementForm";
-import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { Announcement } from '@/lib/types';
 
 
@@ -10,14 +9,15 @@ type Props = {
 }
 
 async function getAnnouncement(id: string): Promise<Announcement | null> {
-    const docRef = doc(db, 'announcements', id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
+    const docRef = dbAdmin.collection('announcements').doc(id);
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
         const data = docSnap.data();
+        if (!data) return null;
         return {
             id: docSnap.id,
             ...data,
-            createdAt: data.createdAt.toDate().toISOString(),
+            createdAt: (data.createdAt.toDate() as Date).toISOString(),
         } as Announcement;
     }
     return null;

@@ -5,8 +5,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { dbAdmin } from '@/lib/firebase-admin';
 import type { Program } from '@/lib/types';
 
 
@@ -18,8 +17,8 @@ export const metadata = {
 const programsHeroImage = PlaceHolderImages.find(p => p.id === 'programs-hero');
 
 async function getPrograms(): Promise<Program[]> {
-  const programsCol = collection(db, 'programs');
-  const programSnapshot = await getDocs(programsCol);
+  const programsCol = dbAdmin.collection('programs');
+  const programSnapshot = await programsCol.get();
   const programList = programSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Program));
   return programList;
 }
