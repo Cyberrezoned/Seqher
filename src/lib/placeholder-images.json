@@ -57,13 +57,13 @@
     {
       "id": "avatar-1",
       "description": "Avatar of a person",
-      "imageUrl": "https://images.unsplash.com/photo-1594616838951-c155f8d978a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBhdmF0YXJ8ZW58MHx8fHwxNzY0MTExMDM1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1594616838951-c155f8d978a0",
       "imageHint": "person avatar"
     },
     {
       "id": "avatar-2",
       "description": "Avatar of another person",
-      "imageUrl": "https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwZXJzb24lMjBhdmF0YXJ8ZW58MHx8fHwxNzY0MTExMDM1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1639149888905-fb39731f2e6c",
       "imageHint": "person avatar"
     },
     {
@@ -93,37 +93,37 @@
     {
       "id": "hero-canada",
       "description": "A stunning view of mountains and a lake in Canada.",
-      "imageUrl": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjYW5hZGF8ZW58MHx8fHwxNzY0MTYyMjM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce",
       "imageHint": "canada landscape"
     },
     {
       "id": "about-canada-1",
       "description": "A Canadian city skyline at dusk.",
-      "imageUrl": "https://images.unsplash.com/photo-1500930287299-e45f94921676?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW5hZGlhbiUyMGNpdHl8ZW58MHx8fHwxNzY0MTYyMjM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1500930287299-e45f94921676",
       "imageHint": "canadian city"
     },
     {
       "id": "about-canada-2",
       "description": "A close-up of a maple leaf, the symbol of Canada.",
-      "imageUrl": "https://images.unsplash.com/photo-1479832912903-35697a2e5052?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjYW5hZGlhbiUyMG1hcGxlJTIwbGVhZnxlbnwwfHx8fDE3NjQxNjIyMzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1479832912903-35697a2e5052",
       "imageHint": "maple leaf"
     },
     {
       "id": "about-hero",
       "description": "A team of diverse volunteers planning a project together.",
-      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx0ZWFtJTIwY29sbGFib3JhdGlvbnxlbnwwfHx8fDE3NjQxOTg1MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
       "imageHint": "team collaboration"
     },
     {
       "id": "about-mission",
       "description": "A close-up shot of a compass pointing towards a goal.",
-      "imageUrl": "https://images.unsplash.com/photo-1504992963429-56f2d776d3ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtaXNzaW9uJTIwZ29hbHxlbnwwfHx8fDE3NjQxOTg1MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1504992963429-56f2d776d3ec",
       "imageHint": "mission goal"
     },
     {
       "id": "news-hero",
       "description": "A satellite image of the earth, highlighting global connectivity.",
-      "imageUrl": "https://images.unsplash.com/photo-1564053489984-723fe21f3170?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxnbG9iYWwlMjBuZXdzfGVufDB8fHx8MTc2NDE5OTQwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1564053489984-723fe21f3170",
       "imageHint": "global news"
     }
   ]
