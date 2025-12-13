@@ -47,7 +47,10 @@ export async function createOrUpdateNewsArticle(
     try {
         if (id) {
             const ref = doc(db, 'news', id);
-            await updateDoc(ref, articleData);
+            await updateDoc(ref, {
+                ...articleData,
+                publishedDate: articleData.publishedDate,
+            });
         } else {
             const newRef = doc(collection(db, 'news'));
             await setDoc(newRef, {
