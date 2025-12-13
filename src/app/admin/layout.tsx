@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Newspaper, Settings, LogOut, Megaphone, CalendarCheck, ClipboardList, DollarSign } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Settings, LogOut, Megaphone, CalendarCheck, ClipboardList, DollarSign, Globe } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -65,6 +65,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/programs', label: 'Programs', icon: ClipboardList },
     { href: '/admin/blog', label: 'Blog', icon: Newspaper },
+    { href: '/admin/news', label: 'News', icon: Globe },
     { href: '/admin/announcements', label: 'Announcements', icon: Megaphone },
     { href: '/admin/appointments', label: 'Appointments', icon: CalendarCheck },
     { href: '/admin/donations', label: 'Donations', icon: DollarSign },

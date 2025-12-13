@@ -7,54 +7,28 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { ArrowRight, Globe } from 'lucide-react';
-import { NewsArticle } from '@/lib/types';
+import type { NewsArticle } from '@/lib/types';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const newsHeroImage = PlaceHolderImages.find((p) => p.id === 'news-hero');
 
-// Placeholder data - in a real app, this would come from a CMS or API
-const newsArticles: NewsArticle[] = [
-  {
-    id: '1',
-    title: 'UN Report: Urgent Action Needed to Achieve 2030 Climate Goals',
-    source: 'UN News',
-    publishedDate: '2024-07-20T10:00:00Z',
-    summary: 'A landmark report from the IPCC highlights the critical need for accelerated efforts to combat climate change, emphasizing renewable energy and international cooperation.',
-    imageUrl: 'https://images.unsplash.com/photo-1611273656184-1de0e35b7b5d?w=800&q=80',
-    imageHint: 'wind turbines',
-    link: '#',
-  },
-  {
-    id: '2',
-    title: 'Global Education Summit Pledges Billions for Quality Education (SDG 4)',
-    source: 'UNESCO',
-    publishedDate: '2024-07-18T14:30:00Z',
-    summary: 'Leaders from around the world have committed to increasing funding for educational initiatives, focusing on access for girls and marginalized communities.',
-    imageUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80',
-    imageHint: 'students learning',
-    link: '#',
-  },
-  {
-    id: '3',
-    title: 'Breakthrough in Clean Water Technology Promises Hope for Rural Areas (SDG 6)',
-    source: 'World Health Organization',
-    publishedDate: '2024-07-15T09:00:00Z',
-    summary: 'A new, low-cost water filtration system developed by researchers could provide safe drinking water to millions, tackling a major global health challenge.',
-    imageUrl: 'https://images.unsplash.com/photo-1598013324227-39b596813a30?w=800&q=80',
-    imageHint: 'clean water',
-    link: '#',
-  },
-  {
-    id: '4',
-    title: '"Decade of Action" Report Shows Mixed Progress on SDGs',
-    source: 'UN DESA',
-    publishedDate: '2024-07-12T11:00:00Z',
-    summary: 'While significant gains have been made in some areas, the latest Sustainable Development Goals Report warns that the pandemic has reversed progress in others.',
-    imageUrl: 'https://images.unsplash.com/photo-1590374246944-32215f9a65c9?w=800&q=80',
-    imageHint: 'global goals chart',
-    link: '#',
-  },
-];
+async function getNewsArticles(): Promise<NewsArticle[]> {
+  const newsQuery = query(collection(db, 'news'), orderBy('publishedDate', 'desc'));
+  const snapshot = await getDocs(newsQuery);
+  const list = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return { 
+          id: doc.id, 
+          ...data,
+          publishedDate: data.publishedDate?.toDate ? data.publishedDate.toDate().toISOString() : new Date().toISOString(),
+      } as NewsArticle
+  });
+  return list;
+}
+
 
 const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -70,6 +44,12 @@ const cardVariants = {
   };
 
 export default function NewsPage() {
+    const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
+
+    useEffect(() => {
+        getNewsArticles().then(setNewsArticles);
+    }, []);
+
   return (
     <div>
       <section className="relative h-[40vh] min-h-[300px] w-full bg-primary/20 flex items-center justify-center">
@@ -112,25 +92,30 @@ export default function NewsPage() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newsArticles.map((article, index) => (
+            {newsArticles.map((article, index) => {
+               const articleImage = PlaceHolderImages.find((p) => p.id === article.imageId);
+               return (
               <motion.div
                 key={article.id}
                 custom={index}
                 initial="hidden"
-                animate="visible"
+                whileInView="visible"
+                viewport={{ once: true }}
                 variants={cardVariants}
-                className="h-full"
+                className="h-full flex"
                 >
-                <Card className="flex flex-col h-full overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+                <Card className="flex flex-col h-full w-full overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
                   <CardHeader className="p-0">
-                    <Image
-                      src={article.imageUrl}
-                      alt={article.title}
-                      width={400}
-                      height={225}
-                      className="w-full h-48 object-cover"
-                      data-ai-hint={article.imageHint}
-                    />
+                    {articleImage && (
+                        <Image
+                        src={articleImage.imageUrl}
+                        alt={article.title}
+                        width={400}
+                        height={225}
+                        className="w-full h-48 object-cover"
+                        data-ai-hint={articleImage.imageHint}
+                        />
+                    )}
                   </CardHeader>
                   <CardContent className="p-6 flex flex-col flex-grow">
                     <p className="text-sm text-muted-foreground mb-2 font-medium">
@@ -146,8 +131,13 @@ export default function NewsPage() {
                   </CardFooter>
                 </Card>
               </motion.div>
-            ))}
+            )})}
           </div>
+           {newsArticles.length === 0 && (
+                <div className="text-center p-8 text-muted-foreground">
+                    No news articles found. Check back later!
+                </div>
+            )}
         </div>
       </section>
     </div>

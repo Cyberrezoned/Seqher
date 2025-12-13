@@ -125,6 +125,42 @@
       "description": "A satellite image of the earth, highlighting global connectivity.",
       "imageUrl": "https://images.unsplash.com/photo-1564053489984-723fe21f3170",
       "imageHint": "global news"
+    },
+    {
+      "id": "news-climate-report",
+      "description": "Wind turbines on a hill at sunset.",
+      "imageUrl": "https://images.unsplash.com/photo-1611273656184-1de0e35b7b5d",
+      "imageHint": "wind turbines"
+    },
+    {
+      "id": "news-education-summit",
+      "description": "A diverse group of students collaborating in a modern classroom.",
+      "imageUrl": "https://images.unsplash.com/photo-1523240795612-9a054b0db644",
+      "imageHint": "students learning"
+    },
+    {
+      "id": "news-water-tech",
+      "description": "Crystal clear water flowing from a tap into a glass.",
+      "imageUrl": "https://images.unsplash.com/photo-1598013324227-39b596813a30",
+      "imageHint": "clean water"
+    },
+    {
+      "id": "news-sdg-report",
+      "description": "The 17 Sustainable Development Goal icons arranged in a grid.",
+      "imageUrl": "https://images.unsplash.com/photo-1590374246944-32215f9a65c9",
+      "imageHint": "global goals"
+    },
+    {
+      "id": "news-biodiversity-conference",
+      "description": "A lush, vibrant rainforest with diverse flora.",
+      "imageUrl": "https://images.unsplash.com/photo-1426604966848-d7adbf422ca2",
+      "imageHint": "rainforest biodiversity"
+    },
+    {
+      "id": "news-digital-inclusion",
+      "description": "An elderly person learning to use a tablet computer with help.",
+      "imageUrl": "https://images.unsplash.com/photo-1605328227916-2a9a7ab2572c",
+      "imageHint": "digital inclusion"
     }
   ]
 }

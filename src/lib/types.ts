@@ -44,8 +44,7 @@ export type NewsArticle = {
   source: string;
   publishedDate: string; // ISO string
   summary: string;
-  imageUrl: string;
-  imageHint: string;
+  imageId: string;
   link: string;
 };
 
