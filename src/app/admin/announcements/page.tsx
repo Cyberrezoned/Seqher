@@ -70,11 +70,6 @@ export default async function AdminAnnouncementsPage() {
           <CardDescription>A list of all announcements in the system.</CardDescription>
         </CardHeader>
         <CardContent>
-          {!dbAdmin ? (
-            <div className="text-center p-8 text-destructive">
-                Firebase Admin is not configured. Unable to load announcements.
-            </div>
-          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -116,7 +111,6 @@ export default async function AdminAnnouncementsPage() {
               ))}
             </TableBody>
           </Table>
-          )}
         </CardContent>
       </Card>
     </div>

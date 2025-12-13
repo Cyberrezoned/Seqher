@@ -50,16 +50,6 @@ export default async function ProgramDetailPage({ params }: Props) {
   const program = await getProgram(params.id);
 
   if (!program) {
-     if (!dbAdmin) {
-        return (
-            <div className="container mx-auto px-4 py-12 md:py-20">
-                <div className="max-w-3xl mx-auto text-center">
-                    <h1 className="font-headline text-3xl font-bold text-destructive">Firebase Not Configured</h1>
-                    <p className="mt-4 text-muted-foreground">The connection to the database could not be established. Please check server environment variables.</p>
-                </div>
-            </div>
-        )
-      }
     notFound();
   }
 

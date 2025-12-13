@@ -63,7 +63,7 @@ export default async function AdminNewsPage() {
             <PlusCircle className="mr-2 h-4 w-4" />
             Create News Article
           </Link>
-        </Button>
+        </Button>_
       </div>
       <Card>
         <CardHeader>
@@ -71,11 +71,6 @@ export default async function AdminNewsPage() {
           <CardDescription>A list of all news articles in the system.</CardDescription>
         </CardHeader>
         <CardContent>
-          {!dbAdmin ? (
-             <div className="text-center p-8 text-destructive">
-                Firebase Admin is not configured. Unable to load news articles.
-            </div>
-          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -130,7 +125,6 @@ export default async function AdminNewsPage() {
                 )}
             </TableBody>
           </Table>
-          )}
         </CardContent>
       </Card>
     </div>

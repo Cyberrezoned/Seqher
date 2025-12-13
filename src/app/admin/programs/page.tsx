@@ -69,11 +69,6 @@ export default async function AdminProgramsPage() {
           <CardDescription>A list of all programs in the system.</CardDescription>
         </CardHeader>
         <CardContent>
-          {!dbAdmin ? (
-            <div className="text-center p-8 text-destructive">
-                Firebase Admin is not configured. Unable to load programs.
-            </div>
-          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -126,7 +121,6 @@ export default async function AdminProgramsPage() {
               )}
             </TableBody>
           </Table>
-          )}
         </CardContent>
       </Card>
     </div>

@@ -70,11 +70,6 @@ export default async function AdminBlogPage() {
           <CardDescription>A list of all blog posts in the system.</CardDescription>
         </CardHeader>
         <CardContent>
-          {!dbAdmin ? (
-             <div className="text-center p-8 text-destructive">
-                Firebase Admin is not configured. Unable to load blog posts.
-            </div>
-          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -119,7 +114,6 @@ export default async function AdminBlogPage() {
               ))}
             </TableBody>
           </Table>
-          )}
         </CardContent>
       </Card>
     </div>

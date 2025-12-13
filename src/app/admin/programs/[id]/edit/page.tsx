@@ -10,6 +10,7 @@ type Props = {
 
 async function getProgram(id: string): Promise<Program | null> {
     if (!dbAdmin) {
+        console.error("Firebase Admin is not configured. Unable to fetch program.");
         return null;
     }
     const docRef = dbAdmin.collection('programs').doc(id);
@@ -27,19 +28,6 @@ async function getProgram(id: string): Promise<Program | null> {
 export default async function EditProgramPage({ params }: Props) {
     const program = await getProgram(params.id);
     if (!program) {
-        if (!dbAdmin) {
-            return (
-                <div className="space-y-8">
-                    <div>
-                        <h1 className="text-3xl font-bold font-headline">Edit Program</h1>
-                        <p className="text-muted-foreground">Make changes to the program below.</p>
-                    </div>
-                    <div className="text-center p-8 text-destructive">
-                        Firebase Admin is not configured. Unable to edit program.
-                    </div>
-                </div>
-            )
-        }
         notFound();
     }
 
