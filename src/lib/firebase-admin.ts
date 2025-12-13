@@ -1,3 +1,4 @@
+
 import * as admin from 'firebase-admin';
 import { getApps } from 'firebase-admin/app';
 
@@ -13,7 +14,9 @@ const serviceAccount = {
 
 if (!getApps().length) {
   if (!serviceAccount.projectId || !serviceAccount.clientEmail || !serviceAccount.privateKey) {
-    console.error('Firebase Admin SDK service account credentials are not set in environment variables.');
+    // We are not throwing an error here to allow the app to build, 
+    // but we log a serious warning. Server-side features will fail.
+    console.warn('CRITICAL: Firebase Admin SDK service account credentials are not set. Server-side Firebase features will fail.');
   } else {
     try {
       admin.initializeApp({
@@ -25,7 +28,12 @@ if (!getApps().length) {
   }
 }
 
-const dbAdmin = admin.firestore();
-const authAdmin = admin.auth();
+const dbAdmin = admin.apps.length > 0 ? admin.firestore() : null;
+const authAdmin = admin.apps.length > 0 ? admin.auth() : null;
+
+// This guard is essential for server-side rendering, where dbAdmin might be null.
+if (!dbAdmin) {
+    throw new Error('Firebase Admin SDK is not initialized. Check your environment variables.');
+}
 
 export { dbAdmin, authAdmin };
