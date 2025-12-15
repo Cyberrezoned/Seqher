@@ -3,7 +3,14 @@
 // The new pattern is to use the useFirebase() hook from FirebaseContext.
 
 import { initializeApp, getApps, getApp, type FirebaseOptions, type FirebaseApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator, type Auth } from 'firebase/auth';
+import { 
+  getAuth, 
+  connectAuthEmulator, 
+  setPersistence, 
+  browserLocalPersistence, 
+  browserSessionPersistence, 
+  type Auth 
+} from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator, type Firestore } from 'firebase/firestore';
 
 const firebaseConfig: FirebaseOptions = {
@@ -27,6 +34,12 @@ function initializeFirebase() {
     const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    // Ensure auth state persists between refreshes; fall back to session-only if storage is blocked.
+    setPersistence(auth, browserLocalPersistence).catch(() => {
+        console.warn('Local persistence unavailable, falling back to session persistence.');
+        return setPersistence(auth, browserSessionPersistence);
+    });
 
     if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true') {
         // @ts-ignore

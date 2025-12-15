@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User, signOut as firebaseSignOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import type { AppUser, UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFirebase } from './FirebaseContext';
@@ -36,19 +36,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   useEffect(() => {
-    if (!auth || !db) {
+    if (!auth) {
         // Firebase might not be initialized yet
         return;
     }
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
-      if (firebaseUser) {
-        const userRef = doc(db, 'users', firebaseUser.uid);
-        
-        const unsubSnapshot = onSnapshot(userRef, async (docSnap) => {
+      if (!firebaseUser) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      // Start with the Firebase auth user; enrich with Firestore profile when available.
+      let mergedUser: AppUser = {
+        ...firebaseUser,
+        role: 'user',
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+      };
+
+      try {
+        if (db) {
+            const userRef = doc(db, 'users', firebaseUser.uid);
+            const docSnap = await getDoc(userRef);
+
             if (docSnap.exists()) {
                 const userProfile = docSnap.data() as UserProfile;
-                setUser({ ...firebaseUser, ...userProfile });
+                mergedUser = { ...firebaseUser, ...userProfile };
             } else {
                 const firstUser = await isFirstUserClient();
                 const newUserProfile: UserProfile = {
@@ -64,15 +79,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 const currentCount = countSnap.exists() ? countSnap.data().count : 0;
                 await setDoc(userCountRef, { count: currentCount + 1 }, { merge: true });
 
-                setUser({ ...firebaseUser, ...newUserProfile });
+                mergedUser = { ...firebaseUser, ...newUserProfile };
             }
-            setLoading(false);
-        });
-
-        return () => unsubSnapshot();
-
-      } else {
-        setUser(null);
+        }
+      } catch (error) {
+        console.error('Error loading user profile from Firestore', error);
+      } finally {
+        setUser(mergedUser);
         setLoading(false);
       }
     });
