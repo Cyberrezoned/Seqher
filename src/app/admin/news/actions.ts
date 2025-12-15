@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { dbAdmin } from '@/lib/firebase-admin';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 const newsArticleSchema = z.object({
   id: z.string().optional(),
@@ -40,17 +40,36 @@ export async function createOrUpdateNewsArticle(
     
     try {
         if (id) {
-            const ref = dbAdmin.collection('news').doc(id);
-            await ref.update({
-                ...articleData,
-                publishedDate: articleData.publishedDate,
-            });
+            const { error } = await supabaseAdmin
+                .from('news')
+                .update({
+                    title: articleData.title,
+                    summary: articleData.summary,
+                    source: articleData.source,
+                    link: articleData.link,
+                    image_id: articleData.imageId,
+                    published_date: articleData.publishedDate,
+                    category: articleData.category,
+                    updated_at: new Date().toISOString(),
+                })
+                .eq('id', id);
+
+            if (error) throw error;
         } else {
-            const newRef = dbAdmin.collection('news').doc();
-            await newRef.set({
-                ...articleData,
-                id: newRef.id,
-            });
+            const { error } = await supabaseAdmin
+                .from('news')
+                .insert({
+                    title: articleData.title,
+                    summary: articleData.summary,
+                    source: articleData.source,
+                    link: articleData.link,
+                    image_id: articleData.imageId,
+                    published_date: articleData.publishedDate,
+                    category: articleData.category,
+                    created_at: new Date().toISOString(),
+                });
+
+            if (error) throw error;
         }
         
         revalidatePath('/ng/news');
@@ -75,8 +94,12 @@ export async function deleteNewsArticle(id: string) {
     }
 
     try {
-        const ref = dbAdmin.collection('news').doc(id);
-        await ref.delete();
+        const { error } = await supabaseAdmin
+            .from('news')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
 
         revalidatePath('/ng/news');
         revalidatePath('/admin/news');

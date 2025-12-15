@@ -2,8 +2,7 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { dbAdmin } from '@/lib/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 const programSchema = z.object({
   id: z.string().optional(),
@@ -39,15 +38,32 @@ export async function createOrUpdateProgram(
     
     try {
         if (id) {
-            const ref = dbAdmin.collection('programs').doc(id);
-            await ref.update(programData);
+            const { error } = await supabaseAdmin
+                .from('programs')
+                .update({
+                    title: programData.title,
+                    summary: programData.summary,
+                    description: programData.description,
+                    image_id: programData.imageId,
+                    sdg_goals: programData.sdgGoals,
+                    updated_at: new Date().toISOString(),
+                })
+                .eq('id', id);
+
+            if (error) throw error;
         } else {
-            const newRef = dbAdmin.collection('programs').doc();
-            await newRef.set({
-                ...programData,
-                id: newRef.id,
-                createdAt: FieldValue.serverTimestamp(),
-            });
+            const { error } = await supabaseAdmin
+                .from('programs')
+                .insert({
+                    title: programData.title,
+                    summary: programData.summary,
+                    description: programData.description,
+                    image_id: programData.imageId,
+                    sdg_goals: programData.sdgGoals,
+                    created_at: new Date().toISOString(),
+                });
+
+            if (error) throw error;
         }
         
         revalidatePath('/ng'); // Homepage featured programs
@@ -76,8 +92,12 @@ export async function deleteProgram(id: string) {
     }
 
     try {
-        const ref = dbAdmin.collection('programs').doc(id);
-        await ref.delete();
+        const { error } = await supabaseAdmin
+            .from('programs')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
 
         revalidatePath('/ng');
         revalidatePath('/ng/programs');

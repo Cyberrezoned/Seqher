@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    config.externals.push({
+      '@supabase/supabase-js': '@supabase/supabase-js',
+    });
+    return config;
+  },
 };
 
 export default nextConfig;

@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { dbAdmin } from '@/lib/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
+import { supabaseAdmin } from '@/lib/supabase-admin';
+
 // We need a way to get the admin user's UID on the server.
 // The most reliable way is to use a library that manages server-side sessions.
 // For now, we will assume we get it from a session, but this part is not fully implemented.
@@ -41,20 +41,27 @@ export async function createOrUpdateAnnouncement(
     try {
         if (id) {
             // Update existing announcement
-            const ref = dbAdmin.collection('announcements').doc(id);
-            await ref.update({
-                title,
-                content,
-            });
+            const { error } = await supabaseAdmin
+                .from('announcements')
+                .update({
+                    title,
+                    content,
+                    updated_at: new Date().toISOString(),
+                })
+                .eq('id', id);
+
+            if (error) throw error;
         } else {
             // Create new announcement
-            const newRef = dbAdmin.collection('announcements').doc();
-            await newRef.set({
-                id: newRef.id,
-                title,
-                content,
-                createdAt: FieldValue.serverTimestamp(),
-            });
+            const { error } = await supabaseAdmin
+                .from('announcements')
+                .insert({
+                    title,
+                    content,
+                    created_at: new Date().toISOString(),
+                });
+
+            if (error) throw error;
         }
         
         revalidatePath('/'); // For the homepage announcements
@@ -79,8 +86,12 @@ export async function deleteAnnouncement(id: string) {
     }
 
     try {
-        const ref = dbAdmin.collection('announcements').doc(id);
-        await ref.delete();
+        const { error } = await supabaseAdmin
+            .from('announcements')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
 
         revalidatePath('/');
         revalidatePath('/admin/announcements');

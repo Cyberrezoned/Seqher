@@ -2,8 +2,7 @@
 
 import { z } from 'zod';
 import { validateEmail } from '@/ai/flows/validate-email-with-llm';
-import { dbAdmin } from '@/lib/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 const appointmentSchema = z.object({
   name: z.string().min(2),
@@ -42,16 +41,20 @@ export async function bookAppointment(
       };
     }
 
-    // Save the appointment to Firestore using the admin SDK
-    await dbAdmin.collection('appointments').add({
-      name,
-      email,
-      appointmentDate,
-      appointmentType,
-      message,
-      createdAt: FieldValue.serverTimestamp(),
-      status: 'pending',
-    });
+    // Save the appointment to Supabase (map camelCase to snake_case)
+    const { error } = await supabaseAdmin
+      .from('appointments')
+      .insert({
+        name,
+        email,
+        appointment_date: appointmentDate,
+        appointment_type: appointmentType,
+        message,
+        created_at: new Date().toISOString(),
+        status: 'pending',
+      });
+
+    if (error) throw error;
 
     return { success: true, message: 'Appointment requested successfully!' };
 

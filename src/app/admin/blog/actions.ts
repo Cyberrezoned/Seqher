@@ -2,8 +2,7 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { dbAdmin } from '@/lib/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { AppUser } from '@/lib/types';
 
 
@@ -45,27 +44,34 @@ export async function createOrUpdatePost(
     
     try {
         if (id) {
-            // Update existing post
-            const postRef = dbAdmin.collection('blogPosts').doc(id);
-            await postRef.update({
-                title,
-                content,
-                slug,
-                imageId: imageId || 'blog-community-gardens',
-            });
+            // Update existing post in Supabase (snake_case columns)
+            const { error } = await supabaseAdmin
+                .from('blog_posts')
+                .update({
+                    title,
+                    content,
+                    slug,
+                    image_id: imageId || 'blog-community-gardens',
+                    updated_at: new Date().toISOString(),
+                })
+                .eq('id', id);
+            
+            if (error) throw error;
         } else {
-            // Create new post
-            const newPostRef = dbAdmin.collection('blogPosts').doc();
-            await newPostRef.set({
-                id: newPostRef.id,
-                title,
-                content,
-                slug,
-                imageId: imageId || 'blog-community-gardens',
-                author: user.displayName || "Admin User",
-                authorId: user.uid,
-                createdAt: FieldValue.serverTimestamp(),
-            });
+            // Create new post in Supabase
+            const { error } = await supabaseAdmin
+                .from('blog_posts')
+                .insert({
+                    title,
+                    content,
+                    slug,
+                    image_id: imageId || 'blog-community-gardens',
+                    author: user.displayName || "Admin User",
+                    author_id: user.uid,
+                    created_at: new Date().toISOString(),
+                });
+            
+            if (error) throw error;
         }
         
         // Revalidate paths to show updated content
@@ -92,15 +98,24 @@ export async function deletePost(postId: string) {
     }
 
     try {
-        const postRef = dbAdmin.collection('blogPosts').doc(postId);
-        const postSnap = await postRef.get();
-        const slug = postSnap.data()?.slug;
+        // Get the post to retrieve the slug for revalidation
+        const { data: post } = await supabaseAdmin
+            .from('blog_posts')
+            .select('slug')
+            .eq('id', postId)
+            .single();
 
-        await postRef.delete();
+        // Delete the post from Supabase
+        const { error } = await supabaseAdmin
+            .from('blog_posts')
+            .delete()
+            .eq('id', postId);
+
+        if (error) throw error;
 
         revalidatePath('/blog');
-        if (slug) {
-            revalidatePath(`/blog/${slug}`);
+        if (post?.slug) {
+            revalidatePath(`/blog/${post.slug}`);
         }
         revalidatePath('/admin/blog');
         
