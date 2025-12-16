@@ -1,5 +1,3 @@
-import type { User } from 'firebase/auth';
-
 export type Program = {
   id: string;
   title: string;
@@ -53,14 +51,14 @@ export type NewsArticle = {
   locale: 'ng' | 'ca' | 'global';
 };
 
-
 export type UserProfile = {
-  uid: string;
+  id: string;
   email: string | null;
   displayName: string | null;
   role: 'admin' | 'user';
   locale?: 'ng' | 'ca' | 'global';
+  // raw Supabase user object, if needed
+  metadata?: Record<string, any>;
 };
 
-// This combines Firebase's User object with our custom UserProfile
-export type AppUser = User & UserProfile;
+export type AppUser = UserProfile;

@@ -4,14 +4,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from 'firebase/auth';
-import { useFirebase } from '@/context/FirebaseContext';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase-client';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -42,7 +37,6 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
-  const { auth } = useFirebase();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -54,42 +48,39 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!auth) {
-        toast({ title: "Error", description: "Firebase is not ready. Please try again in a moment.", variant: "destructive"});
-        return;
-    }
     setLoading(true);
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, values.email, values.password);
+        const { error } = await supabase.auth.signInWithPassword({
+          email: values.email,
+          password: values.password,
+        });
+        if (error) throw error;
         toast({ title: "Success", description: "Logged in successfully." });
-        router.refresh();
+        router.refresh(); // re-render protected routes
       } else {
         if (!values.name) {
           form.setError("name", { message: "Name is required for sign up."});
           setLoading(false);
           return;
         }
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          values.email,
-          values.password
-        );
-        await updateProfile(userCredential.user, { displayName: values.name });
-        toast({ title: "Welcome!", description: "Account created successfully." });
+        const { error } = await supabase.auth.signUp({
+          email: values.email,
+          password: values.password,
+          options: {
+            data: { displayName: values.name },
+          },
+        });
+        if (error) throw error;
+        toast({
+          title: "Welcome!",
+          description: "Account created successfully. Ask an admin to set your app_metadata.role to admin.",
+        });
         router.push('/admin');
       }
     } catch (error: any) {
         console.error(error);
-        const errorCode = error.code;
-        let errorMessage = "An unknown error occurred.";
-        if (errorCode === 'auth/user-not-found' || errorCode === 'auth/invalid-credential') {
-            errorMessage = "No account found with this email or incorrect password. Please try again or sign up.";
-        } else if (errorCode === 'auth/wrong-password') {
-            errorMessage = "Incorrect password. Please try again.";
-        } else if (errorCode === 'auth/email-already-in-use') {
-            errorMessage = "This email is already registered. Please log in.";
-        }
+        const errorMessage = error?.message || "An unknown error occurred. Check your Supabase credentials.";
         toast({
             title: "Authentication Failed",
             description: errorMessage,
@@ -158,7 +149,7 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={loading || !auth}>
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : isLogin ? (

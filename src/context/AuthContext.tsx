@@ -1,11 +1,10 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthStateChanged, User, signOut as firebaseSignOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import type { AppUser, UserProfile } from '@/lib/types';
+import type { Session, User } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase-client';
+import type { AppUser } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useFirebase } from './FirebaseContext';
 
 interface AuthContextType {
   user: AppUser | null;
@@ -21,82 +20,52 @@ export const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
+function mapSupabaseUser(supaUser: User | null): AppUser | null {
+  if (!supaUser) return null;
+  const role = (supaUser.app_metadata?.role as AppUser['role']) || 'user';
+  return {
+    id: supaUser.id,
+    email: supaUser.email ?? null,
+    displayName: (supaUser.user_metadata as any)?.displayName ?? null,
+    role,
+    locale: (supaUser.user_metadata as any)?.locale ?? 'ng',
+    metadata: {
+      app_metadata: supaUser.app_metadata,
+      user_metadata: supaUser.user_metadata,
+    },
+  };
+}
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { auth, db } = useFirebase();
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // This function needs to run on the client, so we can't use the admin SDK here.
-  // It checks if a 'users' collection exists and has any documents.
-  const isFirstUserClient = async (): Promise<boolean> => {
-      if (!db) return false;
-      const userCountRef = doc(db, 'internal', 'user_count');
-      const docSnap = await getDoc(userCountRef);
-      return !docSnap.exists() || docSnap.data().count === 0;
-  }
-
   useEffect(() => {
-    if (!auth) {
-        // Firebase might not be initialized yet
-        return;
-    }
+    let mounted = true;
 
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
-      if (!firebaseUser) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
+    const hydrateFromSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!mounted) return;
+      setUser(mapSupabaseUser(data.session?.user ?? null));
+      setLoading(false);
+    };
 
-      // Start with the Firebase auth user; enrich with Firestore profile when available.
-      let mergedUser: AppUser = {
-        ...firebaseUser,
-        role: 'user',
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-      };
+    hydrateFromSession();
 
-      try {
-        if (db) {
-            const userRef = doc(db, 'users', firebaseUser.uid);
-            const docSnap = await getDoc(userRef);
-
-            if (docSnap.exists()) {
-                const userProfile = docSnap.data() as UserProfile;
-                mergedUser = { ...firebaseUser, ...userProfile };
-            } else {
-                const firstUser = await isFirstUserClient();
-                const newUserProfile: UserProfile = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    displayName: firebaseUser.displayName,
-                    role: firstUser ? 'admin' : 'user',
-                };
-                await setDoc(userRef, newUserProfile);
-                // Also update the count
-                const userCountRef = doc(db, 'internal', 'user_count');
-                const countSnap = await getDoc(userCountRef);
-                const currentCount = countSnap.exists() ? countSnap.data().count : 0;
-                await setDoc(userCountRef, { count: currentCount + 1 }, { merge: true });
-
-                mergedUser = { ...firebaseUser, ...newUserProfile };
-            }
-        }
-      } catch (error) {
-        console.error('Error loading user profile from Firestore', error);
-      } finally {
-        setUser(mergedUser);
-        setLoading(false);
-      }
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session: Session | null) => {
+      if (!mounted) return;
+      setUser(mapSupabaseUser(session?.user ?? null));
+      setLoading(false);
     });
 
-    return () => unsubscribe();
-  }, [auth, db]);
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
 
   const signOut = async () => {
-    if (auth) {
-        await firebaseSignOut(auth);
-    }
+    await supabase.auth.signOut();
   };
 
   const isAdmin = user?.role === 'admin';
@@ -125,7 +94,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         </div>
     );
   }
-
 
   return (
     <AuthContext.Provider value={{ user, loading, isAdmin, signOut }}>
