@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Card,
   CardContent,
@@ -17,37 +15,35 @@ import {
 } from "@/components/ui/table";
 import { CalendarCheck } from "lucide-react";
 import { format } from "date-fns";
-import { useFirebase } from "@/context/FirebaseContext";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { AppointmentRequest } from "@/lib/types";
-import { useEffect, useState } from "react";
 import AppointmentDetails from "./AppointmentDetails";
 
+async function getAppointments(): Promise<AppointmentRequest[]> {
+  const { data, error } = await supabaseAdmin
+    .from('appointments')
+    .select('id,name,email,appointment_date,appointment_type,message,status,created_at')
+    .order('created_at', { ascending: false });
 
-export default function AdminAppointmentsPage() {
-  const { db } = useFirebase();
-  const [appointments, setAppointments] = useState<AppointmentRequest[]>([]);
-  
-  useEffect(() => {
-    if (!db) return;
+  if (error || !data) {
+    console.error('Failed to load appointments from Supabase:', error);
+    return [];
+  }
 
-    async function getAppointments(): Promise<AppointmentRequest[]> {
-      const appointmentsQuery = query(collection(db, 'appointments'), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(appointmentsQuery);
-      const list = snapshot.docs.map(doc => {
-          const data = doc.data();
-          return { 
-              id: doc.id, 
-              ...data,
-              createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-              appointmentDate: data.appointmentDate?.toDate ? data.appointmentDate.toDate().toISOString() : new Date().toISOString(),
-          } as AppointmentRequest
-      });
-      return list;
-    }
+  return data.map((row) => ({
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    appointmentDate: row.appointment_date,
+    appointmentType: row.appointment_type as AppointmentRequest['appointmentType'],
+    message: row.message || '',
+    createdAt: row.created_at || new Date().toISOString(),
+    status: (row.status as AppointmentRequest['status']) || 'pending',
+  }));
+}
 
-    getAppointments().then(setAppointments);
-  }, [db]);
+export default async function AdminAppointmentsPage() {
+  const appointments = await getAppointments();
 
   return (
     <div className="space-y-8">
@@ -102,13 +98,15 @@ export default function AdminAppointmentsPage() {
                   </TableCell>
                 </TableRow>
               ))}
+               {appointments.length === 0 && (
+                <TableRow>
+                    <TableCell colSpan={6} className="text-center p-8 text-muted-foreground">
+                        No appointment requests yet.
+                    </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
-           {appointments.length === 0 && (
-                <div className="text-center p-8 text-muted-foreground">
-                    No appointment requests yet.
-                </div>
-            )}
         </CardContent>
       </Card>
     </div>

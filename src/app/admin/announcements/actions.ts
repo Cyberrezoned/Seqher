@@ -20,6 +20,7 @@ const announcementSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(5, "Title must be at least 5 characters"),
   content: z.string().min(10, "Content must be at least 10 characters"),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 
@@ -36,7 +37,7 @@ export async function createOrUpdateAnnouncement(
         return { success: false, message: `Invalid data: ${validation.error.flatten().fieldErrors}` };
     }
     
-    const { id, title, content } = validation.data;
+    const { id, title, content, locale } = validation.data;
     
     try {
         if (id) {
@@ -46,6 +47,7 @@ export async function createOrUpdateAnnouncement(
                 .update({
                     title,
                     content,
+                    locale,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', id);
@@ -58,6 +60,7 @@ export async function createOrUpdateAnnouncement(
                 .insert({
                     title,
                     content,
+                    locale,
                     created_at: new Date().toISOString(),
                 });
 

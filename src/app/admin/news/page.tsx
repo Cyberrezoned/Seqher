@@ -25,25 +25,32 @@ import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal, PlusCircle, Globe } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { dbAdmin } from "@/lib/firebase-admin";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { NewsArticle } from "@/lib/types";
 import DeleteNewsButton from "./DeleteNewsButton";
 
 async function getNewsArticles(): Promise<NewsArticle[]> {
-  if (!dbAdmin) {
+  const { data, error } = await supabaseAdmin
+    .from('news')
+    .select('id,title,summary,source,link,image_id,published_date,category,locale,created_at')
+    .order('published_date', { ascending: false });
+
+  if (error || !data) {
+    console.error('Failed to load news articles from Supabase:', error);
     return [];
   }
-  const articlesQuery = dbAdmin.collection('news').orderBy('publishedDate', 'desc');
-  const snapshot = await articlesQuery.get();
-  const list = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return { 
-          id: doc.id, 
-          ...data,
-          publishedDate: data.publishedDate?.toDate ? data.publishedDate.toDate().toISOString() : new Date().toISOString(),
-      } as NewsArticle
-  });
-  return list;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    summary: row.summary,
+    source: row.source,
+    link: row.link,
+    imageId: row.image_id,
+    publishedDate: row.published_date,
+    category: row.category as NewsArticle['category'],
+    locale: (row.locale as NewsArticle['locale']) || 'ng',
+  }));
 }
 
 export default async function AdminNewsPage() {
@@ -63,7 +70,7 @@ export default async function AdminNewsPage() {
             <PlusCircle className="mr-2 h-4 w-4" />
             Create News Article
           </Link>
-        </Button>_
+        </Button>
       </div>
       <Card>
         <CardHeader>
@@ -75,6 +82,7 @@ export default async function AdminNewsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
+                <TableHead className="hidden md:table-cell">Locale</TableHead>
                 <TableHead className="hidden lg:table-cell">Category</TableHead>
                 <TableHead className="hidden md:table-cell">Source</TableHead>
                 <TableHead className="hidden md:table-cell">Published Date</TableHead>
@@ -88,6 +96,9 @@ export default async function AdminNewsPage() {
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">
                     <Link href={item.link} className="hover:underline" target="_blank">{item.title}</Link>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell uppercase">
+                    <Badge variant="outline">{item.locale}</Badge>
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     <Badge variant="secondary">{item.category}</Badge>

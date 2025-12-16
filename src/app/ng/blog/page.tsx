@@ -7,88 +7,44 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { BlogPost } from '@/lib/types';
-import { useFirebase } from '@/context/FirebaseContext';
-import { collection, getDocs, query, orderBy, writeBatch, doc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { supabase } from '@/lib/supabase-client';
 
 const blogHeroImage = PlaceHolderImages.find(p => p.id === 'blog-hero');
 
-// Nigerian-focused blog posts for seeding
-const localBlogPostsData: Omit<BlogPost, 'id' | 'createdAt'>[] = [
-    {
-        title: "Empowering Lagos Youth: Our New Digital Skills Program",
-        slug: "lagos-youth-digital-skills-program",
-        content: "SEQHER Nigeria is thrilled to launch a new digital skills program aimed at empowering young people in Lagos. This initiative will provide free training in web development, digital marketing, and graphic design, opening up new career pathways and fostering economic independence. In partnership with local tech hubs, we aim to train over 500 youths in the first year, directly contributing to SDG 8 (Decent Work and Economic Growth).",
-        author: "Admin User",
-        authorId: "admin-placeholder-uid",
-        imageId: "program-education"
-    },
-    {
-        title: "Sustainable Farming Initiative Takes Root in Rural Oyo State",
-        slug: "sustainable-farming-oyo-state",
-        content: "Our latest project in Oyo State focuses on promoting sustainable agricultural practices among smallholder farmers. By introducing techniques like drip irrigation and organic composting, we are helping communities increase their crop yields, improve food security (SDG 2), and build resilience against climate change. The program has already seen a 40% increase in harvest for participating families.",
-        author: "Admin User",
-        authorId: "admin-placeholder-uid",
-        imageId: "program-sustainability"
-    },
-    {
-        title: "Clean Water for All: A Community-Led Project in Rivers State",
-        slug: "clean-water-rivers-state",
-        content: "Access to clean water is a fundamental human right. In collaboration with community leaders in Rivers State, SEQHER has successfully installed three new borehole wells, providing safe drinking water to over 5,000 residents. This project addresses SDG 6 (Clean Water and Sanitation) and has significantly reduced the incidence of waterborne diseases in the area.",
-        author: "Admin User",
-        authorId: "admin-placeholder-uid",
-        imageId: "program-water"
-    }
-];
-
-
 export default function BlogPage() {
-    const { db } = useFirebase();
     const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!db) return;
-
-        async function seedBlogData() {
-            const blogQuery = query(collection(db, 'blogPosts'));
-            const snapshot = await getDocs(blogQuery);
-            if (snapshot.empty) {
-                console.log('Seeding blog data...');
-                const batch = writeBatch(db);
-                localBlogPostsData.forEach(postData => {
-                    const newRef = doc(collection(db, 'blogPosts'));
-                    batch.set(newRef, {
-                        ...postData,
-                        id: newRef.id,
-                        createdAt: new Date().toISOString(),
-                    });
-                });
-                await batch.commit();
-                console.log('Blog data seeded successfully.');
-                return true;
-            }
-            return false;
-        }
-
         async function getBlogPosts(): Promise<BlogPost[]> {
-            const postsQuery = query(collection(db, 'blogPosts'), orderBy('createdAt', 'desc'));
-            const postsSnapshot = await getDocs(postsQuery);
-            const postsList = postsSnapshot.docs.map(doc => {
-                const data = doc.data();
-                return {
-                    id: doc.id,
-                    ...data,
-                    createdAt: data.createdAt, // Assumes createdAt is already an ISO string
-                } as BlogPost;
-            });
-            return postsList;
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+                .eq('locale', 'ng')
+                .order('created_at', { ascending: false });
+
+            if (error || !data) {
+                console.error('Failed to load blog posts from Supabase:', error);
+                return [];
+            }
+
+            return data.map((row) => ({
+                id: row.id,
+                title: row.title,
+                content: row.content || '',
+                slug: row.slug,
+                imageId: row.image_id || 'blog-community-gardens',
+                author: row.author || 'Admin',
+                authorId: row.author_id || '',
+                createdAt: row.created_at || new Date().toISOString(),
+                locale: (row.locale as BlogPost['locale']) || 'ng',
+            }));
         }
 
         async function loadBlog() {
             setLoading(true);
-            await seedBlogData();
             const posts = await getBlogPosts();
             setBlogPosts(posts);
             setLoading(false);
@@ -96,7 +52,7 @@ export default function BlogPage() {
 
         loadBlog();
 
-    }, [db]);
+    }, []);
 
 
   return (

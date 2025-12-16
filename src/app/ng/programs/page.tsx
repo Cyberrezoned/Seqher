@@ -5,7 +5,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { dbAdmin } from '@/lib/firebase-admin';
+import { supabase } from '@/lib/supabase-client';
 import type { Program } from '@/lib/types';
 
 
@@ -17,13 +17,26 @@ export const metadata = {
 const programsHeroImage = PlaceHolderImages.find(p => p.id === 'programs-hero');
 
 async function getPrograms(): Promise<Program[]> {
-  if (!dbAdmin) {
+  const { data, error } = await supabase
+    .from('programs')
+    .select('id,title,summary,description,image_id,sdg_goals,locale')
+    .eq('locale', 'ng')
+    .order('title', { ascending: true });
+
+  if (error || !data) {
+    console.error('Failed to load programs from Supabase:', error);
     return [];
   }
-  const programsCol = dbAdmin.collection('programs');
-  const programSnapshot = await programsCol.get();
-  const programList = programSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Program));
-  return programList;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    summary: row.summary,
+    description: row.description,
+    imageId: row.image_id,
+    sdgGoals: row.sdg_goals || [],
+    locale: (row.locale as Program['locale']) || 'ng',
+  }));
 }
 
 export default async function ProgramsPage() {

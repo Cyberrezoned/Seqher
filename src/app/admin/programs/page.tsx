@@ -24,24 +24,30 @@ import { Badge } from "@/components/ui/badge";
 
 import { MoreHorizontal, PlusCircle, ClipboardList } from "lucide-react";
 import Link from "next/link";
-import { dbAdmin } from "@/lib/firebase-admin";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Program } from "@/lib/types";
 import DeleteProgramButton from "./DeleteProgramButton";
 
 async function getPrograms(): Promise<Program[]> {
-  if (!dbAdmin) {
+  const { data, error } = await supabaseAdmin
+    .from('programs')
+    .select('id,title,summary,description,image_id,sdg_goals,locale,created_at')
+    .order('title', { ascending: true });
+
+  if (error || !data) {
+    console.error('Failed to load programs from Supabase:', error);
     return [];
   }
-  const programsQuery = dbAdmin.collection('programs').orderBy('title', 'asc');
-  const snapshot = await programsQuery.get();
-  const list = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return { 
-          id: doc.id, 
-          ...data,
-      } as Program
-  });
-  return list;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    summary: row.summary,
+    description: row.description,
+    imageId: row.image_id,
+    sdgGoals: row.sdg_goals || [],
+    locale: (row.locale as Program['locale']) || 'ng',
+  }));
 }
 
 export default async function AdminProgramsPage() {
@@ -73,6 +79,7 @@ export default async function AdminProgramsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
+                <TableHead className="hidden md:table-cell">Locale</TableHead>
                 <TableHead className="hidden md:table-cell">SDG Goals</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -85,6 +92,7 @@ export default async function AdminProgramsPage() {
                   <TableCell className="font-medium">
                     {item.title}
                   </TableCell>
+                  <TableCell className="hidden md:table-cell uppercase">{item.locale}</TableCell>
                   <TableCell className="hidden md:table-cell">
                     <div className="flex flex-wrap gap-1">
                         {item.sdgGoals.map(goal => (

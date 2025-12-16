@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import AnnouncementForm from "../../AnnouncementForm";
-import { dbAdmin } from '@/lib/firebase-admin';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { Announcement } from '@/lib/types';
 
 
@@ -9,22 +9,24 @@ type Props = {
 }
 
 async function getAnnouncement(id: string): Promise<Announcement | null> {
-    if (!dbAdmin) {
-        console.error("Firebase Admin is not configured. Unable to fetch announcement.");
+    const { data, error } = await supabaseAdmin
+        .from('announcements')
+        .select('id,title,content,locale,created_at')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) {
+        console.error('Failed to load announcement from Supabase:', error);
         return null;
     }
-    const docRef = dbAdmin.collection('announcements').doc(id);
-    const docSnap = await docRef.get();
-    if (docSnap.exists) {
-        const data = docSnap.data();
-        if (!data) return null;
-        return {
-            id: docSnap.id,
-            ...data,
-            createdAt: (data.createdAt.toDate() as Date).toISOString(),
-        } as Announcement;
-    }
-    return null;
+
+    return {
+        id: data.id,
+        title: data.title,
+        content: data.content,
+        locale: (data.locale as Announcement['locale']) || 'ng',
+        createdAt: data.created_at || new Date().toISOString(),
+    };
 }
 
 export default async function EditAnnouncementPage({ params }: Props) {

@@ -11,6 +11,7 @@ const programSchema = z.object({
   description: z.string().min(50, 'Description must be at least 50 characters.'),
   imageId: z.string().min(1, 'Please select an image.'),
   sdgGoals: z.array(z.number()).min(1, 'Please select at least one SDG goal.'),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 async function getAdminUid(): Promise<string | null> {
@@ -46,6 +47,7 @@ export async function createOrUpdateProgram(
                     description: programData.description,
                     image_id: programData.imageId,
                     sdg_goals: programData.sdgGoals,
+                    locale: programData.locale,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', id);
@@ -60,6 +62,7 @@ export async function createOrUpdateProgram(
                     description: programData.description,
                     image_id: programData.imageId,
                     sdg_goals: programData.sdgGoals,
+                    locale: programData.locale,
                     created_at: new Date().toISOString(),
                 });
 

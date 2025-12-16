@@ -10,36 +10,10 @@ import { ArrowRight, Globe } from 'lucide-react';
 import type { NewsArticle } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, orderBy, query, writeBatch, doc } from 'firebase/firestore';
-import { useFirebase } from '@/context/FirebaseContext';
 import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/lib/supabase-client';
 
 const newsHeroImage = PlaceHolderImages.find((p) => p.id === 'news-hero');
-
-// One-time data seeding
-const newArticlesData: Omit<NewsArticle, 'id'>[] = [
-    { title: "UN Launches 'Decade of Action' to Accelerate Sustainable Development", source: "UN News", publishedDate: "2024-10-24", summary: "The United Nations has kicked off its 'Decade of Action,' a global effort to mobilize financing, enhance national implementation, and strengthen institutions to achieve the Sustainable Development Goals by 2030.", imageId: "news-sdg-report", link: "#", category: "Sustainability" },
-    { title: "Global Carbon Emissions Reach New High, Urgent Action Needed", source: "WMO", publishedDate: "2024-11-15", summary: "A new report from the World Meteorological Organization shows that greenhouse gas concentrations reached a new record last year, making the need for rapid and deep emissions cuts more critical than ever.", imageId: "news-climate-report", link: "#", category: "Climate Action" },
-    { title: "WHO Announces Breakthrough in Malaria Vaccine Trials", source: "WHO News", publishedDate: "2025-01-20", summary: "The World Health Organization has reported promising results from Phase 3 trials of a new malaria vaccine, offering hope to millions at risk from the deadly disease, especially children in Africa.", imageId: "news-health-innovation", link: "#", category: "Global Health" },
-    { title: "UNESCO Summit Focuses on Bridging the Digital Divide in Education", source: "UNESCO", publishedDate: "2024-12-05", summary: "Education leaders from around the world gathered to address the digital divide, calling for increased investment in infrastructure and digital literacy to ensure equitable learning opportunities for all.", imageId: "news-education-summit", link: "#", category: "Education" },
-    { title: "International Court of Justice Expands Role in Environmental Disputes", source: "ICJ Press", publishedDate: "2025-02-10", summary: "The ICJ has adopted new guidelines to better handle cases related to environmental protection and transboundary harm, strengthening the legal framework for international peace and ecological justice.", imageId: "news-peace-justice", link: "#", category: "Peace and Justice" },
-    { title: "World Bank Pledges $50 Billion for Clean Energy Projects in Developing Nations", source: "World Bank", publishedDate: "2024-11-28", summary: "The World Bank Group announced a major funding initiative to support the transition to renewable energy in developing countries, aiming to foster economic growth and combat climate change.", imageId: "news-affordable-clean-energy", link: "#", category: "Economic Growth" },
-    { title: "FAO Report: Sustainable Agriculture Key to Ending Global Hunger", source: "FAO", publishedDate: "2024-10-16", summary: "The Food and Agriculture Organization's latest report highlights the critical role of sustainable farming practices in ensuring food security and nutrition for a growing global population.", imageId: "news-zero-hunger", link: "#", category: "Sustainability" },
-    { title: "UNICEF Report Shows Progress in Reducing Child Mortality Rates", source: "UNICEF", publishedDate: "2025-01-12", summary: "A new report from UNICEF indicates a significant decline in global child mortality rates over the past two decades, but warns that more effort is needed to protect the most vulnerable children.", imageId: "news-good-health", link: "#", category: "Global Health" },
-    { title: "New UN Treaty to Protect Biodiversity on the High Seas Enters into Force", source: "UN News", publishedDate: "2025-03-01", summary: "The historic High Seas Treaty has officially come into effect, creating a new framework for conserving marine life and managing activities in international waters.", imageId: "news-life-below-water", link: "#", category: "Climate Action" },
-    { title: "ILO Conference Addresses the Future of Work and Decent Employment", source: "ILO News", publishedDate: "2024-12-18", summary: "The International Labour Organization is hosting a global summit to discuss the challenges of automation and the gig economy, aiming to promote decent work and economic security for all.", imageId: "news-decent-work", link: "#", category: "Economic Growth" },
-    { title: "UN Women Calls for Urgent Action to End Gender-Based Violence", source: "UN Women", publishedDate: "2024-11-25", summary: "On the International Day for the Elimination of Violence against Women, UN Women launched a new campaign to galvanize global action and funding to end this widespread human rights violation.", imageId: "news-gender-equality", link: "#", category: "Peace and Justice" },
-    { title: "UNDP Report: Reducing Inequality is Crucial for Global Stability", source: "UNDP", publishedDate: "2025-02-20", summary: "The United Nations Development Programme's latest Human Development Report argues that tackling economic and social inequalities is fundamental to building peaceful and resilient societies.", imageId: "news-reduced-inequalities", link: "#", category: "Peace and Justice" },
-    { title: "UN-Habitat Assembly Focuses on Sustainable Urban Development", source: "UN-Habitat", publishedDate: "2024-10-31", summary: "City leaders and urban planners are meeting to discuss innovative solutions for creating greener, more inclusive, and resilient cities in the face of rapid urbanization and climate change.", imageId: "news-sustainable-cities", link: "#", category: "Sustainability" },
-    { title: "G7 Leaders Commit to New Partnership for Global Infrastructure and Investment", source: "G7 Press", publishedDate: "2024-11-10", summary: "Leaders from the G7 nations have announced a new partnership aimed at mobilizing private capital to fund infrastructure projects in developing countries, fostering sustainable economic growth.", imageId: "news-partnerships-for-goals", link: "#", category: "Economic Growth" },
-    { title: "IPCC Synthesis Report: A Final Warning on the Climate Crisis", source: "IPCC", publishedDate: "2025-03-15", summary: "The Intergovernmental Panel on Climate Change has released its final synthesis report, stating that the world has a brief and rapidly closing window to secure a liveable and sustainable future for all.", imageId: "news-climate-report", link: "#", category: "Climate Action" },
-    { title: "WHO and Partners Launch New Global Initiative to Combat Noncommunicable Diseases", source: "WHO News", publishedDate: "2024-12-01", summary: "A new global collaboration aims to reduce mortality from noncommunicable diseases like heart disease, cancer, and diabetes through prevention and improved access to care.", imageId: "news-health-innovation", link: "#", category: "Global Health" },
-    { title: "Global Fund Replenishment Conference Raises Record Pledges", source: "The Global Fund", publishedDate: "2024-09-21", summary: "Donors have pledged a record amount to the Global Fund to fight AIDS, Tuberculosis, and Malaria, providing critical resources to save millions of lives.", imageId: "news-good-health", link: "#", category: "Global Health" },
-    { title: "UNHCR Reports Record Levels of Global Displacement", source: "UNHCR", publishedDate: "2024-06-20", summary: "The UN Refugee Agency's annual report reveals that the number of people forced to flee their homes due to conflict, violence, and persecution has reached an all-time high.", imageId: "news-peace-justice", link: "#", category: "Peace and Justice" },
-    { title: "ITU Report Highlights Progress and Gaps in Global Internet Connectivity", source: "ITU News", publishedDate: "2024-09-15", summary: "The International Telecommunication Union reports that while more people are online than ever, significant efforts are still needed to connect the remaining 2.6 billion people, especially in rural areas.", imageId: "news-digital-inclusion", link: "#", category: "Education" },
-    { title: "COP29 Concludes with New Agreement on Climate Finance", source: "UNFCCC", publishedDate: "2024-11-22", summary: "The latest UN Climate Change Conference has concluded with a landmark agreement on a new collective quantified goal for climate finance, aiming to support developing countries in their climate actions.", imageId: "news-partnerships-for-goals", link: "#", category: "Climate Action" }
-  ];
-
 
 const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -55,59 +29,43 @@ const cardVariants = {
   };
 
 export default function NewsPage() {
-    const { db } = useFirebase();
     const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!db) return;
-
-        async function seedNewsData() {
-            const newsQuery = query(collection(db, 'news'));
-            const snapshot = await getDocs(newsQuery);
-            // Only seed if the collection is empty
-            if (snapshot.empty) {
-                console.log('Seeding news data...');
-                const batch = writeBatch(db);
-                newArticlesData.forEach(articleData => {
-                    const newRef = doc(collection(db, 'news'));
-                    batch.set(newRef, {
-                        ...articleData,
-                        id: newRef.id,
-                    });
-                });
-                await batch.commit();
-                console.log('News data seeded successfully.');
-                // Return true to indicate seeding happened
-                return true;
-            }
-            // Return false if no seeding was done
-            return false;
-        }
-
         async function getNewsArticles(): Promise<NewsArticle[]> {
-            const newsQuery = query(collection(db, 'news'), orderBy('publishedDate', 'desc'));
-            const snapshot = await getDocs(newsQuery);
-            const list = snapshot.docs.map(doc => {
-                const data = doc.data();
-                return { 
-                    id: doc.id, 
-                    ...data,
-                    publishedDate: data.publishedDate?.toDate ? data.publishedDate.toDate().toISOString() : new Date().toISOString(),
-                } as NewsArticle
-            });
-            return list;
+            const { data, error } = await supabase
+                .from('news')
+                .select('id,title,summary,source,link,image_id,published_date,category,locale')
+                .in('locale', ['ng', 'global'])
+                .order('published_date', { ascending: false });
+
+            if (error || !data) {
+                console.error('Failed to load news from Supabase:', error);
+                return [];
+            }
+
+            return data.map((row) => ({
+                id: row.id,
+                title: row.title,
+                summary: row.summary,
+                source: row.source,
+                link: row.link,
+                imageId: row.image_id,
+                publishedDate: row.published_date,
+                category: row.category as NewsArticle['category'],
+                locale: (row.locale as NewsArticle['locale']) || 'ng',
+            }));
         }
 
         async function loadNews() {
             setLoading(true);
-            await seedNewsData();
             const articles = await getNewsArticles();
             setNewsArticles(articles);
             setLoading(false);
         }
         loadNews();
-    }, [db]);
+    }, []);
 
   return (
     <div>

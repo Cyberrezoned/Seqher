@@ -7,6 +7,7 @@ export type Program = {
   description: string;
   imageId: string;
   sdgGoals: number[];
+  locale: 'ng' | 'ca' | 'global';
 };
 
 export type BlogPost = {
@@ -18,12 +19,14 @@ export type BlogPost = {
   authorId: string;
   createdAt: string; // ISO string
   imageId: string;
+  locale: 'ng' | 'ca' | 'global';
 };
 
 export type Announcement = {
   id: string;
   title: string;
   content: string;
+  locale: 'ng' | 'ca' | 'global';
   createdAt: string; // ISO string
 };
 
@@ -35,7 +38,7 @@ export type AppointmentRequest = {
     appointmentType: 'volunteering' | 'partnership' | 'general';
     message?: string;
     createdAt: string; // ISO string
-    status: 'pending' | 'contacted' | 'resolved';
+    status: 'pending' | 'confirmed' | 'cancelled';
 }
 
 export type NewsArticle = {
@@ -47,6 +50,7 @@ export type NewsArticle = {
   imageId: string;
   link: string;
   category: 'Climate Action' | 'Global Health' | 'Education' | 'Economic Growth' | 'Peace and Justice' | 'Sustainability';
+  locale: 'ng' | 'ca' | 'global';
 };
 
 
@@ -55,6 +59,7 @@ export type UserProfile = {
   email: string | null;
   displayName: string | null;
   role: 'admin' | 'user';
+  locale?: 'ng' | 'ca' | 'global';
 };
 
 // This combines Firebase's User object with our custom UserProfile

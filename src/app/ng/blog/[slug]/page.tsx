@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { dbAdmin } from '@/lib/firebase-admin';
+import { supabase } from '@/lib/supabase-client';
 import type { BlogPost } from '@/lib/types';
 
 
@@ -14,32 +14,37 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-    if (!dbAdmin) {
-        return [];
-    }
-    const postsQuery = dbAdmin.collection('blogPosts');
-    const postsSnapshot = await postsQuery.get();
-    return postsSnapshot.docs.map((doc) => ({
-        slug: doc.data().slug,
-    }));
+    const { data, error } = await supabase
+        .from('blog_posts')
+        .select('slug')
+        .eq('locale', 'ng');
+
+    if (error || !data) return [];
+
+    return data.map((row) => ({ slug: row.slug }));
 }
 
 async function getPost(slug: string): Promise<BlogPost | null> {
-    if (!dbAdmin) {
-        return null;
-    }
-    const postsQuery = dbAdmin.collection('blogPosts').where('slug', '==', slug);
-    const querySnapshot = await postsQuery.get();
-    if (querySnapshot.empty) {
-        return null;
-    }
-    const doc = querySnapshot.docs[0];
-    const data = doc.data();
+    const { data, error } = await supabase
+        .from('blog_posts')
+        .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+        .eq('slug', slug)
+        .eq('locale', 'ng')
+        .single();
+
+    if (error || !data) return null;
+
     return {
-        id: doc.id,
-        ...data,
-        createdAt: data.createdAt.toDate().toISOString(),
-    } as BlogPost;
+        id: data.id,
+        title: data.title,
+        content: data.content || '',
+        slug: data.slug,
+        imageId: data.image_id || 'blog-community-gardens',
+        author: data.author || 'Admin',
+        authorId: data.author_id || '',
+        createdAt: data.created_at || new Date().toISOString(),
+        locale: (data.locale as BlogPost['locale']) || 'ng',
+    };
 }
 
 

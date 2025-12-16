@@ -38,6 +38,7 @@ const newsArticleSchema = z.object({
   imageId: z.string().min(1, 'Please select an image.'),
   publishedDate: z.date({ required_error: 'A published date is required.'}),
   category: z.enum(['Climate Action', 'Global Health', 'Education', 'Economic Growth', 'Peace and Justice', 'Sustainability']),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 const imageOptions = PlaceHolderImages.filter(p => p.id.startsWith('news-'));
@@ -62,6 +63,7 @@ export default function NewsForm({ article }: NewsFormProps) {
       imageId: article?.imageId || '',
       publishedDate: article?.publishedDate ? new Date(article.publishedDate) : new Date(),
       category: article?.category || 'Sustainability',
+      locale: article?.locale || 'ng',
     },
   });
 
@@ -215,6 +217,29 @@ export default function NewsForm({ article }: NewsFormProps) {
                     )}
                 />
             </div>
+            <FormField
+              control={form.control}
+              name="locale"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Locale</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a locale" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="ng">Nigeria</SelectItem>
+                      <SelectItem value="ca">Canada</SelectItem>
+                      <SelectItem value="global">Global</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select which site this article is for.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
              <FormField
                 control={form.control}
                 name="imageId"

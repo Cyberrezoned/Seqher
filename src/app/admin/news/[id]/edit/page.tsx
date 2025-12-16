@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import NewsForm from "../../NewsForm";
-import { dbAdmin } from '@/lib/firebase-admin';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { NewsArticle } from '@/lib/types';
 
 
@@ -9,22 +9,28 @@ type Props = {
 }
 
 async function getNewsArticle(id: string): Promise<NewsArticle | null> {
-    if (!dbAdmin) {
-        console.error("Firebase Admin is not configured. Unable to fetch article.");
+    const { data, error } = await supabaseAdmin
+        .from('news')
+        .select('id,title,summary,source,link,image_id,published_date,category,locale')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) {
+        console.error('Failed to load news article from Supabase:', error);
         return null;
     }
-    const docRef = dbAdmin.collection('news').doc(id);
-    const docSnap = await docRef.get();
-    if (docSnap.exists) {
-        const data = docSnap.data();
-        if (!data) return null;
-        return {
-            id: docSnap.id,
-            ...data,
-            publishedDate: (data.publishedDate.toDate() as Date).toISOString(),
-        } as NewsArticle;
-    }
-    return null;
+
+    return {
+        id: data.id,
+        title: data.title,
+        summary: data.summary,
+        source: data.source,
+        link: data.link,
+        imageId: data.image_id,
+        publishedDate: data.published_date,
+        category: data.category as NewsArticle['category'],
+        locale: (data.locale as NewsArticle['locale']) || 'ng',
+    };
 }
 
 export default async function EditNewsArticlePage({ params }: Props) {

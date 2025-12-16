@@ -8,11 +8,10 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { useFirebase } from '@/context/FirebaseContext';
-import { collection, getDocs, limit, query, orderBy } from 'firebase/firestore';
 import type { Program, Announcement } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { supabase } from '@/lib/supabase-client';
 
 const heroImage = PlaceHolderImages.find(p => p.id === 'hero-community');
 const programImage1 = PlaceHolderImages.find(p => p.id === 'program-education');
@@ -37,38 +36,59 @@ const cardVariants = {
 };
 
 export default function NigeriaHomePage() {
-  const { db } = useFirebase();
   const [featuredPrograms, setFeaturedPrograms] = useState<Program[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
   useEffect(() => {
-    if (!db) return;
-    
     async function getFeaturedPrograms(): Promise<Program[]> {
-      if (!db) return [];
-      const programsQuery = query(collection(db, 'programs'), limit(3));
-      const programSnapshot = await getDocs(programsQuery);
-      const programList = programSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Program));
-      return programList;
+      const { data, error } = await supabase
+        .from('programs')
+        .select('id,title,summary,description,image_id,sdg_goals,locale')
+        .in('locale', ['ng', 'global'])
+        .order('title', { ascending: true })
+        .limit(3);
+
+      if (error || !data) {
+        console.error('Failed to load programs from Supabase:', error);
+        return [];
+      }
+
+      return data.map((row) => ({
+        id: row.id,
+        title: row.title,
+        summary: row.summary,
+        description: row.description,
+        imageId: row.image_id,
+        sdgGoals: row.sdg_goals || [],
+        locale: (row.locale as Program['locale']) || 'ng',
+      }));
     }
 
     async function getAnnouncements(): Promise<Announcement[]> {
-      if (!db) return [];
-      const announcementsQuery = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(1));
-      const snapshot = await getDocs(announcementsQuery);
-      return snapshot.docs.map(doc => {
-          const data = doc.data();
-          return { 
-              id: doc.id, 
-              ...data,
-              createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-          } as Announcement
-      });
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('id,title,content,locale,created_at')
+        .in('locale', ['ng', 'global'])
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (error || !data) {
+        console.error('Failed to load announcements from Supabase:', error);
+        return [];
+      }
+
+      return data.map((row) => ({
+        id: row.id,
+        title: row.title,
+        content: row.content,
+        locale: (row.locale as Announcement['locale']) || 'ng',
+        createdAt: row.created_at || new Date().toISOString(),
+      }));
     }
 
     getFeaturedPrograms().then(setFeaturedPrograms);
     getAnnouncements().then(setAnnouncements);
-  }, [db]);
+  }, []);
 
   const impactStats = [
     { id: 1, icon: <Handshake className="h-10 w-10 text-primary" />, value: '10,000+', label: 'Lives Impacted' },

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import BlogForm from "../../BlogForm";
-import { dbAdmin } from '@/lib/firebase-admin';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { BlogPost } from '@/lib/types';
 
 
@@ -9,22 +9,28 @@ type Props = {
 }
 
 async function getPost(id: string): Promise<BlogPost | null> {
-    if (!dbAdmin) {
-        console.error("Firebase Admin is not configured. Unable to fetch post.");
+    const { data, error } = await supabaseAdmin
+        .from('blog_posts')
+        .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) {
+        console.error('Failed to load blog post from Supabase:', error);
         return null;
     }
-    const docRef = dbAdmin.collection('blogPosts').doc(id);
-    const docSnap = await docRef.get();
-    if (docSnap.exists) {
-        const data = docSnap.data();
-        if (!data) return null;
-        return {
-            id: docSnap.id,
-            ...data,
-            createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-        } as BlogPost;
-    }
-    return null;
+
+    return {
+        id: data.id,
+        title: data.title,
+        content: data.content || '',
+        slug: data.slug,
+        imageId: data.image_id || 'blog-community-gardens',
+        author: data.author || 'Unknown',
+        authorId: data.author_id || '',
+        createdAt: data.created_at || new Date().toISOString(),
+        locale: (data.locale as BlogPost['locale']) || 'ng',
+    };
 }
 
 export default async function EditBlogPostPage({ params }: Props) {

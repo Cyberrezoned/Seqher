@@ -20,12 +20,14 @@ create table if not exists public.blog_posts (
   id uuid primary key default gen_random_uuid(),
   title varchar(255) not null,
   content text not null,
-  slug varchar(255) not null unique,
+  slug varchar(255) not null,
   image_id varchar(255) default 'blog-community-gardens',
   author varchar(255),
   author_id varchar(255),
+  locale varchar(10) not null default 'ng' check (locale in ('ng', 'ca', 'global')),
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  constraint blog_posts_slug_locale_unique unique (slug, locale)
 );
 
 create trigger trg_blog_posts_updated_at
@@ -45,6 +47,7 @@ create table if not exists public.news (
   category varchar(100) not null check (
     category in ('Climate Action', 'Global Health', 'Education', 'Economic Growth', 'Peace and Justice', 'Sustainability')
   ),
+  locale varchar(10) not null default 'ng' check (locale in ('ng', 'ca', 'global')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -62,6 +65,7 @@ create table if not exists public.programs (
   description text not null,
   image_id varchar(255) not null,
   sdg_goals int[] not null,
+  locale varchar(10) not null default 'ng' check (locale in ('ng', 'ca', 'global')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -76,6 +80,7 @@ create table if not exists public.announcements (
   id uuid primary key default gen_random_uuid(),
   title varchar(255) not null,
   content text not null,
+  locale varchar(10) not null default 'ng' check (locale in ('ng', 'ca', 'global')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -97,11 +102,30 @@ create table if not exists public.appointments (
   created_at timestamptz not null default now()
 );
 
+-- USERS (mirrors Firebase auth profiles for auditing/locale awareness)
+create table if not exists public.app_users (
+  id uuid primary key default gen_random_uuid(),
+  firebase_uid varchar(255) not null unique,
+  email varchar(255),
+  display_name varchar(255),
+  role varchar(50) not null default 'user' check (role in ('user','admin')),
+  locale varchar(10) not null default 'ng' check (locale in ('ng','ca','global')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create trigger trg_app_users_updated_at
+before update on public.app_users
+for each row execute function public.set_updated_at();
+
 -- Indexes
 create index if not exists idx_blog_posts_slug on public.blog_posts(slug);
+create index if not exists idx_blog_posts_locale on public.blog_posts(locale);
 create index if not exists idx_news_category on public.news(category);
 create index if not exists idx_news_published_date on public.news(published_date);
+create index if not exists idx_news_locale on public.news(locale);
 create index if not exists idx_programs_created_at on public.programs(created_at);
+create index if not exists idx_programs_locale on public.programs(locale);
 create index if not exists idx_appointments_email on public.appointments(email);
 create index if not exists idx_appointments_status on public.appointments(status);
 
@@ -191,4 +215,3 @@ create policy "admin delete appointments"
 on public.appointments for delete
 to authenticated
 using (public.is_admin());
-

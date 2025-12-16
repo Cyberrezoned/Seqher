@@ -33,6 +33,7 @@ const programSchema = z.object({
   description: z.string().min(50, 'Description must be at least 50 characters.'),
   imageId: z.string().min(1, 'Please select an image.'),
   sdgGoals: z.array(z.number()).min(1, 'Please select at least one SDG goal.'),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 const allSdgGoals = Array.from({ length: 17 }, (_, i) => i + 1);
@@ -56,6 +57,7 @@ export default function ProgramForm({ program }: ProgramFormProps) {
       description: program?.description || '',
       imageId: program?.imageId || '',
       sdgGoals: program?.sdgGoals || [],
+      locale: program?.locale || 'ng',
     },
   });
 
@@ -132,6 +134,29 @@ export default function ProgramForm({ program }: ProgramFormProps) {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="locale"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Locale</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select locale" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="ng">Nigeria</SelectItem>
+                      <SelectItem value="ca">Canada</SelectItem>
+                      <SelectItem value="global">Global</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select which site this program belongs to.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

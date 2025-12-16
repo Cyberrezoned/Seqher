@@ -26,6 +26,7 @@ import { Card, CardContent } from '@/components/ui/card';
 const announcementSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters.'),
   content: z.string().min(10, 'Content must be at least 10 characters.'),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 type AnnouncementFormProps = {
@@ -42,6 +43,7 @@ export default function AnnouncementForm({ announcement }: AnnouncementFormProps
     defaultValues: {
       title: announcement?.title || '',
       content: announcement?.content || '',
+      locale: announcement?.locale || 'ng',
     },
   });
 
@@ -100,6 +102,27 @@ export default function AnnouncementForm({ announcement }: AnnouncementFormProps
                       className="min-h-[150px]"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="locale"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Locale</FormLabel>
+                  <FormControl>
+                    <select
+                      className="w-full rounded-md border border-input bg-background px-3 py-2"
+                      value={field.value}
+                      onChange={field.onChange}
+                    >
+                      <option value="ng">Nigeria</option>
+                      <option value="ca">Canada</option>
+                      <option value="global">Global</option>
+                    </select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

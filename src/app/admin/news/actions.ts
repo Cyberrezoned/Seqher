@@ -13,6 +13,7 @@ const newsArticleSchema = z.object({
   imageId: z.string().min(1, "Please select an image"),
   publishedDate: z.date(),
   category: z.enum(['Climate Action', 'Global Health', 'Education', 'Economic Growth', 'Peace and Justice', 'Sustainability']),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 async function getAdminUid(): Promise<string | null> {
@@ -50,6 +51,7 @@ export async function createOrUpdateNewsArticle(
                     image_id: articleData.imageId,
                     published_date: articleData.publishedDate,
                     category: articleData.category,
+                    locale: articleData.locale,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', id);
@@ -66,6 +68,7 @@ export async function createOrUpdateNewsArticle(
                     image_id: articleData.imageId,
                     published_date: articleData.publishedDate,
                     category: articleData.category,
+                    locale: articleData.locale,
                     created_at: new Date().toISOString(),
                 });
 

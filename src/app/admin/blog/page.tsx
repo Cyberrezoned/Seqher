@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -24,25 +25,32 @@ import {
 import { MoreHorizontal, PlusCircle, Newspaper } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { dbAdmin } from "@/lib/firebase-admin";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { BlogPost } from "@/lib/types";
 import DeletePostButton from "./DeletePostButton";
 
 async function getBlogPosts(): Promise<BlogPost[]> {
-  if (!dbAdmin) {
+  const { data, error } = await supabaseAdmin
+    .from('blog_posts')
+    .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+    .order('created_at', { ascending: false });
+
+  if (error || !data) {
+    console.error('Failed to load blog posts from Supabase:', error);
     return [];
   }
-  const postsQuery = dbAdmin.collection('blogPosts').orderBy('createdAt', 'desc');
-  const postsSnapshot = await postsQuery.get();
-  const postsList = postsSnapshot.docs.map(doc => {
-      const data = doc.data();
-      return { 
-          id: doc.id, 
-          ...data,
-          createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-      } as BlogPost
-  });
-  return postsList;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    content: row.content || '',
+    slug: row.slug,
+    imageId: row.image_id || 'blog-community-gardens',
+    author: row.author || 'Unknown',
+    authorId: row.author_id || '',
+    createdAt: row.created_at || new Date().toISOString(),
+    locale: (row.locale as BlogPost['locale']) || 'ng',
+  }));
 }
 
 export default async function AdminBlogPage() {
@@ -74,6 +82,7 @@ export default async function AdminBlogPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
+                <TableHead className="hidden md:table-cell">Locale</TableHead>
                 <TableHead className="hidden md:table-cell">Author</TableHead>
                 <TableHead className="hidden md:table-cell">Created At</TableHead>
                 <TableHead>
@@ -87,6 +96,9 @@ export default async function AdminBlogPage() {
                   <TableCell className="font-medium">
                     <Link href={`/blog/${post.slug}`} className="hover:underline" target="_blank">{post.title}</Link>
 
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell uppercase">
+                    <Badge variant="outline">{post.locale}</Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">{post.author}</TableCell>
                   <TableCell className="hidden md:table-cell">

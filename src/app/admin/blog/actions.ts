@@ -12,6 +12,7 @@ const blogPostSchema = z.object({
   content: z.string().min(50),
   slug: z.string().min(5).regex(/^[a-z0-9-]+$/),
   imageId: z.string().optional(),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 // This placeholder function needs to be replaced with a real auth check.
@@ -40,7 +41,7 @@ export async function createOrUpdatePost(
         return { success: false, message: `Invalid data: ${validation.error.flatten().fieldErrors}` };
     }
     
-    const { id, title, content, slug, imageId } = validation.data;
+    const { id, title, content, slug, imageId, locale } = validation.data;
     
     try {
         if (id) {
@@ -52,6 +53,7 @@ export async function createOrUpdatePost(
                     content,
                     slug,
                     image_id: imageId || 'blog-community-gardens',
+                    locale,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', id);
@@ -68,6 +70,7 @@ export async function createOrUpdatePost(
                     image_id: imageId || 'blog-community-gardens',
                     author: user.displayName || "Admin User",
                     author_id: user.uid,
+                    locale,
                     created_at: new Date().toISOString(),
                 });
             

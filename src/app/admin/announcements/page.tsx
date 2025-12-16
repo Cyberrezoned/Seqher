@@ -24,25 +24,29 @@ import {
 import { MoreHorizontal, PlusCircle, Megaphone } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { dbAdmin } from "@/lib/firebase-admin";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Announcement } from "@/lib/types";
 import DeleteAnnouncementButton from "./DeleteAnnouncementButton";
+import { Badge } from "@/components/ui/badge";
 
 async function getAnnouncements(): Promise<Announcement[]> {
-  if (!dbAdmin) {
+  const { data, error } = await supabaseAdmin
+    .from('announcements')
+    .select('id,title,content,locale,created_at')
+    .order('created_at', { ascending: false });
+
+  if (error || !data) {
+    console.error('Failed to load announcements from Supabase:', error);
     return [];
   }
-  const announcementsQuery = dbAdmin.collection('announcements').orderBy('createdAt', 'desc');
-  const snapshot = await announcementsQuery.get();
-  const list = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return { 
-          id: doc.id, 
-          ...data,
-          createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-      } as Announcement
-  });
-  return list;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    content: row.content,
+    locale: (row.locale as Announcement['locale']) || 'ng',
+    createdAt: row.created_at || new Date().toISOString(),
+  }));
 }
 
 export default async function AdminAnnouncementsPage() {
@@ -74,6 +78,7 @@ export default async function AdminAnnouncementsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
+                <TableHead className="hidden md:table-cell">Locale</TableHead>
                 <TableHead className="hidden md:table-cell">Created At</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -85,6 +90,9 @@ export default async function AdminAnnouncementsPage() {
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">
                     {item.title}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell uppercase">
+                    <Badge variant="outline">{item.locale}</Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {format(new Date(item.createdAt), 'PPpp')}

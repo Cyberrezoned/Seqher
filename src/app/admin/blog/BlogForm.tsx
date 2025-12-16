@@ -29,6 +29,7 @@ const blogPostSchema = z.object({
   content: z.string().min(50, 'Content must be at least 50 characters.'),
   slug: z.string().min(5, 'Slug must be at least 5 characters.').regex(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens.'),
   imageId: z.string().optional(),
+  locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
 type BlogFormProps = {
@@ -47,6 +48,7 @@ export default function BlogForm({ post }: BlogFormProps) {
       content: post?.content || '',
       slug: post?.slug || '',
       imageId: post?.imageId || 'blog-community-gardens', // default placeholder
+      locale: post?.locale || 'ng',
     },
   });
   
@@ -112,6 +114,28 @@ export default function BlogForm({ post }: BlogFormProps) {
                   <FormDescription>
                     This is the unique URL for your post. It's auto-generated from the title but can be customized.
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="locale"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Locale</FormLabel>
+                  <FormControl>
+                    <select
+                      className="w-full rounded-md border border-input bg-background px-3 py-2"
+                      value={field.value}
+                      onChange={field.onChange}
+                    >
+                      <option value="ng">Nigeria</option>
+                      <option value="ca">Canada</option>
+                      <option value="global">Global</option>
+                    </select>
+                  </FormControl>
+                  <FormDescription>Select which site this post appears on.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

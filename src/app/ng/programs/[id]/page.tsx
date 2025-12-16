@@ -4,7 +4,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { dbAdmin } from '@/lib/firebase-admin';
+import { supabase } from '@/lib/supabase-client';
 import type { Program } from '@/lib/types';
 
 type Props = {
@@ -12,26 +12,35 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  if (!dbAdmin) {
-    return [];
-  }
-  const programsCol = dbAdmin.collection('programs');
-  const programSnapshot = await programsCol.get();
-  return programSnapshot.docs.map((doc) => ({
-    id: doc.id,
-  }));
+  const { data, error } = await supabase
+    .from('programs')
+    .select('id')
+    .eq('locale', 'ng');
+
+  if (error || !data) return [];
+
+  return data.map((row) => ({ id: row.id }));
 }
 
 async function getProgram(id: string): Promise<Program | null> {
-    if (!dbAdmin) {
-        return null;
-    }
-    const docRef = dbAdmin.collection('programs').doc(id);
-    const docSnap = await docRef.get();
-    if (docSnap.exists) {
-        return { id: docSnap.id, ...docSnap.data() } as Program;
-    }
-    return null;
+    const { data, error } = await supabase
+        .from('programs')
+        .select('id,title,summary,description,image_id,sdg_goals,locale')
+        .eq('id', id)
+        .eq('locale', 'ng')
+        .single();
+
+    if (error || !data) return null;
+
+    return {
+        id: data.id,
+        title: data.title,
+        summary: data.summary,
+        description: data.description,
+        imageId: data.image_id,
+        sdgGoals: data.sdg_goals || [],
+        locale: (data.locale as Program['locale']) || 'ng',
+    };
 }
 
 
