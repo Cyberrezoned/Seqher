@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { motion } from 'framer-motion';
-import { Users, Globe, Target } from 'lucide-react';
+import { Flame, Globe, HeartHandshake, Scale, Shield, Users } from 'lucide-react';
 
 const heroImage = PlaceHolderImages.find((p) => p.id === 'about-hero');
 const missionImage = PlaceHolderImages.find((p) => p.id === 'about-mission');
@@ -32,21 +32,67 @@ const cardVariants = {
 };
 
 export default function AboutPage() {
+  const offices = [
+    {
+      name: 'Headquarter',
+      address: 'Behind Monday Lodge, Shagari Low-cost Jere, Maiduguri, Borno State, Nigeria.',
+    },
+    {
+      name: 'Abuja Office',
+      address: 'A1 Akaton Homes, Plot 822 Durumi District, Abuja, Nigeria.',
+    },
+    {
+      name: 'Kogi Office',
+      address: 'Beside El Bethel Gbeganu, Kogi State, Nigeria.',
+    },
+  ];
+
+  const contact = {
+    name: 'Omeiza Segun Samuel',
+    role: 'Executive Director',
+    phones: ['+2348064454657', '+2349020484873'],
+    email: 'Samsegun01@gmail.com',
+    website: 'https://seqher.org',
+    social: {
+      facebook: 'https://facebook.com/Seqherinitiativ',
+      instagram: 'https://instagram.com/Seqherinitiativ',
+      x: 'https://x.com/Seqherinitiativ',
+    },
+  };
+
   const values = [
     {
-      icon: <Globe className="h-10 w-10 text-primary" />,
-      title: 'Global Goals, Local Action',
-      description: 'We align our work with the UN SDGs, adapting them to create tangible impact within local communities.',
-    },
-    {
       icon: <Users className="h-10 w-10 text-primary" />,
-      title: 'Community-Centric',
-      description: 'Our approach is collaborative, putting the needs and voices of the communities we serve at the forefront.',
+      title: 'Respect',
+      description:
+        'We respect everyone, regardless of who they are, and expect the same from partners and team members.',
     },
     {
-      icon: <Target className="h-10 w-10 text-primary" />,
-      title: 'Sustainable Impact',
-      description: 'We are committed to creating lasting, self-sufficient change that empowers future generations.',
+      icon: <HeartHandshake className="h-10 w-10 text-primary" />,
+      title: 'Solidarity',
+      description:
+        'We stand with people who are treated differently and work to ensure they receive the rights they deserve.',
+    },
+    {
+      icon: <Flame className="h-10 w-10 text-primary" />,
+      title: 'Passion',
+      description: 'We care deeply about equality and do everything within our power to advance it for all.',
+    },
+    {
+      icon: <Scale className="h-10 w-10 text-primary" />,
+      title: 'Justice',
+      description:
+        'No human should be treated less than another; we speak up, condemn abuses, and defend human rights.',
+    },
+    {
+      icon: <Globe className="h-10 w-10 text-primary" />,
+      title: 'Equality',
+      description: 'Equality for all — not for some.',
+    },
+    {
+      icon: <Shield className="h-10 w-10 text-primary" />,
+      title: 'Courage',
+      description: 'We are not afraid to pursue our goals and challenge exclusionary systems and practices.',
     },
   ];
 
@@ -85,12 +131,12 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.7 }}
           >
-            Fostering sustainable development and empowering communities worldwide.
+            Igniting actions that drive change.
           </motion.p>
         </motion.div>
       </section>
 
-      {/* Our Mission Section */}
+      {/* Introduction Section */}
       <motion.section
         className="py-16 md:py-24 bg-background overflow-hidden"
         initial="hidden"
@@ -101,13 +147,20 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-4">
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Our Mission</h2>
-              <p className="text-lg text-muted-foreground">
-                Our mission is to catalyze and support initiatives that align with the United Nations Sustainable Development Goals (SDGs). We are dedicated to empowering communities by focusing on critical areas such as education, healthcare, economic opportunity, and environmental stewardship.
-              </p>
+              <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">
+                Society for Equal Health and Rights (SEQHER)
+              </h2>
               <p className="text-muted-foreground">
-                We believe in the power of collaboration and partnership. By working closely with local stakeholders, volunteers, and global partners, we ensure our projects are not only effective but also culturally relevant and sustainable for the long term. Our goal is to build resilient communities that can thrive for generations to come.
+                SEQHER is a non-governmental organization that is sensitive to the plight of minorities who experience
+                inequality in our society. We work to address systematic gaps and foster an inclusive and just society.
               </p>
+              <div className="rounded-lg border bg-secondary/40 p-5">
+                <p className="text-sm font-semibold text-primary">{contact.name}</p>
+                <p className="text-sm text-muted-foreground">{contact.role}</p>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Our motto is <span className="font-medium text-foreground">“Igniting Actions that drive change.”</span>
+                </p>
+              </div>
             </div>
             <motion.div
               className="relative aspect-square md:aspect-[4/3] rounded-lg shadow-lg overflow-hidden"
@@ -130,9 +183,39 @@ export default function AboutPage() {
         </div>
       </motion.section>
 
-      {/* Our Values Section */}
+      {/* Mission / Vision / Motto */}
       <motion.section
         className="py-16 md:py-24 bg-secondary"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={sectionVariants}
+      >
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="rounded-lg bg-background p-6 shadow-md">
+              <h3 className="font-headline text-xl font-bold text-primary">Our Mission</h3>
+              <p className="mt-2 text-muted-foreground">
+                Advancing a better world by closing the gaps of inequality through education, economic empowerment,
+                human rights, gender and social justice, health and wellbeing, food security, inclusivity, and cultural
+                connections.
+              </p>
+            </div>
+            <div className="rounded-lg bg-background p-6 shadow-md">
+              <h3 className="font-headline text-xl font-bold text-primary">Our Vision</h3>
+              <p className="mt-2 text-muted-foreground">A society where equality thrives.</p>
+            </div>
+            <div className="rounded-lg bg-background p-6 shadow-md">
+              <h3 className="font-headline text-xl font-bold text-primary">Our Motto</h3>
+              <p className="mt-2 text-muted-foreground">Igniting Actions that drive change.</p>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Our Values Section */}
+      <motion.section
+        className="py-16 md:py-24 bg-background"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -143,7 +226,7 @@ export default function AboutPage() {
           <p className="mt-2 mb-12 max-w-3xl mx-auto text-muted-foreground">
             The principles that guide every action we take and every program we build.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {values.map((value, index) => (
               <motion.div
                 key={value.title}
@@ -159,6 +242,160 @@ export default function AboutPage() {
                 <p className="mt-2 text-muted-foreground">{value.description}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Focus Areas */}
+      <motion.section
+        className="py-16 md:py-24 bg-secondary"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={sectionVariants}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="font-headline text-3xl md:text-4xl font-bold text-center">What We Do</h2>
+            <p className="mt-3 text-center text-muted-foreground">
+              Our work spans health, rights, inclusion, and empowerment — designed to improve quality of life for
+              marginalized and vulnerable people.
+            </p>
+
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="rounded-lg bg-background p-6 shadow-md">
+                <h3 className="font-headline text-xl font-bold text-primary">Objectives</h3>
+                <ul className="mt-3 list-disc pl-5 text-muted-foreground space-y-2">
+                  <li>Advocate for human rights and equality for marginalized and vulnerable people.</li>
+                  <li>Increase socio-economic capacity of marginalized and vulnerable persons.</li>
+                  <li>Promote healthy living and good mental wellbeing.</li>
+                  <li>
+                    Accelerate life-saving and life-improving innovations for people impacted by conflict, climate change,
+                    and other complex emergencies.
+                  </li>
+                  <li>
+                    Advance gender equality and transform unequal power relations by changing exclusionary practices and
+                    embedding a culture of change.
+                  </li>
+                </ul>
+              </div>
+
+              <div className="rounded-lg bg-background p-6 shadow-md">
+                <h3 className="font-headline text-xl font-bold text-primary">Thematic Areas</h3>
+                <ul className="mt-3 list-disc pl-5 text-muted-foreground space-y-2">
+                  <li>Comprehensive Health Promotion and Service Delivery (SRHR, STIs, Mental Health, TB, Malaria).</li>
+                  <li>Human Rights, Gender and Social Justice (advocacy, protection, GBV, safety and security).</li>
+                  <li>Civic Engagement and Inclusion (leadership development and movement building).</li>
+                  <li>Economic Empowerment (vocational and entrepreneurial training).</li>
+                  <li>Education (literacy and access for marginalized persons).</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-8 rounded-lg bg-background p-6 shadow-md">
+              <h3 className="font-headline text-xl font-bold text-primary">Strategy</h3>
+              <ul className="mt-3 list-disc pl-5 text-muted-foreground space-y-2">
+                <li>
+                  <span className="font-medium text-foreground">Advocacy:</span> Engage stakeholders to influence policies,
+                  laws, norms, and frameworks to be rights-based, inclusive, and gender-sensitive.
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Lobbying:</span> Build formal and informal collaborations
+                  to strengthen grassroots movement, improve tolerance, and expand access.
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Behavior change &amp; capacity building:</span> Provide
+                  psychosocial support and train changemakers through online and in-person initiatives, using local
+                  language materials and referral pathways.
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Communication outreach:</span> Use local languages, social
+                  media, and community-friendly professionals to reach youth and underserved communities.
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Service delivery:</span> Prioritize transparency,
+                  confidentiality, and accountability while demystifying harmful stereotypes and promoting dignity.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Offices & Contact */}
+      <motion.section
+        className="py-16 md:py-24 bg-background"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={sectionVariants}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="font-headline text-3xl md:text-4xl font-bold text-center">Offices & Contact</h2>
+            <p className="mt-3 text-center text-muted-foreground">
+              Reach SEQHER through our offices, phone, email, or official social channels.
+            </p>
+
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {offices.map((office) => (
+                <div key={office.name} className="rounded-lg border bg-secondary/30 p-6">
+                  <h3 className="font-headline text-lg font-bold text-primary">{office.name}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{office.address}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-lg bg-secondary/30 border p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-headline text-lg font-bold text-primary">Contact Person</h3>
+                  <p className="mt-2 text-muted-foreground">
+                    {contact.name} <span className="text-muted-foreground">({contact.role})</span>
+                  </p>
+                  <div className="mt-4 space-y-2 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Phone:</span>{' '}
+                      <div className="mt-1 flex flex-col gap-1">
+                        {contact.phones.map((p) => (
+                          <a key={p} className="text-primary hover:underline" href={`tel:${p.replace(/\s+/g, '')}`}>
+                            {p}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="pt-1">
+                      <span className="text-muted-foreground">Email:</span>{' '}
+                      <a className="text-primary hover:underline" href={`mailto:${contact.email}`}>
+                        {contact.email}
+                      </a>
+                    </div>
+                    <div className="pt-1">
+                      <span className="text-muted-foreground">Website:</span>{' '}
+                      <a className="text-primary hover:underline" href={contact.website} target="_blank" rel="noreferrer">
+                        {contact.website.replace(/^https?:\/\//, '')}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-headline text-lg font-bold text-primary">Social Media</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">Official handle: @Seqherinitiativ</p>
+                  <div className="mt-4 flex flex-col gap-2 text-sm">
+                    <a className="text-primary hover:underline" href={contact.social.facebook} target="_blank" rel="noreferrer">
+                      Facebook
+                    </a>
+                    <a className="text-primary hover:underline" href={contact.social.x} target="_blank" rel="noreferrer">
+                      X (Twitter)
+                    </a>
+                    <a className="text-primary hover:underline" href={contact.social.instagram} target="_blank" rel="noreferrer">
+                      Instagram
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </motion.section>
