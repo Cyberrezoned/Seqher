@@ -1,12 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import SafeImage from '@/components/ui/safe-image';
 
 export type BlogListItem = {
   id: string;
@@ -28,7 +28,7 @@ export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
     <div>
       <section className="relative h-[40vh] min-h-[300px] w-full bg-primary/20 flex items-center justify-center">
         {blogHeroImage && (
-          <Image
+          <SafeImage
             src={blogHeroImage.imageUrl}
             alt={blogHeroImage.description}
             fill
@@ -65,7 +65,7 @@ export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
                     <Card className="flex flex-col h-full overflow-hidden hover:shadow-xl transition-shadow duration-300">
                       <CardHeader className="p-0">
                         {imageSrc && (
-                          <Image
+                          <SafeImage
                             src={imageSrc}
                             alt={post.title}
                             width={400}
@@ -104,4 +104,3 @@ export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
     </div>
   );
 }
-

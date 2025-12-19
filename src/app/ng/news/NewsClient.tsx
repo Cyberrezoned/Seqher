@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { ArrowRight } from 'lucide-react';
@@ -10,6 +9,7 @@ import type { NewsArticle } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import SafeImage from '@/components/ui/safe-image';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -45,7 +45,7 @@ export default function NewsClient({ articles }: { articles: NewsArticle[] }) {
                 <Card className="flex flex-col h-full w-full overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
                   <CardHeader className="p-0 relative">
                     {imageSrc && (
-                      <Image
+                      <SafeImage
                         src={imageSrc}
                         alt={article.title}
                         width={400}
@@ -84,4 +84,3 @@ export default function NewsClient({ articles }: { articles: NewsArticle[] }) {
     </section>
   );
 }
-

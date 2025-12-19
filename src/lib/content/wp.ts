@@ -32,3 +32,8 @@ export function extractFirstImageUrl(input: string): string | null {
   const match = html.match(/<img[^>]+src=[\"']([^\"']+)[\"'][^>]*>/i);
   return match?.[1] ?? null;
 }
+
+export function isBlockedSeqherWpMediaUrl(url: string): boolean {
+  if (!url) return false;
+  return /^https?:\/\/(www\.)?seqher\.org\/wp-content\//i.test(url.trim());
+}

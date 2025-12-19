@@ -1,5 +1,5 @@
 import type { NewsArticle } from '@/lib/types';
-import { extractFirstImageUrl, makeExcerpt } from '@/lib/content/wp';
+import { extractFirstImageUrl, isBlockedSeqherWpMediaUrl, makeExcerpt } from '@/lib/content/wp';
 
 export type NewsPost = {
   slug: string;
@@ -12,65 +12,21 @@ export type NewsPost = {
   imageUrl?: string | null;
 };
 
-function escapeXml(input: string): string {
-  return input
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function svgPlaceholderDataUri({
-  seed,
-  title,
-  category,
-}: {
-  seed: string;
-  title: string;
-  category: string;
-}): string {
-  const safeTitle = escapeXml(title);
-  const safeCategory = escapeXml(category);
-  const safeSeed = encodeURIComponent(seed);
-
-  const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="${safeTitle}">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0f766e"/>
-      <stop offset="0.55" stop-color="#14532d"/>
-      <stop offset="1" stop-color="#052e16"/>
-    </linearGradient>
-    <filter id="noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
-      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.14 0"/>
-    </filter>
-  </defs>
-  <rect width="1200" height="675" fill="url(#g)"/>
-  <rect width="1200" height="675" filter="url(#noise)"/>
-  <circle cx="1040" cy="120" r="220" fill="rgba(255,255,255,0.06)"/>
-  <circle cx="160" cy="560" r="280" fill="rgba(255,255,255,0.05)"/>
-  <g fill="rgba(255,255,255,0.92)" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial">
-    <text x="64" y="98" font-size="28" opacity="0.9">SEQHER • News</text>
-    <text x="64" y="150" font-size="22" opacity="0.85">${safeCategory}</text>
-    <text x="64" y="260" font-size="58" font-weight="700">${safeTitle}</text>
-    <text x="64" y="612" font-size="20" opacity="0.7">Generated placeholder • ${safeSeed}</text>
-  </g>
-</svg>`;
-
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+function normalizeImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+  if (trimmed.startsWith('/')) return trimmed;
+  if (!/^https?:\/\//i.test(trimmed)) return null;
+  if (isBlockedSeqherWpMediaUrl(trimmed)) return null;
+  return trimmed;
 }
 
 export function getNewsPostImageUrl(post: NewsPost): string {
   return (
-    post.imageUrl ??
-    extractFirstImageUrl(post.contentHtml) ??
-    svgPlaceholderDataUri({
-      seed: post.slug,
-      title: post.title,
-      category: post.category,
-    })
+    normalizeImageUrl(post.imageUrl) ??
+    normalizeImageUrl(extractFirstImageUrl(post.contentHtml) ?? null) ??
+    '/images/placeholder-teal.svg'
   );
 }
 
@@ -81,6 +37,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-12-11T00:00:00.000Z',
     category: 'Peace and Justice',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/12/use.jpg?w=1024',
     contentHtml: `
       <p>Today, SEQHER stood in solidarity for human rights at the International Human Rights Day commemoration in Maiduguri, hosted by the National Human Rights Commission at Borno State Hotel.</p>
       <p>We were honored to represent our community, deliver a goodwill speech on this year’s theme <strong>“Human Rights: Our Everyday Essentials,”</strong> and advocate for justice, inclusion, and protection for the most vulnerable in Borno State.</p>
@@ -95,6 +52,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-12-01T00:00:00.000Z',
     category: 'Global Health',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/12/webinar-2.png?w=819',
     contentHtml: `
       <p>Join SEQHER this World AIDS Day <strong>December 1, 2025</strong> for our virtual symposium:</p>
       <p><strong>“Breaking the Silence and Living Free: Health, HIV, and Stigma in Nigeria.”</strong></p>
@@ -114,6 +72,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-11-17T00:00:00.000Z',
     category: 'Global Health',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/11/gemini_generated_image_5mtet35mtet35mte.png?w=1024',
     contentHtml: `
       <p>Across Nigeria, the healthcare system is meant to serve every individual with dignity, respect, and professionalism. Yet for many transgender people, walking into a clinic is not an act of care — it is an act of courage.</p>
       <p>Too many trans Nigerians delay treatment until emergencies, avoid hospitals entirely, or seek care in unsafe or unregulated spaces. This is not because they do not value their health, but because the healthcare environment often communicates one message loudly: “You are not safe here.”</p>
@@ -145,6 +104,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-10-28T00:00:00.000Z',
     category: 'Economic Growth',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/10/medical-officer.png?w=819',
     contentHtml: `
       <h2>Terms of Reference</h2>
       <p><strong>Position Title:</strong> Medical Officer<br/>
@@ -164,6 +124,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-10-28T00:00:00.000Z',
     category: 'Economic Growth',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/10/gbv-officer-1.png?w=819',
     contentHtml: `
       <h2>Terms of Reference</h2>
       <p><strong>Position Title:</strong> Laboratory Scientist<br/>
@@ -183,6 +144,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-10-28T00:00:00.000Z',
     category: 'Peace and Justice',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/10/gbv-officer.png?w=819',
     contentHtml: `
       <h2>Terms of Reference</h2>
       <p><strong>Position Title:</strong> GBV Officer (Gender‑Based Violence)<br/>
@@ -202,6 +164,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-10-27T00:00:00.000Z',
     category: 'Economic Growth',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/10/program-assistant-2.png?w=819',
     contentHtml: `
       <p><strong>Position Title:</strong> Program Assistant<br/>
       <strong>Location:</strong> Borno State, Nigeria<br/>
@@ -219,6 +182,8 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-10-27T00:00:00.000Z',
     category: 'Peace and Justice',
     locale: 'ng',
+    imageUrl:
+      'https://sirpek.wordpress.com/wp-content/uploads/2025/10/whatsapp-image-2025-10-27-at-11.42.04_c535f212.jpg?w=724',
     contentHtml: `
       <p>Hilary’s life was brutally cut short by hate, deceit, and violence — a reminder of the growing danger faced by LGBTQI+ persons in Nigeria.</p>
       <p>This death is not an isolated tragedy, but part of a wider pattern of injustice sustained by silence and impunity.</p>
@@ -233,6 +198,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-06-16T00:00:00.000Z',
     category: 'Global Health',
     locale: 'ng',
+    imageUrl: 'https://sirpek.wordpress.com/wp-content/uploads/2025/06/reminder-1.jpg?w=791',
     contentHtml: `
       <p>Join us for a vital health outreach event!</p>
       <p><strong>New Immigrant Healthcare Support Ambassador program</strong> invites you to an insightful session.</p>
@@ -258,6 +224,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-06-01T00:00:00.000Z',
     category: 'Sustainability',
     locale: 'ng',
+    imageUrl: '/images/placeholder-teal.svg',
     contentHtml: `
       <p><strong>Fun and Cunty!</strong> was the theme of the first edition of the Vogue for Awareness class.</p>
       <p>If you missed it, here’s a little rundown — and you don’t want to miss the next one.</p>

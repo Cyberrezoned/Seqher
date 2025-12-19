@@ -1,10 +1,10 @@
 
 'use client';
 
-import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { motion } from 'framer-motion';
 import { Flame, Globe, HeartHandshake, Scale, Shield, Users } from 'lucide-react';
+import SafeImage from '@/components/ui/safe-image';
 
 const heroImage = PlaceHolderImages.find((p) => p.id === 'about-hero');
 const missionImage = PlaceHolderImages.find((p) => p.id === 'about-mission');
@@ -101,7 +101,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="relative h-[50vh] min-h-[350px] w-full bg-primary/20">
         {heroImage && (
-          <Image
+          <SafeImage
             src={heroImage.imageUrl}
             alt={heroImage.description}
             fill
@@ -170,7 +170,7 @@ export default function AboutPage() {
               viewport={{ once: true }}
             >
               {missionImage && (
-                <Image
+                <SafeImage
                   src={missionImage.imageUrl}
                   alt={missionImage.description}
                   data-ai-hint={missionImage.imageHint}

@@ -1,6 +1,6 @@
 import type { Announcement, BlogPost, NewsArticle, Program } from '@/lib/types';
 import raw from '@/content/wordpress-export.json';
-import { extractFirstImageUrl } from '@/lib/content/wp';
+import { extractFirstImageUrl, isBlockedSeqherWpMediaUrl } from '@/lib/content/wp';
 
 type ExportPayload = {
   images?: unknown[];
@@ -16,20 +16,38 @@ function asArray(value: unknown): any[] {
   return Array.isArray(value) ? value : [];
 }
 
+function normalizeImageUrl(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (trimmed.startsWith('/')) return trimmed;
+  if (!/^https?:\/\//i.test(trimmed)) return null;
+  if (isBlockedSeqherWpMediaUrl(trimmed)) return null;
+  return trimmed;
+}
+
+function firstValidImageUrl(...candidates: unknown[]): string | null {
+  for (const candidate of candidates) {
+    const normalized = normalizeImageUrl(candidate);
+    if (normalized) return normalized;
+  }
+  return null;
+}
+
 export function getStaticPrograms(locale: Program['locale']): Program[] {
   return asArray(payload.programs)
     .filter((p) => (p?.locale ?? 'ng') === locale || (p?.locale ?? 'ng') === 'global')
     .map(
       (p): Program => {
         const description = String(p.description ?? p.content ?? '');
-        const imageUrl = (p.imageUrl ?? p.image_url ?? extractFirstImageUrl(description) ?? null) as string | null;
+        const imageUrl = firstValidImageUrl(p.imageUrl, p.image_url, extractFirstImageUrl(description));
         return {
           id: String(p.id ?? p.slug ?? p.title ?? ''),
           title: String(p.title ?? ''),
           summary: String(p.summary ?? ''),
           description,
           imageId: String(p.imageId ?? p.image_id ?? ''),
-          imageUrl,
+          imageUrl: imageUrl ?? null,
           sdgGoals: Array.isArray(p.sdgGoals ?? p.sdg_goals) ? (p.sdgGoals ?? p.sdg_goals) : [],
           locale: ((p.locale ?? locale) as Program['locale']) || locale,
         };
@@ -49,12 +67,15 @@ export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
       (p): BlogPost => {
         const content = String(p.content ?? '');
         const rawImageId = String(p.imageId ?? p.image_id ?? '');
-        const imageId = rawImageId.startsWith('http') ? '' : rawImageId;
-        const imageUrl = (p.imageUrl ??
-          p.image_url ??
-          (rawImageId.startsWith('http') ? rawImageId : null) ??
-          extractFirstImageUrl(content) ??
-          null) as string | null;
+        const extractedUrl = extractFirstImageUrl(content);
+        const imageUrl =
+          firstValidImageUrl(
+            p.imageUrl,
+            p.image_url,
+            rawImageId.startsWith('http') ? rawImageId : null,
+            extractedUrl
+          ) ?? null;
+        const imageId = (rawImageId.startsWith('http') ? '' : rawImageId) || (!imageUrl ? 'blog-community-gardens' : '');
         return {
           id: String(p.id ?? p.slug ?? p.title ?? ''),
           slug: String(p.slug ?? ''),
@@ -88,7 +109,7 @@ export function getStaticNews(locale: NewsArticle['locale']): NewsArticle[] {
         publishedDate: String(n.publishedDate ?? n.published_date ?? new Date().toISOString()),
         summary: String(n.summary ?? ''),
         imageId: String(n.imageId ?? n.image_id ?? ''),
-        imageUrl: (n.imageUrl ?? n.image_url ?? extractFirstImageUrl(String(n.summary ?? '')) ?? null) as string | null,
+        imageUrl: firstValidImageUrl(n.imageUrl, n.image_url, extractFirstImageUrl(String(n.summary ?? ''))) ?? null,
         link: String(n.link ?? ''),
         category: (n.category ?? 'Sustainability') as NewsArticle['category'],
         locale: ((n.locale ?? locale) as NewsArticle['locale']) || locale,
