@@ -6,12 +6,20 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase-client';
 import type { Program } from '@/lib/types';
+import { USE_STATIC_CONTENT } from '@/lib/content/config';
+import { getStaticProgramById, getStaticPrograms } from '@/lib/content/static';
 
 type Props = {
   params: { id: string };
 };
 
 export async function generateStaticParams() {
+  if (USE_STATIC_CONTENT) {
+    return getStaticPrograms('ng')
+      .filter((p) => p.locale === 'ng')
+      .map((p) => ({ id: p.id }));
+  }
+
   const { data, error } = await supabase
     .from('programs')
     .select('id')
@@ -23,9 +31,13 @@ export async function generateStaticParams() {
 }
 
 async function getProgram(id: string): Promise<Program | null> {
+    if (USE_STATIC_CONTENT) {
+        return getStaticProgramById('ng', id);
+    }
+
     const { data, error } = await supabase
         .from('programs')
-        .select('id,title,summary,description,image_id,sdg_goals,locale')
+        .select('id,title,summary,description,image_id,image_url,sdg_goals,locale')
         .eq('id', id)
         .eq('locale', 'ng')
         .single();
@@ -38,6 +50,7 @@ async function getProgram(id: string): Promise<Program | null> {
         summary: data.summary,
         description: data.description,
         imageId: data.image_id,
+        imageUrl: data.image_url ?? null,
         sdgGoals: data.sdg_goals || [],
         locale: (data.locale as Program['locale']) || 'ng',
     };
@@ -63,6 +76,7 @@ export default async function ProgramDetailPage({ params }: Props) {
   }
 
   const programImage = PlaceHolderImages.find((p) => p.id === program.imageId);
+  const imageSrc = program.imageUrl || programImage?.imageUrl;
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-20">
@@ -84,14 +98,14 @@ export default async function ProgramDetailPage({ params }: Props) {
             ))}
           </div>
 
-          {programImage && (
+          {imageSrc && (
             <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg">
               <Image
-                src={programImage.imageUrl}
+                src={imageSrc}
                 alt={program.title}
                 fill
                 className="object-cover"
-                data-ai-hint={programImage.imageHint}
+                data-ai-hint={programImage?.imageHint}
               />
             </div>
           )}

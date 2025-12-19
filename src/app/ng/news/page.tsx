@@ -11,7 +11,9 @@ import type { NewsArticle } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/lib/supabase-client';
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser';
+import { USE_STATIC_CONTENT } from '@/lib/content/config';
+import { getStaticNews } from '@/lib/content/static';
 
 const newsHeroImage = PlaceHolderImages.find((p) => p.id === 'news-hero');
 
@@ -31,12 +33,20 @@ const cardVariants = {
 export default function NewsPage() {
     const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
     const [loading, setLoading] = useState(true);
+    const supabase = getSupabaseBrowserClient();
 
     useEffect(() => {
+        if (USE_STATIC_CONTENT) {
+            setLoading(true);
+            setNewsArticles(getStaticNews('ng'));
+            setLoading(false);
+            return;
+        }
+
         async function getNewsArticles(): Promise<NewsArticle[]> {
             const { data, error } = await supabase
                 .from('news')
-                .select('id,title,summary,source,link,image_id,published_date,category,locale')
+                .select('id,title,summary,source,link,image_id,image_url,published_date,category,locale')
                 .in('locale', ['ng', 'global'])
                 .order('published_date', { ascending: false });
 
@@ -52,6 +62,7 @@ export default function NewsPage() {
                 source: row.source,
                 link: row.link,
                 imageId: row.image_id,
+                imageUrl: row.image_url ?? null,
                 publishedDate: row.published_date,
                 category: row.category as NewsArticle['category'],
                 locale: (row.locale as NewsArticle['locale']) || 'ng',
@@ -129,6 +140,7 @@ export default function NewsPage() {
             ))
             : newsArticles.map((article, index) => {
                const articleImage = PlaceHolderImages.find((p) => p.id === article.imageId);
+               const imageSrc = article.imageUrl || articleImage?.imageUrl;
                return (
               <motion.div
                 key={article.id}
@@ -141,14 +153,14 @@ export default function NewsPage() {
                 >
                 <Card className="flex flex-col h-full w-full overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
                   <CardHeader className="p-0 relative">
-                    {articleImage && (
+                    {imageSrc && (
                         <Image
-                        src={articleImage.imageUrl}
+                        src={imageSrc}
                         alt={article.title}
                         width={400}
                         height={225}
                         className="w-full h-48 object-cover"
-                        data-ai-hint={articleImage.imageHint}
+                        data-ai-hint={articleImage?.imageHint}
                         />
                     )}
                     <Badge className="absolute top-2 right-2" variant="secondary">{article.category}</Badge>

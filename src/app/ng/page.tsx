@@ -11,7 +11,9 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Program, Announcement } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { supabase } from '@/lib/supabase-client';
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser';
+import { USE_STATIC_CONTENT } from '@/lib/content/config';
+import { getStaticAnnouncements, getStaticPrograms } from '@/lib/content/static';
 
 const heroImage = PlaceHolderImages.find(p => p.id === 'hero-community');
 const programImage1 = PlaceHolderImages.find(p => p.id === 'program-education');
@@ -38,12 +40,19 @@ const cardVariants = {
 export default function NigeriaHomePage() {
   const [featuredPrograms, setFeaturedPrograms] = useState<Program[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const supabase = getSupabaseBrowserClient();
 
   useEffect(() => {
+    if (USE_STATIC_CONTENT) {
+      setFeaturedPrograms(getStaticPrograms('ng').slice(0, 3));
+      setAnnouncements(getStaticAnnouncements('ng').slice(0, 1));
+      return;
+    }
+
     async function getFeaturedPrograms(): Promise<Program[]> {
       const { data, error } = await supabase
         .from('programs')
-        .select('id,title,summary,description,image_id,sdg_goals,locale')
+        .select('id,title,summary,description,image_id,image_url,sdg_goals,locale')
         .in('locale', ['ng', 'global'])
         .order('title', { ascending: true })
         .limit(3);
@@ -59,6 +68,7 @@ export default function NigeriaHomePage() {
         summary: row.summary,
         description: row.description,
         imageId: row.image_id,
+        imageUrl: row.image_url ?? null,
         sdgGoals: row.sdg_goals || [],
         locale: (row.locale as Program['locale']) || 'ng',
       }));
@@ -267,6 +277,7 @@ export default function NigeriaHomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredPrograms.map((program, index) => {
               const programImage = PlaceHolderImages.find(p => p.id === program.imageId);
+              const imageSrc = program.imageUrl || programImage?.imageUrl;
               return (
                 <motion.div
                   key={program.id}
@@ -277,12 +288,12 @@ export default function NigeriaHomePage() {
                   viewport={{ once: true }}
                   className="h-full"
                 >
-                  <Card className="group flex flex-col h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+                    <Card className="group flex flex-col h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl">
                     <CardHeader className="p-0">
-                      {programImage && (
+                      {imageSrc && (
                         <div className="overflow-hidden">
                           <Image
-                            src={programImage.imageUrl}
+                            src={imageSrc}
                             alt={program.title}
                             width={400}
                             height={250}

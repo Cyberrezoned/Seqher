@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { supabase } from '@/lib/supabase-client';
 import type { BlogPost } from '@/lib/types';
+import { USE_STATIC_CONTENT } from '@/lib/content/config';
+import { getStaticBlogPostBySlug, getStaticBlogPosts } from '@/lib/content/static';
 
 
 type Props = {
@@ -14,6 +16,12 @@ type Props = {
 };
 
 export async function generateStaticParams() {
+    if (USE_STATIC_CONTENT) {
+        return getStaticBlogPosts('ng')
+            .filter((p) => p.locale === 'ng')
+            .map((p) => ({ slug: p.slug }));
+    }
+
     const { data, error } = await supabase
         .from('blog_posts')
         .select('slug')
@@ -25,9 +33,13 @@ export async function generateStaticParams() {
 }
 
 async function getPost(slug: string): Promise<BlogPost | null> {
+    if (USE_STATIC_CONTENT) {
+        return getStaticBlogPostBySlug('ng', slug);
+    }
+
     const { data, error } = await supabase
         .from('blog_posts')
-        .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+        .select('id,title,content,slug,image_id,image_url,author,author_id,locale,created_at')
         .eq('slug', slug)
         .eq('locale', 'ng')
         .single();
@@ -40,6 +52,7 @@ async function getPost(slug: string): Promise<BlogPost | null> {
         content: data.content || '',
         slug: data.slug,
         imageId: data.image_id || 'blog-community-gardens',
+        imageUrl: data.image_url ?? null,
         author: data.author || 'Admin',
         authorId: data.author_id || '',
         createdAt: data.created_at || new Date().toISOString(),
@@ -67,6 +80,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const postImage = PlaceHolderImages.find((p) => p.id === post.imageId);
+  const imageSrc = post.imageUrl || postImage?.imageUrl;
   const authorAvatar = PlaceHolderImages.find(p => p.id.startsWith('avatar-'));
 
   return (
@@ -91,14 +105,14 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
             </div>
             
-            {postImage && (
+            {imageSrc && (
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg">
                 <Image
-                    src={postImage.imageUrl}
+                    src={imageSrc}
                     alt={post.title}
                     fill
                     className="object-cover"
-                    data-ai-hint={postImage.imageHint}
+                    data-ai-hint={postImage?.imageHint}
                     priority
                 />
                 </div>

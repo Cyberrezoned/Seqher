@@ -9,25 +9,42 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { BlogPost } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { supabase } from '@/lib/supabase-client';
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser';
+import { USE_STATIC_CONTENT } from '@/lib/content/config';
+import { getStaticBlogPosts } from '@/lib/content/static';
 
 const blogHeroImage = PlaceHolderImages.find(p => p.id === 'blog-hero');
 
 export default function BlogPage() {
     const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
     const [loading, setLoading] = useState(true);
+    const supabase = getSupabaseBrowserClient();
 
     useEffect(() => {
+        if (USE_STATIC_CONTENT) {
+            setLoading(true);
+            setBlogPosts(getStaticBlogPosts('ng'));
+            setLoading(false);
+            return;
+        }
+
         async function getBlogPosts(): Promise<BlogPost[]> {
             const { data, error } = await supabase
                 .from('blog_posts')
-                .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+                .select('id,title,content,slug,image_id,image_url,author,author_id,locale,created_at')
                 .eq('locale', 'ng')
                 .order('created_at', { ascending: false });
 
             if (error || !data) {
-                console.error('Failed to load blog posts from Supabase:', error);
-                return [];
+                const err: any = error;
+                console.error('Failed to load blog posts from Supabase:', {
+                    message: err?.message,
+                    code: err?.code,
+                    details: err?.details,
+                    hint: err?.hint,
+                    keys: err ? Object.getOwnPropertyNames(err) : null,
+                });
+                return getStaticBlogPosts('ng');
             }
 
             return data.map((row) => ({
@@ -36,6 +53,7 @@ export default function BlogPage() {
                 content: row.content || '',
                 slug: row.slug,
                 imageId: row.image_id || 'blog-community-gardens',
+                imageUrl: row.image_url ?? null,
                 author: row.author || 'Admin',
                 authorId: row.author_id || '',
                 createdAt: row.created_at || new Date().toISOString(),
@@ -112,20 +130,21 @@ export default function BlogPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {blogPosts.map((post) => {
                 const postImage = PlaceHolderImages.find((p) => p.id === post.imageId);
+                const imageSrc = post.imageUrl || postImage?.imageUrl;
                 const authorAvatar = PlaceHolderImages.find(p => p.id.startsWith('avatar-'));
 
                 return (
                     <Link key={post.id} href={`/ng/blog/${post.slug}`} className="group">
                     <Card className="flex flex-col h-full overflow-hidden hover:shadow-xl transition-shadow duration-300">
                         <CardHeader className="p-0">
-                        {postImage && (
+                        {imageSrc && (
                             <Image
-                            src={postImage.imageUrl}
+                            src={imageSrc}
                             alt={post.title}
                             width={400}
                             height={225}
                             className="w-full h-48 object-cover"
-                            data-ai-hint={postImage.imageHint}
+                            data-ai-hint={postImage?.imageHint}
                             />
                         )}
                         </CardHeader>

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase-client';
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser';
 import type { AppUser } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     let mounted = true;
+    const supabase = getSupabaseBrowserClient();
 
     const hydrateFromSession = async () => {
       const { data } = await supabase.auth.getSession();
@@ -65,6 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signOut = async () => {
+    const supabase = getSupabaseBrowserClient();
     await supabase.auth.signOut();
   };
 

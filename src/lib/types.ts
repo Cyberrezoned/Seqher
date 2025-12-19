@@ -4,6 +4,7 @@ export type Program = {
   summary: string;
   description: string;
   imageId: string;
+  imageUrl?: string | null;
   sdgGoals: number[];
   locale: 'ng' | 'ca' | 'global';
 };
@@ -17,6 +18,7 @@ export type BlogPost = {
   authorId: string;
   createdAt: string; // ISO string
   imageId: string;
+  imageUrl?: string | null;
   locale: 'ng' | 'ca' | 'global';
 };
 
@@ -46,6 +48,7 @@ export type NewsArticle = {
   publishedDate: string; // ISO string
   summary: string;
   imageId: string;
+  imageUrl?: string | null;
   link: string;
   category: 'Climate Action' | 'Global Health' | 'Education' | 'Economic Growth' | 'Peace and Justice' | 'Sustainability';
   locale: 'ng' | 'ca' | 'global';

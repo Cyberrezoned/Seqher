@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/lib/supabase-client';
 import type { Program } from '@/lib/types';
+import { USE_STATIC_CONTENT } from '@/lib/content/config';
+import { getStaticPrograms } from '@/lib/content/static';
 
 
 export const metadata = {
@@ -17,9 +19,13 @@ export const metadata = {
 const programsHeroImage = PlaceHolderImages.find(p => p.id === 'programs-hero');
 
 async function getPrograms(): Promise<Program[]> {
+  if (USE_STATIC_CONTENT) {
+    return getStaticPrograms('ng').filter((p) => p.locale === 'ng');
+  }
+
   const { data, error } = await supabase
     .from('programs')
-    .select('id,title,summary,description,image_id,sdg_goals,locale')
+    .select('id,title,summary,description,image_id,image_url,sdg_goals,locale')
     .eq('locale', 'ng')
     .order('title', { ascending: true });
 
@@ -34,6 +40,7 @@ async function getPrograms(): Promise<Program[]> {
     summary: row.summary,
     description: row.description,
     imageId: row.image_id,
+    imageUrl: row.image_url ?? null,
     sdgGoals: row.sdg_goals || [],
     locale: (row.locale as Program['locale']) || 'ng',
   }));
@@ -73,18 +80,19 @@ export default async function ProgramsPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {programs.map((program) => {
               const programImage = PlaceHolderImages.find(p => p.id === program.imageId);
+              const imageSrc = program.imageUrl || programImage?.imageUrl;
               return (
                 <Card key={program.id} className="group flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300">
                    <CardHeader className="p-0">
-                    {programImage && (
+                    {imageSrc && (
                       <div className="overflow-hidden">
                         <Image
-                          src={programImage.imageUrl}
+                          src={imageSrc}
                           alt={program.title}
                           width={400}
                           height={250}
                           className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                          data-ai-hint={programImage.imageHint}
+                          data-ai-hint={programImage?.imageHint}
                         />
                       </div>
                     )}
