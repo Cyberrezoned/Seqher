@@ -8,27 +8,14 @@ import { supabase } from '@/lib/supabase-client';
 import type { Program } from '@/lib/types';
 import { USE_STATIC_CONTENT } from '@/lib/content/config';
 import { getStaticProgramById, getStaticPrograms } from '@/lib/content/static';
+import RichText from '@/components/content/RichText';
+
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
 type Props = {
   params: { id: string };
 };
-
-export async function generateStaticParams() {
-  if (USE_STATIC_CONTENT) {
-    return getStaticPrograms('ng')
-      .filter((p) => p.locale === 'ng')
-      .map((p) => ({ id: p.id }));
-  }
-
-  const { data, error } = await supabase
-    .from('programs')
-    .select('id')
-    .eq('locale', 'ng');
-
-  if (error || !data) return [];
-
-  return data.map((row) => ({ id: row.id }));
-}
 
 async function getProgram(id: string): Promise<Program | null> {
     if (USE_STATIC_CONTENT) {
@@ -42,7 +29,8 @@ async function getProgram(id: string): Promise<Program | null> {
         .eq('locale', 'ng')
         .single();
 
-    if (error || !data) return null;
+    if (error) return null;
+    if (!data) return null;
 
     return {
         id: data.id,
@@ -110,9 +98,9 @@ export default async function ProgramDetailPage({ params }: Props) {
             </div>
           )}
 
-          <div className="prose prose-lg max-w-none text-foreground">
+          <div className="prose prose-lg max-w-none text-foreground prose-img:rounded-lg prose-img:shadow-sm">
             <p className="lead text-xl text-muted-foreground">{program.summary}</p>
-            <p>{program.description}</p>
+            <RichText html={program.description} />
           </div>
 
           <div className="pt-8 border-t">

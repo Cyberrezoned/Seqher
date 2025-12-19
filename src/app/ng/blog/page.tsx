@@ -12,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser';
 import { USE_STATIC_CONTENT } from '@/lib/content/config';
 import { getStaticBlogPosts } from '@/lib/content/static';
+import { makeExcerpt } from '@/lib/content/wp';
 
 const blogHeroImage = PlaceHolderImages.find(p => p.id === 'blog-hero');
 
@@ -150,7 +151,7 @@ export default function BlogPage() {
                         </CardHeader>
                         <CardContent className="p-6 flex flex-col flex-grow">
                         <h2 className="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">{post.title}</h2>
-                        <p className="text-muted-foreground line-clamp-3 flex-grow">{post.content}</p>
+                        <p className="text-muted-foreground line-clamp-3 flex-grow">{makeExcerpt(post.content, 180)}</p>
                         <div className="flex items-center gap-3 mt-4 pt-4 border-t">
                             <Avatar>
                             {authorAvatar && <AvatarImage src={authorAvatar.imageUrl} />}

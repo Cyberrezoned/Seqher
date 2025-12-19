@@ -9,28 +9,14 @@ import { supabase } from '@/lib/supabase-client';
 import type { BlogPost } from '@/lib/types';
 import { USE_STATIC_CONTENT } from '@/lib/content/config';
 import { getStaticBlogPostBySlug, getStaticBlogPosts } from '@/lib/content/static';
+import RichText from '@/components/content/RichText';
 
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
 type Props = {
   params: { slug: string };
 };
-
-export async function generateStaticParams() {
-    if (USE_STATIC_CONTENT) {
-        return getStaticBlogPosts('ng')
-            .filter((p) => p.locale === 'ng')
-            .map((p) => ({ slug: p.slug }));
-    }
-
-    const { data, error } = await supabase
-        .from('blog_posts')
-        .select('slug')
-        .eq('locale', 'ng');
-
-    if (error || !data) return [];
-
-    return data.map((row) => ({ slug: row.slug }));
-}
 
 async function getPost(slug: string): Promise<BlogPost | null> {
     if (USE_STATIC_CONTENT) {
@@ -44,7 +30,8 @@ async function getPost(slug: string): Promise<BlogPost | null> {
         .eq('locale', 'ng')
         .single();
 
-    if (error || !data) return null;
+    if (error) return null;
+    if (!data) return null;
 
     return {
         id: data.id,
@@ -118,8 +105,8 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
             )}
 
-            <div className="prose prose-lg max-w-none text-foreground prose-p:text-foreground prose-headings:text-primary prose-strong:text-foreground prose-a:text-primary">
-                <p>{post.content}</p>
+            <div className="prose prose-lg max-w-none text-foreground prose-p:text-foreground prose-headings:text-primary prose-strong:text-foreground prose-a:text-primary prose-img:rounded-lg prose-img:shadow-sm">
+                <RichText html={post.content} />
             </div>
             
             <Separator />

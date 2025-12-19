@@ -10,6 +10,8 @@ import type { Program } from '@/lib/types';
 import { USE_STATIC_CONTENT } from '@/lib/content/config';
 import { getStaticPrograms } from '@/lib/content/static';
 
+export const dynamic = 'force-dynamic';
+
 
 export const metadata = {
   title: 'Our Programs | SEQHER Nigeria',
@@ -29,10 +31,11 @@ async function getPrograms(): Promise<Program[]> {
     .eq('locale', 'ng')
     .order('title', { ascending: true });
 
-  if (error || !data) {
+  if (error) {
     console.error('Failed to load programs from Supabase:', error);
     return [];
   }
+  if (!data) return [];
 
   return data.map((row) => ({
     id: row.id,

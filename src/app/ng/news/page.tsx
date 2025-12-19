@@ -6,14 +6,11 @@ import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import { format } from 'date-fns';
-import { ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import type { NewsArticle } from '@/lib/types';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { getSupabaseBrowserClient } from '@/lib/supabase/browser';
-import { USE_STATIC_CONTENT } from '@/lib/content/config';
-import { getStaticNews } from '@/lib/content/static';
+import { getNgNewsArticles } from '@/content/news';
 
 const newsHeroImage = PlaceHolderImages.find((p) => p.id === 'news-hero');
 
@@ -31,52 +28,7 @@ const cardVariants = {
   };
 
 export default function NewsPage() {
-    const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
-    const [loading, setLoading] = useState(true);
-    const supabase = getSupabaseBrowserClient();
-
-    useEffect(() => {
-        if (USE_STATIC_CONTENT) {
-            setLoading(true);
-            setNewsArticles(getStaticNews('ng'));
-            setLoading(false);
-            return;
-        }
-
-        async function getNewsArticles(): Promise<NewsArticle[]> {
-            const { data, error } = await supabase
-                .from('news')
-                .select('id,title,summary,source,link,image_id,image_url,published_date,category,locale')
-                .in('locale', ['ng', 'global'])
-                .order('published_date', { ascending: false });
-
-            if (error || !data) {
-                console.error('Failed to load news from Supabase:', error);
-                return [];
-            }
-
-            return data.map((row) => ({
-                id: row.id,
-                title: row.title,
-                summary: row.summary,
-                source: row.source,
-                link: row.link,
-                imageId: row.image_id,
-                imageUrl: row.image_url ?? null,
-                publishedDate: row.published_date,
-                category: row.category as NewsArticle['category'],
-                locale: (row.locale as NewsArticle['locale']) || 'ng',
-            }));
-        }
-
-        async function loadNews() {
-            setLoading(true);
-            const articles = await getNewsArticles();
-            setNewsArticles(articles);
-            setLoading(false);
-        }
-        loadNews();
-    }, []);
+    const newsArticles: NewsArticle[] = getNgNewsArticles();
 
   return (
     <div>
@@ -120,25 +72,7 @@ export default function NewsPage() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {loading ? Array.from({length: 6}).map((_, index) => (
-                <Card key={index} className="flex flex-col h-full w-full overflow-hidden">
-                    <CardHeader className="p-0">
-                        <div className="w-full h-48 bg-muted animate-pulse" />
-                    </CardHeader>
-                    <CardContent className="p-6 flex flex-col flex-grow">
-                        <div className="h-4 bg-muted w-1/3 mb-4 animate-pulse" />
-                        <div className="h-6 bg-muted w-full mb-2 animate-pulse" />
-                        <div className="h-6 bg-muted w-3/4 mb-4 animate-pulse" />
-                        <div className="h-4 bg-muted w-full mt-2 animate-pulse" />
-                        <div className="h-4 bg-muted w-full mt-2 animate-pulse" />
-                        <div className="h-4 bg-muted w-1/2 mt-2 animate-pulse" />
-                    </CardContent>
-                     <CardFooter className="p-6 pt-0 mt-auto">
-                        <div className="h-5 bg-muted w-24 animate-pulse" />
-                    </CardFooter>
-                </Card>
-            ))
-            : newsArticles.map((article, index) => {
+            {newsArticles.map((article, index) => {
                const articleImage = PlaceHolderImages.find((p) => p.id === article.imageId);
                const imageSrc = article.imageUrl || articleImage?.imageUrl;
                return (
@@ -173,7 +107,7 @@ export default function NewsPage() {
                     <p className="text-muted-foreground line-clamp-3 flex-grow">{article.summary}</p>
                   </CardContent>
                   <CardFooter className="p-6 pt-0 mt-auto">
-                    <Link href={article.link} className="flex items-center text-primary font-semibold" target="_blank" rel="noopener noreferrer">
+                    <Link href={article.link} className="flex items-center text-primary font-semibold">
                       Read More <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </CardFooter>
@@ -181,7 +115,7 @@ export default function NewsPage() {
               </motion.div>
             )})}
           </div>
-           {!loading && newsArticles.length === 0 && (
+           {newsArticles.length === 0 && (
                 <div className="text-center p-8 text-muted-foreground">
                     No news articles found. Check back later!
                 </div>
