@@ -32,10 +32,19 @@ import DeletePostButton from "./DeletePostButton";
 export const dynamic = 'force-dynamic';
 
 async function getBlogPosts(): Promise<BlogPost[]> {
-  const { data, error } = await supabaseAdmin
-    .from('blog_posts')
-    .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
-    .order('created_at', { ascending: false });
+  const fetchFrom = async (table: string) =>
+    supabaseAdmin
+      .from(table)
+      .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+      .order('created_at', { ascending: false });
+
+  // Support both legacy `blogposts` and newer `blog_posts` table names.
+  let { data, error } = await fetchFrom('blog_posts');
+  if (error) {
+    const fallback = await fetchFrom('blogposts');
+    data = fallback.data;
+    error = fallback.error;
+  }
 
   if (error) {
     console.error('Failed to load blog posts from Supabase:', error);
@@ -97,7 +106,9 @@ export default async function AdminBlogPage() {
               {blogPosts.map((post) => (
                 <TableRow key={post.id}>
                   <TableCell className="font-medium">
-                    <Link href={`/blog/${post.slug}`} className="hover:underline" target="_blank">{post.title}</Link>
+                    <Link href={`/ng/blog/${post.slug}`} className="hover:underline" target="_blank">
+                      {post.title}
+                    </Link>
 
                   </TableCell>
                   <TableCell className="hidden md:table-cell uppercase">

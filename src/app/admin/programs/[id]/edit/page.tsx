@@ -9,11 +9,22 @@ type Props = {
 }
 
 async function getProgram(id: string): Promise<Program | null> {
-    const { data, error } = await supabaseAdmin
+    const primary = await supabaseAdmin
         .from('programs')
         .select('id,title,summary,description,image_id,sdg_goals,locale')
         .eq('id', id)
         .single();
+
+    const fallback = primary.error
+        ? await supabaseAdmin
+              .from('programs')
+              .select('id,title,summary,description,imageid,sdggoals')
+              .eq('id', id)
+              .single()
+        : null;
+
+    const data = ((fallback ? fallback.data : primary.data) as any);
+    const error = fallback ? fallback.error : primary.error;
 
     if (error || !data) {
         console.error('Failed to load program from Supabase:', error);
@@ -25,8 +36,8 @@ async function getProgram(id: string): Promise<Program | null> {
         title: data.title,
         summary: data.summary,
         description: data.description,
-        imageId: data.image_id,
-        sdgGoals: data.sdg_goals || [],
+        imageId: data.image_id ?? data.imageid ?? '',
+        sdgGoals: data.sdg_goals ?? data.sdggoals ?? [],
         locale: (data.locale as Program['locale']) || 'ng',
     };
 }

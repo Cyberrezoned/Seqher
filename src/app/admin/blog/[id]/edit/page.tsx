@@ -9,11 +9,20 @@ type Props = {
 }
 
 async function getPost(id: string): Promise<BlogPost | null> {
-    const { data, error } = await supabaseAdmin
-        .from('blog_posts')
-        .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
-        .eq('id', id)
-        .single();
+    const fetchFrom = async (table: string) =>
+        supabaseAdmin
+            .from(table)
+            .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
+            .eq('id', id)
+            .single();
+
+    // Support both legacy `blogposts` and newer `blog_posts` table names.
+    let { data, error } = await fetchFrom('blog_posts');
+    if (error) {
+        const fallback = await fetchFrom('blogposts');
+        data = fallback.data;
+        error = fallback.error;
+    }
 
     if (error || !data) {
         console.error('Failed to load blog post from Supabase:', error);

@@ -26,16 +26,26 @@ import { MoreHorizontal, PlusCircle, Globe } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import type { NewsArticle } from "@/lib/types";
+import type { AdminNewsPost } from "./types";
 import DeleteNewsButton from "./DeleteNewsButton";
 
 export const dynamic = 'force-dynamic';
 
-async function getNewsArticles(): Promise<NewsArticle[]> {
-  const { data, error } = await supabaseAdmin
+async function getNewsPosts(): Promise<AdminNewsPost[]> {
+  const primary = await supabaseAdmin
     .from('news')
-    .select('id,title,summary,source,link,image_id,published_date,category,locale,created_at')
+    .select('id,title,summary,source,link,image_id,published_date,category,locale,created_at,updated_at')
     .order('published_date', { ascending: false });
+
+  const fallback = primary.error
+    ? await supabaseAdmin
+        .from('news')
+        .select('id,title,summary,slug,imageid,locale,created_at,updated_at')
+        .order('created_at', { ascending: false })
+    : null;
+
+  const data = fallback ? fallback.data : primary.data;
+  const error = fallback ? fallback.error : primary.error;
 
   if (error) {
     console.error('Failed to load news articles from Supabase:', error);
@@ -43,21 +53,28 @@ async function getNewsArticles(): Promise<NewsArticle[]> {
   }
   if (!data) return [];
 
-  return data.map((row) => ({
-    id: row.id,
-    title: row.title,
-    summary: row.summary,
-    source: row.source,
-    link: row.link,
-    imageId: row.image_id,
-    publishedDate: row.published_date,
-    category: row.category as NewsArticle['category'],
-    locale: (row.locale as NewsArticle['locale']) || 'ng',
-  }));
+  const rows = data as any[];
+  return rows.map((row) => {
+    const derivedSlug =
+      row.slug ??
+      (typeof row.link === 'string' ? row.link.split('/').filter(Boolean).pop() : '') ??
+      '';
+    return {
+      id: row.id,
+      title: row.title ?? '',
+      slug: derivedSlug,
+      summary: row.summary ?? '',
+      content: '',
+      imageId: row.image_id ?? row.imageid ?? null,
+      locale: (row.locale as AdminNewsPost['locale']) || 'ng',
+      createdAt: row.created_at ?? new Date().toISOString(),
+      updatedAt: row.updated_at ?? null,
+    };
+  });
 }
 
 export default async function AdminNewsPage() {
-  const articles = await getNewsArticles();
+  const posts = await getNewsPosts();
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -77,8 +94,8 @@ export default async function AdminNewsPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>All News Articles</CardTitle>
-          <CardDescription>A list of all news articles in the system.</CardDescription>
+          <CardTitle>All News Posts</CardTitle>
+          <CardDescription>A list of all news posts in the system.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -86,29 +103,25 @@ export default async function AdminNewsPage() {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead className="hidden md:table-cell">Locale</TableHead>
-                <TableHead className="hidden lg:table-cell">Category</TableHead>
-                <TableHead className="hidden md:table-cell">Source</TableHead>
-                <TableHead className="hidden md:table-cell">Published Date</TableHead>
+                <TableHead className="hidden md:table-cell">Last Updated</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {articles.map((item) => (
+              {posts.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">
-                    <Link href={item.link} className="hover:underline" target="_blank">{item.title}</Link>
+                    <Link href={`/admin/news/${item.id}/edit`} className="hover:underline">
+                      {item.title}
+                    </Link>
                   </TableCell>
                   <TableCell className="hidden md:table-cell uppercase">
                     <Badge variant="outline">{item.locale}</Badge>
                   </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    <Badge variant="secondary">{item.category}</Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">{item.source}</TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {format(new Date(item.publishedDate), 'PP')}
+                    {format(new Date(item.updatedAt ?? item.createdAt), 'PP')}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
@@ -130,10 +143,10 @@ export default async function AdminNewsPage() {
                   </TableCell>
                 </TableRow>
               ))}
-               {articles.length === 0 && (
+               {posts.length === 0 && (
                     <TableRow>
-                        <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">
-                            No news articles created yet.
+                        <TableCell colSpan={3} className="text-center p-8 text-muted-foreground">
+                            No news posts created yet.
                         </TableCell>
                     </TableRow>
                 )}

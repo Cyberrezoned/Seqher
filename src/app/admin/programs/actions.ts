@@ -39,32 +39,53 @@ export async function createOrUpdateProgram(
     
     try {
         if (id) {
-            const { error } = await supabaseAdmin
-                .from('programs')
-                .update({
-                    title: programData.title,
-                    summary: programData.summary,
-                    description: programData.description,
-                    image_id: programData.imageId,
-                    sdg_goals: programData.sdgGoals,
-                    locale: programData.locale,
-                    updated_at: new Date().toISOString(),
-                })
-                .eq('id', id);
+            const primaryUpdate = {
+                title: programData.title,
+                summary: programData.summary,
+                description: programData.description,
+                image_id: programData.imageId,
+                sdg_goals: programData.sdgGoals,
+                locale: programData.locale,
+                updated_at: new Date().toISOString(),
+            };
+            const fallbackUpdate = {
+                title: programData.title,
+                summary: programData.summary,
+                description: programData.description,
+                imageid: programData.imageId,
+                sdggoals: programData.sdgGoals,
+                updated_at: new Date().toISOString(),
+            };
+
+            let { error } = await supabaseAdmin.from('programs').update(primaryUpdate).eq('id', id);
+            if (error) {
+                ({ error } = await supabaseAdmin.from('programs').update(fallbackUpdate).eq('id', id));
+            }
 
             if (error) throw error;
         } else {
-            const { error } = await supabaseAdmin
-                .from('programs')
-                .insert({
-                    title: programData.title,
-                    summary: programData.summary,
-                    description: programData.description,
-                    image_id: programData.imageId,
-                    sdg_goals: programData.sdgGoals,
-                    locale: programData.locale,
-                    created_at: new Date().toISOString(),
-                });
+            const primaryInsert = {
+                title: programData.title,
+                summary: programData.summary,
+                description: programData.description,
+                image_id: programData.imageId,
+                sdg_goals: programData.sdgGoals,
+                locale: programData.locale,
+                created_at: new Date().toISOString(),
+            };
+            const fallbackInsert = {
+                title: programData.title,
+                summary: programData.summary,
+                description: programData.description,
+                imageid: programData.imageId,
+                sdggoals: programData.sdgGoals,
+                created_at: new Date().toISOString(),
+            };
+
+            let { error } = await supabaseAdmin.from('programs').insert(primaryInsert);
+            if (error) {
+                ({ error } = await supabaseAdmin.from('programs').insert(fallbackInsert));
+            }
 
             if (error) throw error;
         }

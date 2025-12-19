@@ -49,40 +49,44 @@ export async function createOrUpdatePost(
     try {
         if (id) {
             // Update existing post in Supabase (snake_case columns)
-            const { error } = await supabaseAdmin
-                .from('blog_posts')
-                .update({
-                    title,
-                    content,
-                    slug,
-                    image_id: imageId || 'blog-community-gardens',
-                    locale,
-                    updated_at: new Date().toISOString(),
-                })
-                .eq('id', id);
+            const updatePayload = {
+                title,
+                content,
+                slug,
+                image_id: imageId || 'blog-community-gardens',
+                locale,
+                updated_at: new Date().toISOString(),
+            };
+            let { error } = await supabaseAdmin.from('blog_posts').update(updatePayload).eq('id', id);
+            if (error) {
+                // Support legacy `blogposts` table.
+                ({ error } = await supabaseAdmin.from('blogposts').update(updatePayload).eq('id', id));
+            }
             
             if (error) throw error;
         } else {
             // Create new post in Supabase
-            const { error } = await supabaseAdmin
-                .from('blog_posts')
-                .insert({
-                    title,
-                    content,
-                    slug,
-                    image_id: imageId || 'blog-community-gardens',
-                    author: user.displayName || "Admin User",
-                    author_id: user.id,
-                    locale,
-                    created_at: new Date().toISOString(),
-                });
+            const insertPayload = {
+                title,
+                content,
+                slug,
+                image_id: imageId || 'blog-community-gardens',
+                author: user.displayName || "Admin User",
+                author_id: user.id,
+                locale,
+                created_at: new Date().toISOString(),
+            };
+            let { error } = await supabaseAdmin.from('blog_posts').insert(insertPayload);
+            if (error) {
+                ({ error } = await supabaseAdmin.from('blogposts').insert(insertPayload));
+            }
             
             if (error) throw error;
         }
         
         // Revalidate paths to show updated content
-        revalidatePath('/blog');
-        revalidatePath(`/blog/${slug}`);
+        revalidatePath('/ng/blog');
+        revalidatePath(`/ng/blog/${slug}`);
         revalidatePath('/admin/blog');
         
         return { success: true, message: 'Post saved successfully' };
@@ -105,23 +109,25 @@ export async function deletePost(postId: string) {
 
     try {
         // Get the post to retrieve the slug for revalidation
-        const { data: post } = await supabaseAdmin
-            .from('blog_posts')
-            .select('slug')
-            .eq('id', postId)
-            .single();
+        const fetchSlugFrom = async (table: string) =>
+            supabaseAdmin.from(table).select('slug').eq('id', postId).single();
+        let { data: post, error: slugError } = await fetchSlugFrom('blog_posts');
+        if (slugError) {
+            const fallback = await fetchSlugFrom('blogposts');
+            post = fallback.data;
+        }
 
         // Delete the post from Supabase
-        const { error } = await supabaseAdmin
-            .from('blog_posts')
-            .delete()
-            .eq('id', postId);
+        let { error } = await supabaseAdmin.from('blog_posts').delete().eq('id', postId);
+        if (error) {
+            ({ error } = await supabaseAdmin.from('blogposts').delete().eq('id', postId));
+        }
 
         if (error) throw error;
 
-        revalidatePath('/blog');
+        revalidatePath('/ng/blog');
         if (post?.slug) {
-            revalidatePath(`/blog/${post.slug}`);
+            revalidatePath(`/ng/blog/${post.slug}`);
         }
         revalidatePath('/admin/blog');
         

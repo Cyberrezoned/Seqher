@@ -31,10 +31,20 @@ import DeleteProgramButton from "./DeleteProgramButton";
 export const dynamic = 'force-dynamic';
 
 async function getPrograms(): Promise<Program[]> {
-  const { data, error } = await supabaseAdmin
+  const primary = await supabaseAdmin
     .from('programs')
     .select('id,title,summary,description,image_id,sdg_goals,locale,created_at')
     .order('title', { ascending: true });
+
+  const fallback = primary.error
+    ? await supabaseAdmin
+        .from('programs')
+        .select('id,title,summary,description,imageid,sdggoals,created_at,updated_at')
+        .order('title', { ascending: true })
+    : null;
+
+  const data = fallback ? fallback.data : primary.data;
+  const error = fallback ? fallback.error : primary.error;
 
   if (error) {
     console.error('Failed to load programs from Supabase:', error);
@@ -42,14 +52,15 @@ async function getPrograms(): Promise<Program[]> {
   }
   if (!data) return [];
 
-  return data.map((row) => ({
+  const rows = data as any[];
+  return rows.map((row) => ({
     id: row.id,
     title: row.title,
     summary: row.summary,
     description: row.description,
-    imageId: row.image_id,
-    sdgGoals: row.sdg_goals || [],
-    locale: (row.locale as Program['locale']) || 'ng',
+    imageId: row.image_id ?? row.imageid ?? '',
+    sdgGoals: row.sdg_goals ?? row.sdggoals ?? [],
+    locale: ((row.locale as Program['locale']) ?? 'ng') || 'ng',
   }));
 }
 
