@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { getNgNewsPost, NG_NEWS_POSTS } from '@/content/news';
+import { getNewsPostImageUrl, getNgNewsPost, NG_NEWS_POSTS } from '@/content/news';
 import RichText from '@/components/content/RichText';
 import { Badge } from '@/components/ui/badge';
 
@@ -30,7 +30,7 @@ export default function NewsDetailPage({ params }: Props) {
   if (!post) notFound();
 
   const fallback = PlaceHolderImages.find((p) => p.id === 'news-hero');
-  const imageSrc = post.imageUrl || fallback?.imageUrl || null;
+  const imageSrc = getNewsPostImageUrl(post) || fallback?.imageUrl || null;
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-20">
@@ -62,4 +62,3 @@ export default function NewsDetailPage({ params }: Props) {
     </div>
   );
 }
-

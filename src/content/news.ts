@@ -12,6 +12,68 @@ export type NewsPost = {
   imageUrl?: string | null;
 };
 
+function escapeXml(input: string): string {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function svgPlaceholderDataUri({
+  seed,
+  title,
+  category,
+}: {
+  seed: string;
+  title: string;
+  category: string;
+}): string {
+  const safeTitle = escapeXml(title);
+  const safeCategory = escapeXml(category);
+  const safeSeed = encodeURIComponent(seed);
+
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="${safeTitle}">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f766e"/>
+      <stop offset="0.55" stop-color="#14532d"/>
+      <stop offset="1" stop-color="#052e16"/>
+    </linearGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.14 0"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <rect width="1200" height="675" filter="url(#noise)"/>
+  <circle cx="1040" cy="120" r="220" fill="rgba(255,255,255,0.06)"/>
+  <circle cx="160" cy="560" r="280" fill="rgba(255,255,255,0.05)"/>
+  <g fill="rgba(255,255,255,0.92)" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial">
+    <text x="64" y="98" font-size="28" opacity="0.9">SEQHER • News</text>
+    <text x="64" y="150" font-size="22" opacity="0.85">${safeCategory}</text>
+    <text x="64" y="260" font-size="58" font-weight="700">${safeTitle}</text>
+    <text x="64" y="612" font-size="20" opacity="0.7">Generated placeholder • ${safeSeed}</text>
+  </g>
+</svg>`;
+
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+export function getNewsPostImageUrl(post: NewsPost): string {
+  return (
+    post.imageUrl ??
+    extractFirstImageUrl(post.contentHtml) ??
+    svgPlaceholderDataUri({
+      seed: post.slug,
+      title: post.title,
+      category: post.category,
+    })
+  );
+}
+
 export const NG_NEWS_POSTS: NewsPost[] = [
   {
     slug: 'international-human-rights-day-2025',
@@ -213,7 +275,7 @@ export function getNgNewsArticles(): NewsArticle[] {
     .slice()
     .sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime())
     .map((post) => {
-      const imageUrl = post.imageUrl ?? extractFirstImageUrl(post.contentHtml);
+      const imageUrl = getNewsPostImageUrl(post);
       return {
         id: post.slug,
         title: post.title,
@@ -228,4 +290,3 @@ export function getNgNewsArticles(): NewsArticle[] {
       };
     });
 }
-
