@@ -48,7 +48,13 @@ export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
     .map(
       (p): BlogPost => {
         const content = String(p.content ?? '');
-        const imageUrl = (p.imageUrl ?? p.image_url ?? extractFirstImageUrl(content) ?? null) as string | null;
+        const rawImageId = String(p.imageId ?? p.image_id ?? '');
+        const imageId = rawImageId.startsWith('http') ? '' : rawImageId;
+        const imageUrl = (p.imageUrl ??
+          p.image_url ??
+          (rawImageId.startsWith('http') ? rawImageId : null) ??
+          extractFirstImageUrl(content) ??
+          null) as string | null;
         return {
           id: String(p.id ?? p.slug ?? p.title ?? ''),
           slug: String(p.slug ?? ''),
@@ -57,7 +63,7 @@ export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
           author: String(p.author ?? 'Admin'),
           authorId: String(p.authorId ?? p.author_id ?? ''),
           createdAt: String(p.createdAt ?? p.created_at ?? new Date().toISOString()),
-          imageId: String(p.imageId ?? p.image_id ?? ''),
+          imageId,
           imageUrl,
           locale: ((p.locale ?? locale) as BlogPost['locale']) || locale,
         };

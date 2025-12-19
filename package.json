@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "import:wp": "node scripts/import-wordpress-export.mjs",
     "seed": "node scripts/import-wordpress-export.mjs",
-    "make-admin": "node scripts/make-admin.mjs"
+    "make-admin": "node scripts/make-admin.mjs",
+    "import:blogsql": "node scripts/convert-blogposts-sql.mjs"
   },
   "dependencies": {
     "@genkit-ai/google-genai": "^1.20.0",
