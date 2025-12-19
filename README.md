@@ -1,6 +1,30 @@
-# SEQHER Digital Hub
+# Society for Equal Health and Rights (SEQHER) — Digital Hub
 
-This is a Next.js 14 website for SEQHER, an NGO aligned with the UN's Sustainable Development Goals (SDGs). The platform is built with:
+## Organization
+
+**SOCIETY FOR EQUAL HEALTH AND RIGHTS (SEQHER)**
+
+- **Mission:** Advancing a better world by closing the gaps of inequality through education, economic empowerment, human rights, gender and social justice, health and wellbeing, food security, inclusivity and cultural connections.
+- **Vision:** A society where equality thrives.
+- **Motto:** Igniting Actions that drive change.
+
+**Offices**
+
+- **Headquarter:** Behind Monday Lodge, Shagari Low-cost Jere, Maiduguri, Borno State, Nigeria.
+- **Abuja Office:** A1 Akaton Homes, Plot 822 Durumi District, Abuja, Nigeria.
+- **Kogi Office:** Beside El Bethel Gbeganu, Kogi State, Nigeria.
+
+**Contact**
+
+- **Contact person:** Omeiza Segun Samuel (Executive Director)
+- **Telephone:** +2348064454657, +2349020484873
+- **Email:** Samsegun01@gmail.com
+- **Website:** https://seqher.org
+- **Social:** Facebook/Instagram/X: @Seqherinitiativ
+
+## Project
+
+This is a Next.js website for SEQHER. The platform is built with:
 - **Firebase** - Authentication and user management
 - **Supabase** - Admin database for blogs, news, programs, announcements, and appointments
 - **Tailwind CSS** - UI styling
@@ -9,7 +33,7 @@ This is a Next.js 14 website for SEQHER, an NGO aligned with the UN's Sustainabl
 ## Architecture
 
 ### Frontend
-- Next.js 14 App Router
+- Next.js App Router
 - React 18 with TypeScript
 - Tailwind CSS for styling
 - Radix UI components

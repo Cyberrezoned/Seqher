@@ -5,7 +5,7 @@ import type { NewsArticle } from '@/lib/types';
 
 
 type Props = {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
 
 async function getNewsArticle(id: string): Promise<NewsArticle | null> {
@@ -34,7 +34,8 @@ async function getNewsArticle(id: string): Promise<NewsArticle | null> {
 }
 
 export default async function EditNewsArticlePage({ params }: Props) {
-    const article = await getNewsArticle(params.id);
+    const { id } = await params;
+    const article = await getNewsArticle(id);
     if (!article) {
         notFound();
     }

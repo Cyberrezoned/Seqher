@@ -136,8 +136,7 @@ export default function GlobalLandingPage() {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <motion.div 
-              whileHover={{ y: -5, scale: 1.02 }} 
-              transition={{ duration: 0.2 }}
+              whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -168,8 +167,7 @@ export default function GlobalLandingPage() {
               </Link>
             </motion.div>
             <motion.div 
-              whileHover={{ y: -5, scale: 1.02 }} 
-              transition={{ duration: 0.2 }}
+              whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

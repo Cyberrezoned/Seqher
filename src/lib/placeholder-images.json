@@ -15,43 +15,43 @@
     {
       "id": "program-health",
       "description": "A healthcare worker providing a check-up to a smiling elderly person.",
-      "imageUrl": "https://images.unsplash.com/photo-1588776814546-da6202451333",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "healthcare community"
     },
     {
       "id": "program-empowerment",
       "description": "A woman starting her own small business at a local market.",
-      "imageUrl": "https://images.unsplash.com/photo-1504711331084-a73353b34213",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "small business"
     },
     {
       "id": "program-sustainability",
       "description": "Volunteers planting trees in a deforested area.",
-      "imageUrl": "https://images.unsplash.com/photo-1618997324227-9575859754f9",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "tree planting"
     },
     {
       "id": "program-water",
       "description": "A newly installed clean water pump in a village.",
-      "imageUrl": "https://images.unsplash.com/photo-1481498065453-500c9f1367b8",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "clean water"
     },
     {
       "id": "blog-climate-action",
       "description": "A dramatic photo of a glacier melting into the ocean.",
-      "imageUrl": "https://images.unsplash.com/photo-1542317132-77054f9d0563",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "climate change"
     },
     {
       "id": "blog-community-gardens",
       "description": "An urban community garden with fresh vegetables.",
-      "imageUrl": "https://images.unsplash.com/photo-1516253457493-243171d319a9",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "community garden"
     },
     {
       "id": "blog-volunteer-story",
       "description": "A portrait of a smiling volunteer.",
-      "imageUrl": "https://images.unsplash.com/photo-1628882724933-446b7a58189c",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "volunteer portrait"
     },
     {
@@ -75,7 +75,7 @@
     {
       "id": "appointment-hero",
       "description": "A person writing in a planner at a desk.",
-      "imageUrl": "https://images.unsplash.com/photo-1516534775-7489C665214c",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "planning schedule"
     },
     {
@@ -99,13 +99,13 @@
     {
       "id": "about-canada-1",
       "description": "A Canadian city skyline at dusk.",
-      "imageUrl": "https://images.unsplash.com/photo-1500930287299-e45f94921676?q=80&w=1974&auto=format&fit=crop",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "canadian city"
     },
     {
       "id": "about-canada-2",
       "description": "A close-up of a maple leaf, the symbol of Canada.",
-      "imageUrl": "https://images.unsplash.com/photo-1479832912903-35697a2e5052?q=80&w=2070&auto=format&fit=crop",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "maple leaf"
     },
     {
@@ -117,7 +117,7 @@
     {
       "id": "about-mission",
       "description": "A close-up shot of a compass pointing towards a goal.",
-      "imageUrl": "https://images.unsplash.com/photo-1504992963429-56f2d776d3ec",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "mission goal"
     },
     {
@@ -129,7 +129,7 @@
     {
       "id": "news-climate-report",
       "description": "Wind turbines on a hill at sunset.",
-      "imageUrl": "https://images.unsplash.com/photo-1611273656184-1de0e35b7b5d",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "wind turbines"
     },
     {
@@ -141,37 +141,37 @@
     {
       "id": "news-water-tech",
       "description": "Crystal clear water flowing from a tap into a glass.",
-      "imageUrl": "https://images.unsplash.com/photo-1598013324227-39b596813a30",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "clean water"
     },
     {
       "id": "news-sdg-report",
       "description": "The 17 Sustainable Development Goal icons arranged in a grid.",
-      "imageUrl": "https://images.unsplash.com/photo-1590374246944-32215f9a65c9",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "global goals"
     },
     {
       "id": "news-biodiversity-conference",
       "description": "A lush, vibrant rainforest with diverse flora.",
-      "imageUrl": "https://images.unsplash.com/photo-1426604966848-d7adbf422ca2",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "rainforest biodiversity"
     },
     {
       "id": "news-digital-inclusion",
       "description": "An elderly person learning to use a tablet computer with help.",
-      "imageUrl": "https://images.unsplash.com/photo-1605328227916-2a9a7ab2572c",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "digital inclusion"
     },
     {
       "id": "news-health-innovation",
       "description": "A scientist looking at a sample in a lab.",
-      "imageUrl": "https://images.unsplash.com/photo-1579154230198-95800538a54d",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "health innovation"
     },
     {
       "id": "news-peace-justice",
       "description": "A gavel and scales of justice on a desk.",
-      "imageUrl": "https://images.unsplash.com/photo-1589994965851-a8f483d51e8a",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "peace justice"
     },
     {
@@ -183,7 +183,7 @@
     {
       "id": "news-gender-equality",
       "description": "A group of diverse women marching for their rights.",
-      "imageUrl": "https://images.unsplash.com/photo-1581092892233-be7f73a7e5f1",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "gender equality"
     },
     {
@@ -201,7 +201,7 @@
     {
       "id": "news-zero-hunger",
       "description": "A field of wheat under a blue sky.",
-      "imageUrl": "https://images.unsplash.com/photo-1505826759037-4f6b8a377395",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "zero hunger"
     },
     {
@@ -213,49 +213,49 @@
     {
       "id": "news-quality-education",
       "description": "A teacher helping a young student in a classroom.",
-      "imageUrl": "https://images.unsplash.com/photo-1580582932707-520aed93a94d",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "quality education"
     },
     {
       "id": "news-clean-water-sanitation",
       "description": "A child drinking clean water from a cup.",
-      "imageUrl": "https://images.unsplash.com/photo-1576043289048-a0063d831518",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "clean water"
     },
     {
       "id": "news-affordable-clean-energy",
       "description": "Solar panels on a roof against a blue sky.",
-      "imageUrl": "https://images.unsplash.com/photo-1508514177221-188b1cf16e9c",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "clean energy"
     },
     {
       "id": "news-industry-innovation",
       "description": "A futuristic factory with robots and automation.",
-      "imageUrl": "https://images.unsplash.com/photo-1581092921462-683933b093e0",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "industry innovation"
     },
     {
       "id": "news-reduced-inequalities",
       "description": "People from different backgrounds holding hands.",
-      "imageUrl": "https://images.unsplash.com/photo-1556742512-1a4a6b251a3d",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "reduced inequalities"
     },
     {
       "id": "news-responsible-consumption",
       "description": "A person sorting waste for recycling.",
-      "imageUrl": "https://images.unsplash.com/photo-1599878174113-17a41d7b1f5a",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "responsible consumption"
     },
     {
       "id": "news-life-below-water",
       "description": "A colorful coral reef with fish.",
-      "imageUrl": "https://images.unsplash.com/photo-1551202816-9a2c35a6d36e",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "life below water"
     },
     {
       "id": "news-life-on-land",
       "description": "A majestic elephant walking through a savanna.",
-      "imageUrl": "https://images.unsplash.com/photo-1564760822396-48c264c12521",
+      "imageUrl": "/images/placeholder-teal.svg",
       "imageHint": "life on land"
     },
     {

@@ -5,7 +5,7 @@ import type { Announcement } from '@/lib/types';
 
 
 type Props = {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
 
 async function getAnnouncement(id: string): Promise<Announcement | null> {
@@ -30,7 +30,8 @@ async function getAnnouncement(id: string): Promise<Announcement | null> {
 }
 
 export default async function EditAnnouncementPage({ params }: Props) {
-    const announcement = await getAnnouncement(params.id);
+    const { id } = await params;
+    const announcement = await getAnnouncement(id);
     if (!announcement) {
         notFound();
     }

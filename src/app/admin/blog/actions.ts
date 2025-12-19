@@ -16,13 +16,16 @@ const blogPostSchema = z.object({
 });
 
 // This placeholder function needs to be replaced with a real auth check.
-async function getAdminUser(): Promise<Partial<AppUser> | null> {
+async function getAdminUser(): Promise<AppUser | null> {
     // In a real app, you'd verify a session token and get user data.
     // For now, we'll return a placeholder user. This is NOT secure.
     return { 
-        uid: 'admin-placeholder-uid',
+        id: 'admin-placeholder-uid',
+        email: null,
         displayName: 'Admin User',
-        role: 'admin'
+        role: 'admin',
+        locale: 'ng',
+        metadata: {},
     };
 }
 
@@ -69,7 +72,7 @@ export async function createOrUpdatePost(
                     slug,
                     image_id: imageId || 'blog-community-gardens',
                     author: user.displayName || "Admin User",
-                    author_id: user.uid,
+                    author_id: user.id,
                     locale,
                     created_at: new Date().toISOString(),
                 });

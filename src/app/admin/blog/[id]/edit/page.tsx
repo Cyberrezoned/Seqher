@@ -5,7 +5,7 @@ import type { BlogPost } from '@/lib/types';
 
 
 type Props = {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
 
 async function getPost(id: string): Promise<BlogPost | null> {
@@ -34,7 +34,8 @@ async function getPost(id: string): Promise<BlogPost | null> {
 }
 
 export default async function EditBlogPostPage({ params }: Props) {
-    const post = await getPost(params.id);
+    const { id } = await params;
+    const post = await getPost(id);
     if (!post) {
         notFound();
     }

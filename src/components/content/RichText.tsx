@@ -9,7 +9,10 @@ type Props = {
 };
 
 export default function RichText({ html, className }: Props) {
-  const cleaned = stripWpBlockComments(html || '');
+  const withoutWp = stripWpBlockComments(html || '');
+  const cleaned = withoutWp
+    .replace(/<img\b(?![^>]*\bsrc=)[^>]*>/gi, '')
+    .replace(/<img\b[^>]*\bsrc=(["'])\s*\1[^>]*>/gi, '');
   const safe = DOMPurify.sanitize(cleaned, {
     USE_PROFILES: { html: true },
     FORBID_TAGS: ['style', 'script'],
@@ -33,4 +36,3 @@ export default function RichText({ html, className }: Props) {
 
   return <div className={className} dangerouslySetInnerHTML={{ __html: safe }} />;
 }
-

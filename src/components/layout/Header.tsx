@@ -40,12 +40,17 @@ export default function Header() {
     return name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
   }
 
+  const avatarUrl =
+    (user?.metadata as any)?.user_metadata?.avatar_url ??
+    (user?.metadata as any)?.user_metadata?.picture ??
+    null;
+
   const UserMenu = () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
            <Avatar className="h-10 w-10">
-              <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || 'User'} />
+              <AvatarImage src={avatarUrl || ''} alt={user?.displayName || 'User'} />
               <AvatarFallback>{getInitials(user?.displayName)}</AvatarFallback>
             </Avatar>
         </Button>
@@ -72,7 +77,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-          <Logo className="h-8 w-8" />
+          <Logo className="h-8 w-8 text-primary" />
           <span className="font-bold text-xl font-headline tracking-tight">SEQHER</span>
         </Link>
         

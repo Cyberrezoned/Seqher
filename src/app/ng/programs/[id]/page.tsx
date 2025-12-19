@@ -12,7 +12,7 @@ export const dynamic = 'force-static';
 export const dynamicParams = false;
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 async function getProgram(id: string): Promise<Program | null> {
@@ -27,7 +27,8 @@ export async function generateStaticParams() {
 
 
 export async function generateMetadata({ params }: Props) {
-  const program = await getProgram(params.id);
+  const { id } = await params;
+  const program = await getProgram(id);
   if (!program) {
     return { title: 'Program Not Found' };
   }
@@ -38,7 +39,8 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function ProgramDetailPage({ params }: Props) {
-  const program = await getProgram(params.id);
+  const { id } = await params;
+  const program = await getProgram(id);
 
   if (!program) {
     notFound();

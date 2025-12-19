@@ -12,21 +12,23 @@ export const dynamic = 'force-static';
 export const dynamicParams = false;
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
   return NG_NEWS_POSTS.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: Props) {
-  const post = getNgNewsPost(params.slug);
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const post = getNgNewsPost(slug);
   if (!post) return { title: 'News Not Found' };
   return { title: `${post.title} | SEQHER News` };
 }
 
-export default function NewsDetailPage({ params }: Props) {
-  const post = getNgNewsPost(params.slug);
+export default async function NewsDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const post = getNgNewsPost(slug);
   if (!post) notFound();
 
   const fallback = PlaceHolderImages.find((p) => p.id === 'news-hero');

@@ -5,7 +5,7 @@ import type { Program } from '@/lib/types';
 
 
 type Props = {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
 
 async function getProgram(id: string): Promise<Program | null> {
@@ -32,7 +32,8 @@ async function getProgram(id: string): Promise<Program | null> {
 }
 
 export default async function EditProgramPage({ params }: Props) {
-    const program = await getProgram(params.id);
+    const { id } = await params;
+    const program = await getProgram(id);
     if (!program) {
         notFound();
     }
