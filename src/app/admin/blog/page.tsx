@@ -29,16 +29,19 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { BlogPost } from "@/lib/types";
 import DeletePostButton from "./DeletePostButton";
 
+export const dynamic = 'force-dynamic';
+
 async function getBlogPosts(): Promise<BlogPost[]> {
   const { data, error } = await supabaseAdmin
     .from('blog_posts')
     .select('id,title,content,slug,image_id,author,author_id,locale,created_at')
     .order('created_at', { ascending: false });
 
-  if (error || !data) {
+  if (error) {
     console.error('Failed to load blog posts from Supabase:', error);
     return [];
   }
+  if (!data) return [];
 
   return data.map((row) => ({
     id: row.id,

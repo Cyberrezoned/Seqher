@@ -19,7 +19,12 @@ Notes:
 - The script also seeds the built-in placeholder images into the `images` table unless you pass `--no-placeholders`:
   - `npm run seed -- --no-placeholders`
 
+## 3) Make your user an admin (so `/admin` works)
+1. Visit `/admin` and sign up (or sign in) with email/password.
+2. Promote your user to admin:
+   - `npm run make-admin -- you@example.com`
+3. Sign out/in (or refresh) and reload `/admin`.
+
 ## Optional: Static-only mode
 If you want the public site to render from the JSON file without Supabase reads, set:
 - `NEXT_PUBLIC_CONTENT_SOURCE=static`
-

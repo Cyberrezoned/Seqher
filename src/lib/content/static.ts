@@ -1,5 +1,6 @@
 import type { Announcement, BlogPost, NewsArticle, Program } from '@/lib/types';
 import raw from '@/content/wordpress-export.json';
+import { extractFirstImageUrl } from '@/lib/content/wp';
 
 type ExportPayload = {
   images?: unknown[];
@@ -19,16 +20,20 @@ export function getStaticPrograms(locale: Program['locale']): Program[] {
   return asArray(payload.programs)
     .filter((p) => (p?.locale ?? 'ng') === locale || (p?.locale ?? 'ng') === 'global')
     .map(
-      (p): Program => ({
-        id: String(p.id ?? p.slug ?? p.title ?? ''),
-        title: String(p.title ?? ''),
-        summary: String(p.summary ?? ''),
-        description: String(p.description ?? p.content ?? ''),
-        imageId: String(p.imageId ?? p.image_id ?? ''),
-        imageUrl: (p.imageUrl ?? p.image_url ?? null) as string | null,
-        sdgGoals: Array.isArray(p.sdgGoals ?? p.sdg_goals) ? (p.sdgGoals ?? p.sdg_goals) : [],
-        locale: ((p.locale ?? locale) as Program['locale']) || locale,
-      })
+      (p): Program => {
+        const description = String(p.description ?? p.content ?? '');
+        const imageUrl = (p.imageUrl ?? p.image_url ?? extractFirstImageUrl(description) ?? null) as string | null;
+        return {
+          id: String(p.id ?? p.slug ?? p.title ?? ''),
+          title: String(p.title ?? ''),
+          summary: String(p.summary ?? ''),
+          description,
+          imageId: String(p.imageId ?? p.image_id ?? ''),
+          imageUrl,
+          sdgGoals: Array.isArray(p.sdgGoals ?? p.sdg_goals) ? (p.sdgGoals ?? p.sdg_goals) : [],
+          locale: ((p.locale ?? locale) as Program['locale']) || locale,
+        };
+      }
     )
     .filter((p) => p.id && p.title);
 }
@@ -41,18 +46,22 @@ export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
   return asArray(payload.blogPosts)
     .filter((p) => (p?.locale ?? 'ng') === locale || (p?.locale ?? 'ng') === 'global')
     .map(
-      (p): BlogPost => ({
-        id: String(p.id ?? p.slug ?? p.title ?? ''),
-        slug: String(p.slug ?? ''),
-        title: String(p.title ?? ''),
-        content: String(p.content ?? ''),
-        author: String(p.author ?? 'Admin'),
-        authorId: String(p.authorId ?? p.author_id ?? ''),
-        createdAt: String(p.createdAt ?? p.created_at ?? new Date().toISOString()),
-        imageId: String(p.imageId ?? p.image_id ?? ''),
-        imageUrl: (p.imageUrl ?? p.image_url ?? null) as string | null,
-        locale: ((p.locale ?? locale) as BlogPost['locale']) || locale,
-      })
+      (p): BlogPost => {
+        const content = String(p.content ?? '');
+        const imageUrl = (p.imageUrl ?? p.image_url ?? extractFirstImageUrl(content) ?? null) as string | null;
+        return {
+          id: String(p.id ?? p.slug ?? p.title ?? ''),
+          slug: String(p.slug ?? ''),
+          title: String(p.title ?? ''),
+          content,
+          author: String(p.author ?? 'Admin'),
+          authorId: String(p.authorId ?? p.author_id ?? ''),
+          createdAt: String(p.createdAt ?? p.created_at ?? new Date().toISOString()),
+          imageId: String(p.imageId ?? p.image_id ?? ''),
+          imageUrl,
+          locale: ((p.locale ?? locale) as BlogPost['locale']) || locale,
+        };
+      }
     )
     .filter((p) => p.slug && p.title)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -73,7 +82,7 @@ export function getStaticNews(locale: NewsArticle['locale']): NewsArticle[] {
         publishedDate: String(n.publishedDate ?? n.published_date ?? new Date().toISOString()),
         summary: String(n.summary ?? ''),
         imageId: String(n.imageId ?? n.image_id ?? ''),
-        imageUrl: (n.imageUrl ?? n.image_url ?? null) as string | null,
+        imageUrl: (n.imageUrl ?? n.image_url ?? extractFirstImageUrl(String(n.summary ?? '')) ?? null) as string | null,
         link: String(n.link ?? ''),
         category: (n.category ?? 'Sustainability') as NewsArticle['category'],
         locale: ((n.locale ?? locale) as NewsArticle['locale']) || locale,
@@ -98,4 +107,3 @@ export function getStaticAnnouncements(locale: Announcement['locale']): Announce
     .filter((a) => a.title && a.content)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
-

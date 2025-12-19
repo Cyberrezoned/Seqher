@@ -5,48 +5,26 @@ import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { supabase } from '@/lib/supabase-client';
 import type { BlogPost } from '@/lib/types';
-import { USE_STATIC_CONTENT } from '@/lib/content/config';
 import { getStaticBlogPostBySlug, getStaticBlogPosts } from '@/lib/content/static';
 import RichText from '@/components/content/RichText';
 
-export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
+export const dynamic = 'force-static';
+export const dynamicParams = false;
 
 type Props = {
   params: { slug: string };
 };
 
-async function getPost(slug: string): Promise<BlogPost | null> {
-    if (USE_STATIC_CONTENT) {
-        return getStaticBlogPostBySlug('ng', slug);
-    }
-
-    const { data, error } = await supabase
-        .from('blog_posts')
-        .select('id,title,content,slug,image_id,image_url,author,author_id,locale,created_at')
-        .eq('slug', slug)
-        .eq('locale', 'ng')
-        .single();
-
-    if (error) return null;
-    if (!data) return null;
-
-    return {
-        id: data.id,
-        title: data.title,
-        content: data.content || '',
-        slug: data.slug,
-        imageId: data.image_id || 'blog-community-gardens',
-        imageUrl: data.image_url ?? null,
-        author: data.author || 'Admin',
-        authorId: data.author_id || '',
-        createdAt: data.created_at || new Date().toISOString(),
-        locale: (data.locale as BlogPost['locale']) || 'ng',
-    };
+export async function generateStaticParams() {
+  return getStaticBlogPosts('ng')
+    .filter((p) => p.locale === 'ng')
+    .map((p) => ({ slug: p.slug }));
 }
 
+async function getPost(slug: string): Promise<BlogPost | null> {
+  return getStaticBlogPostBySlug('ng', slug);
+}
 
 export async function generateMetadata({ params }: Props) {
   const post = await getPost(params.slug);

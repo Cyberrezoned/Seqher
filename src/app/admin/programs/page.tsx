@@ -28,16 +28,19 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Program } from "@/lib/types";
 import DeleteProgramButton from "./DeleteProgramButton";
 
+export const dynamic = 'force-dynamic';
+
 async function getPrograms(): Promise<Program[]> {
   const { data, error } = await supabaseAdmin
     .from('programs')
     .select('id,title,summary,description,image_id,sdg_goals,locale,created_at')
     .order('title', { ascending: true });
 
-  if (error || !data) {
+  if (error) {
     console.error('Failed to load programs from Supabase:', error);
     return [];
   }
+  if (!data) return [];
 
   return data.map((row) => ({
     id: row.id,

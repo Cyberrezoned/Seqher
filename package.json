@@ -11,7 +11,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "import:wp": "node scripts/import-wordpress-export.mjs",
-    "seed": "node scripts/import-wordpress-export.mjs"
+    "seed": "node scripts/import-wordpress-export.mjs",
+    "make-admin": "node scripts/make-admin.mjs"
   },
   "dependencies": {
     "@genkit-ai/google-genai": "^1.20.0",

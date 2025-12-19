@@ -4,44 +4,25 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/lib/supabase-client';
 import type { Program } from '@/lib/types';
-import { USE_STATIC_CONTENT } from '@/lib/content/config';
 import { getStaticProgramById, getStaticPrograms } from '@/lib/content/static';
 import RichText from '@/components/content/RichText';
 
-export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
+export const dynamic = 'force-static';
+export const dynamicParams = false;
 
 type Props = {
   params: { id: string };
 };
 
 async function getProgram(id: string): Promise<Program | null> {
-    if (USE_STATIC_CONTENT) {
-        return getStaticProgramById('ng', id);
-    }
+  return getStaticProgramById('ng', id);
+}
 
-    const { data, error } = await supabase
-        .from('programs')
-        .select('id,title,summary,description,image_id,image_url,sdg_goals,locale')
-        .eq('id', id)
-        .eq('locale', 'ng')
-        .single();
-
-    if (error) return null;
-    if (!data) return null;
-
-    return {
-        id: data.id,
-        title: data.title,
-        summary: data.summary,
-        description: data.description,
-        imageId: data.image_id,
-        imageUrl: data.image_url ?? null,
-        sdgGoals: data.sdg_goals || [],
-        locale: (data.locale as Program['locale']) || 'ng',
-    };
+export async function generateStaticParams() {
+  return getStaticPrograms('ng')
+    .filter((p) => p.locale === 'ng')
+    .map((p) => ({ id: p.id }));
 }
 
 

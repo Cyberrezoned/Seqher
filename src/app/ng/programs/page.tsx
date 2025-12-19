@@ -5,12 +5,10 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/lib/supabase-client';
 import type { Program } from '@/lib/types';
-import { USE_STATIC_CONTENT } from '@/lib/content/config';
 import { getStaticPrograms } from '@/lib/content/static';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 
 
 export const metadata = {
@@ -21,32 +19,7 @@ export const metadata = {
 const programsHeroImage = PlaceHolderImages.find(p => p.id === 'programs-hero');
 
 async function getPrograms(): Promise<Program[]> {
-  if (USE_STATIC_CONTENT) {
-    return getStaticPrograms('ng').filter((p) => p.locale === 'ng');
-  }
-
-  const { data, error } = await supabase
-    .from('programs')
-    .select('id,title,summary,description,image_id,image_url,sdg_goals,locale')
-    .eq('locale', 'ng')
-    .order('title', { ascending: true });
-
-  if (error) {
-    console.error('Failed to load programs from Supabase:', error);
-    return [];
-  }
-  if (!data) return [];
-
-  return data.map((row) => ({
-    id: row.id,
-    title: row.title,
-    summary: row.summary,
-    description: row.description,
-    imageId: row.image_id,
-    imageUrl: row.image_url ?? null,
-    sdgGoals: row.sdg_goals || [],
-    locale: (row.locale as Program['locale']) || 'ng',
-  }));
+  return getStaticPrograms('ng').filter((p) => p.locale === 'ng');
 }
 
 export default async function ProgramsPage() {

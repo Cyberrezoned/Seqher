@@ -29,16 +29,19 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { NewsArticle } from "@/lib/types";
 import DeleteNewsButton from "./DeleteNewsButton";
 
+export const dynamic = 'force-dynamic';
+
 async function getNewsArticles(): Promise<NewsArticle[]> {
   const { data, error } = await supabaseAdmin
     .from('news')
     .select('id,title,summary,source,link,image_id,published_date,category,locale,created_at')
     .order('published_date', { ascending: false });
 
-  if (error || !data) {
+  if (error) {
     console.error('Failed to load news articles from Supabase:', error);
     return [];
   }
+  if (!data) return [];
 
   return data.map((row) => ({
     id: row.id,

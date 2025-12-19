@@ -19,16 +19,19 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { AppointmentRequest } from "@/lib/types";
 import AppointmentDetails from "./AppointmentDetails";
 
+export const dynamic = 'force-dynamic';
+
 async function getAppointments(): Promise<AppointmentRequest[]> {
   const { data, error } = await supabaseAdmin
     .from('appointments')
     .select('id,name,email,appointment_date,appointment_type,message,status,created_at')
     .order('created_at', { ascending: false });
 
-  if (error || !data) {
+  if (error) {
     console.error('Failed to load appointments from Supabase:', error);
     return [];
   }
+  if (!data) return [];
 
   return data.map((row) => ({
     id: row.id,
