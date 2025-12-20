@@ -42,7 +42,7 @@ export default function NewsClient({ articles }: { articles: NewsArticle[] }) {
                 variants={cardVariants}
                 className="h-full flex"
               >
-                <Card className="flex flex-col h-full w-full overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+                <Card className="flex flex-col h-full w-full overflow-hidden hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
                   <CardHeader className="p-0 relative">
                     {imageSrc && (
                       <SafeImage

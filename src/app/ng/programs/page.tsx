@@ -1,22 +1,17 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import type { Program } from '@/lib/types';
 import { getStaticPrograms } from '@/lib/content/static';
+import ProgramsClient from './ProgramsClient';
 
 export const dynamic = 'force-static';
-
 
 export const metadata = {
   title: 'Our Programs | SEQHER Nigeria',
   description: 'Explore the various programs and initiatives by SEQHER in Nigeria.',
 };
 
-const programsHeroImage = PlaceHolderImages.find(p => p.id === 'programs-hero');
+const programsHeroImage = PlaceHolderImages.find((p) => p.id === 'programs-hero');
 
 async function getPrograms(): Promise<Program[]> {
   return getStaticPrograms('ng').filter((p) => p.locale === 'ng');
@@ -45,56 +40,7 @@ export default async function ProgramsPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          {programs.length === 0 && (
-             <div className="text-center p-8 text-muted-foreground border-dashed border-2 rounded-lg">
-                <h2 className="text-2xl font-bold font-headline mb-4">No Programs Found</h2>
-                <p>There are no programs available at the moment. Check back soon!</p>
-            </div>
-          )}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {programs.map((program) => {
-              const programImage = PlaceHolderImages.find(p => p.id === program.imageId);
-              const imageSrc = program.imageUrl || programImage?.imageUrl;
-              return (
-                <Card key={program.id} className="group flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                   <CardHeader className="p-0">
-                    {imageSrc && (
-                      <div className="overflow-hidden">
-                        <Image
-                          src={imageSrc}
-                          alt={program.title}
-                          width={400}
-                          height={250}
-                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                          data-ai-hint={programImage?.imageHint}
-                        />
-                      </div>
-                    )}
-                  </CardHeader>
-                  <div className="p-6 flex flex-col flex-grow">
-                    <CardTitle className="font-headline text-xl mb-2 group-hover:text-primary transition-colors">{program.title}</CardTitle>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {program.sdgGoals.map(goal => (
-                            <Badge key={goal} variant="secondary">SDG {goal}</Badge>
-                        ))}
-                    </div>
-                    <CardContent className="p-0 flex-grow">
-                      <p className="text-muted-foreground line-clamp-4">{program.summary}</p>
-                    </CardContent>
-                    <div className="pt-4 mt-auto">
-                      <Button asChild variant="link" className="p-0 text-primary">
-                          <Link href={`/ng/programs/${program.id}`}>Learn More <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <ProgramsClient programs={programs} />
     </div>
   );
 }

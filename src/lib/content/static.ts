@@ -1,6 +1,6 @@
 import type { Announcement, BlogPost, NewsArticle, Program } from '@/lib/types';
 import raw from '@/content/wordpress-export.json';
-import { extractFirstImageUrl, isBlockedSeqherWpMediaUrl } from '@/lib/content/wp';
+import { extractFirstImageUrl } from '@/lib/content/wp';
 
 type ExportPayload = {
   images?: unknown[];
@@ -22,7 +22,6 @@ function normalizeImageUrl(value: unknown): string | null {
   if (!trimmed) return null;
   if (trimmed.startsWith('/')) return trimmed;
   if (!/^https?:\/\//i.test(trimmed)) return null;
-  if (isBlockedSeqherWpMediaUrl(trimmed)) return null;
   return trimmed;
 }
 

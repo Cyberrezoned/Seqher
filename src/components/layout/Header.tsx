@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useScrollPosition } from '@/hooks/use-scroll-position';
 
 
 const navLinks = [
@@ -34,6 +35,7 @@ export default function Header() {
   const pathname = usePathname();
   const { user, isAdmin, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const scrollY = useScrollPosition();
 
   const getInitials = (name?: string | null) => {
     if (!name) return 'U';
@@ -74,7 +76,12 @@ export default function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={cn(
+      "sticky top-0 z-50 w-full border-b transition-colors duration-300",
+      scrollY > 50 
+        ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-border" 
+        : "bg-transparent border-transparent"
+    )}>
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
           <Logo className="h-8 w-8 text-primary" />

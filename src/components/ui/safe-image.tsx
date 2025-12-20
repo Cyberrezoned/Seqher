@@ -8,7 +8,7 @@ type Props = Omit<ImageProps, 'src'> & {
   fallbackSrc?: string;
 };
 
-export default function SafeImage({ src, fallbackSrc = '/images/placeholder-teal.svg', onError, alt, ...props }: Props) {
+export default function SafeImage({ src, fallbackSrc = 'https://source.unsplash.com/random/800x600?gray', onError, alt, ...props }: Props) {
   const [currentSrc, setCurrentSrc] = useState(src);
 
   useEffect(() => {
