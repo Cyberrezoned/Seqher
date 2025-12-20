@@ -57,9 +57,10 @@ export default async function NewsDetailPage({ params }: Props) {
           </div>
         )}
 
-        <div className="prose prose-lg max-w-none text-foreground prose-headings:text-primary prose-img:rounded-lg prose-img:shadow-sm">
-          <RichText html={post.contentHtml} />
-        </div>
+        <RichText
+          content={post.contentHtml}
+          className="prose prose-lg max-w-none text-foreground prose-headings:text-primary prose-img:rounded-lg prose-img:shadow-sm"
+        />
       </div>
     </div>
   );

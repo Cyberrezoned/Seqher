@@ -1,0 +1,10 @@
+feat(programs): Add Programs page and enhance UI
+
+This commit introduces a new client for the Programs page, allowing for better display of program information. It also includes several UI enhancements and a new hook.
+
+- Add `ProgramsClient.tsx` for the `/ng/programs` route.
+- Introduce `use-scroll-position` hook to track scroll position.
+- Update `BlogClient.tsx` and `NewsClient.tsx`.
+- Modify UI components: `Header`, `button`, `safe-image`.
+- Update dependencies in `package.json` and `package-lock.json`.
+- Refresh static content and placeholder images.

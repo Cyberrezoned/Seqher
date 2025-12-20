@@ -9,13 +9,22 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    // Avoid runtime "upstream image response failed" errors when remote images disappear/404.
-    // Remote images will be loaded directly by the browser instead of being proxied/optimized by Next.js.
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'source.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'plus.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'sirpek.wordpress.com',
       },
     ],
   },

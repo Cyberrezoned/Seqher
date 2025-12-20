@@ -85,9 +85,10 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
             )}
 
-            <div className="prose prose-lg max-w-none text-foreground prose-p:text-foreground prose-headings:text-primary prose-strong:text-foreground prose-a:text-primary prose-img:rounded-lg prose-img:shadow-sm">
-                <RichText html={post.content} />
-            </div>
+            <RichText
+              content={post.content}
+              className="prose prose-lg max-w-none text-foreground prose-p:text-foreground prose-headings:text-primary prose-strong:text-foreground prose-a:text-primary prose-img:rounded-lg prose-img:shadow-sm"
+            />
             
             <Separator />
             

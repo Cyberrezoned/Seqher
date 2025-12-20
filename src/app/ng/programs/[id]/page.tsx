@@ -81,10 +81,11 @@ export default async function ProgramDetailPage({ params }: Props) {
             </div>
           )}
 
-          <div className="prose prose-lg max-w-none text-foreground prose-img:rounded-lg prose-img:shadow-sm">
-            <p className="lead text-xl text-muted-foreground">{program.summary}</p>
-            <RichText html={program.description} />
-          </div>
+          <p className="lead text-xl text-muted-foreground">{program.summary}</p>
+          <RichText
+            content={program.description}
+            className="prose prose-lg max-w-none text-foreground prose-img:rounded-lg prose-img:shadow-sm"
+          />
 
           <div className="pt-8 border-t">
               <h3 className="font-headline text-2xl font-semibold mb-4">Get Involved</h3>
