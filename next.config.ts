@@ -26,6 +26,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'sirpek.wordpress.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'seqher.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.seqher.org',
+      },
     ],
   },
 };

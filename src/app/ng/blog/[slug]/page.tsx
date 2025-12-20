@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { notFound } from 'next/navigation';
@@ -8,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import type { BlogPost } from '@/lib/types';
 import { getStaticBlogPostBySlug, getStaticBlogPosts } from '@/lib/content/static';
 import RichText from '@/components/content/RichText';
+import SafeImage from '@/components/ui/safe-image';
 
 export const dynamic = 'force-static';
 export const dynamicParams = false;
@@ -74,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
             
             {imageSrc && (
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg">
-                <Image
+                <SafeImage
                     src={imageSrc}
                     alt={post.title}
                     fill
