@@ -12,7 +12,7 @@ import { usePathname } from 'next/navigation';
 
 // This cannot be a client component
 // export const metadata: Metadata = {
-//   title: 'SEQHER Digital Hub',
+//   title: 'Society for Equal Health and Rights',
 //   description: 'An NGO in alignment with SDG GOALS',
 // };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
-        <title>SEQHER Digital Hub</title>
+        <title>Society for Equal Health and Rights</title>
         <meta name="description" content="An NGO in alignment with SDG GOALS" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
