@@ -12,8 +12,6 @@ import type { Announcement, Program } from '@/lib/types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const heroImage = PlaceHolderImages.find((p) => p.id === 'hero-community');
-const programImage1 = PlaceHolderImages.find((p) => p.id === 'program-education');
-const programImage2 = PlaceHolderImages.find((p) => p.id === 'program-health');
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -81,7 +79,7 @@ export default function NigeriaHomeClient({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            Driving localized impact and sustainable solutions across Nigeria.
+            Empowering communities with compassion—advancing equal health and rights across Nigeria.
           </motion.p>
           <motion.div
             className="mt-8 flex flex-wrap justify-center gap-4"
@@ -122,75 +120,6 @@ export default function NigeriaHomeClient({
           </div>
         </motion.section>
       )}
-
-      <motion.section
-        className="py-16 md:py-24 bg-background overflow-hidden"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={sectionVariants}
-      >
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-4">
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Our Mission in Nigeria</h2>
-              <p className="text-lg text-muted-foreground">
-                At SEQHER, our mission is to drive impactful change by creating and supporting programs that align with the
-                Sustainable Development Goals (SDGs). We focus on key areas such as education, health, and economic empowerment to
-                build resilient and thriving communities.
-              </p>
-              <p className="text-muted-foreground">
-                We believe in a collaborative approach, working hand-in-hand with local partners and volunteers to ensure our
-                initiatives are both effective and sustainable.
-              </p>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
-                <Button asChild className="mt-4">
-                  <Link href="/ng/about">
-                    Learn More <ArrowRight className="ml-2" />
-                  </Link>
-                </Button>
-              </motion.div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                {programImage1 && (
-                  <Image
-                    src={programImage1.imageUrl}
-                    alt={programImage1.description}
-                    data-ai-hint={programImage1.imageHint}
-                    width={400}
-                    height={500}
-                    className="rounded-lg shadow-lg object-cover aspect-[4/5]"
-                  />
-                )}
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-                className="mt-8"
-              >
-                {programImage2 && (
-                  <Image
-                    src={programImage2.imageUrl}
-                    alt={programImage2.description}
-                    data-ai-hint={programImage2.imageHint}
-                    width={400}
-                    height={500}
-                    className="rounded-lg shadow-lg object-cover aspect-[4/5]"
-                  />
-                )}
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </motion.section>
 
       <motion.section
         className="py-16 md:py-24 bg-accent/5"
@@ -282,4 +211,3 @@ export default function NigeriaHomeClient({
     </div>
   );
 }
-

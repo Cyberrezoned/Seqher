@@ -1,21 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { ArrowRight, Eye, MapPin, Target } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
-const heroImage = PlaceHolderImages.find((p) => p.id === 'hero-community');
 
 export default function GlobalLandingPage() {
   const [suggestedRegion, setSuggestedRegion] = useState<{
@@ -44,48 +40,63 @@ export default function GlobalLandingPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative flex h-[70vh] min-h-[500px] w-full items-center justify-center bg-primary/20">
-        {heroImage && (
-          <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            fill
-            className="object-cover"
-            data-ai-hint={heroImage.imageHint}
-            priority
-          />
-        )}
-        <div className="absolute inset-0 bg-black/50" />
-        <motion.div
-          className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <motion.h1 
-            className="font-headline text-4xl md:text-6xl font-bold tracking-tight"
-            initial={{ opacity: 0, y: 20 }}
+      {/* Mission & Vision */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="mx-auto max-w-4xl text-center"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.7 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">SEQHER</h1>
+            <p className="mt-3 text-muted-foreground">
+              Society for Equal Health and Rights
+            </p>
+          </motion.div>
+
+          <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.05 }}
             >
-            Empowering Communities, Sustaining Futures
-          </motion.h1>
-          <motion.p 
-            className="mt-4 max-w-3xl text-lg md:text-xl text-primary-foreground"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.7 }}
+              <Card className="h-full">
+                <CardHeader className="flex flex-row items-center gap-3">
+                  <Target className="h-6 w-6 text-primary" />
+                  <CardTitle>Our Mission</CardTitle>
+                </CardHeader>
+                <CardContent className="text-muted-foreground">
+                  Advancing a better world by closing the gaps of inequality through education, economic empowerment,
+                  human rights, gender and social justice, health and wellbeing, food security, inclusivity, and cultural
+                  connections.
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-            SEQHER is a global organization dedicated to fostering sustainable
-            development and creating lasting change in alignment with the UN's
-            SDGs.
-          </motion.p>
-        </motion.div>
+              <Card className="h-full">
+                <CardHeader className="flex flex-row items-center gap-3">
+                  <Eye className="h-6 w-6 text-primary" />
+                  <CardTitle>Our Vision</CardTitle>
+                </CardHeader>
+                <CardContent className="text-muted-foreground">
+                  A society where equality thrives.
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* Portal Selection */}
-      <section className="py-16 md:py-24">
+      <section className="border-t bg-secondary/30 py-16 md:py-24">
         <div className="container mx-auto px-4">
           <motion.h2 
             className="font-headline text-3xl md:text-4xl font-bold text-center mb-4"
@@ -94,7 +105,7 @@ export default function GlobalLandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            Choose Your Region
+            Select Your Location to Continue
           </motion.h2>
           <motion.p 
             className="mt-2 mb-10 max-w-2xl mx-auto text-center text-muted-foreground"
@@ -103,7 +114,7 @@ export default function GlobalLandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
             >
-            Access resources, programs, and events tailored to your location.
+            Choose your portal to access programs, updates, and resources tailored to your region.
           </motion.p>
 
           {suggestedRegion && (

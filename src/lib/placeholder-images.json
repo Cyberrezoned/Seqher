@@ -81,8 +81,8 @@
     {
       "id": "programs-hero",
       "description": "A panoramic view of a diverse landscape showing mountains and a village.",
-      "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
-      "imageHint": "landscape village"
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1670588493386-84435548e2ca?auto=format&fit=crop&w=1600&h=900&q=80",
+      "imageHint": "pride flag"
     },
     {
       "id": "blog-hero",
@@ -116,9 +116,9 @@
     },
     {
       "id": "about-mission",
-      "description": "Volunteers organizing essential supplies for community outreach.",
-      "imageUrl": "https://plus.unsplash.com/premium_photo-1733306621909-1d63c088a93e?auto=format&fit=crop&w=800&h=600&q=80",
-      "imageHint": "community outreach volunteers"
+      "description": "Queer health and rights support in Nigeria.",
+      "imageUrl": "/images/about-mission-queer-health-ng.svg",
+      "imageHint": "queer health nigeria"
     },
     {
       "id": "news-hero",

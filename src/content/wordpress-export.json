@@ -1,6 +1,61 @@
 {
   "images": [],
-  "programs": [],
+  "programs": [
+    {
+      "id": "queer-health-navigation",
+      "title": "Queer Health Navigation & Referrals",
+      "summary": "Confidential support connecting LGBTQ+ people to affirming providers, testing, and care—without judgment.",
+      "description": "<p>Accessing healthcare should feel safe, respectful, and affirming. This program helps LGBTQ+ people navigate services with dignity—whether you need information, referrals, or follow‑up support.</p>\n\n<h2>What we do</h2>\n<ul>\n  <li>Private one‑on‑one navigation and referrals</li>\n  <li>Support with appointments, follow‑ups, and continuity of care</li>\n  <li>Health information that is stigma‑free and community‑centered</li>\n</ul>\n\n<h2>How it works</h2>\n<p>Reach out via our appointment form. A trained community navigator will respond, understand your needs, and connect you to the right support—confidentially.</p>\n\n<h2>Our commitment</h2>\n<ul>\n  <li>Confidentiality and informed consent</li>\n  <li>Trauma‑informed, non‑judgmental support</li>\n  <li>Respect for every identity and experience</li>\n</ul>",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1713453396480-8830accd64bd?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [3, 10, 16],
+      "locale": "ng"
+    },
+    {
+      "id": "hiv-sti-prep",
+      "title": "HIV/STI Testing + PrEP/PEP Support",
+      "summary": "Community-led education, testing referrals, and medication navigation to help queer communities stay informed and protected.",
+      "description": "<p>We promote sexual health through education, confidential referrals, and support that meets people where they are—without shame.</p>\n\n<h2>Services</h2>\n<ul>\n  <li>HIV and STI testing referrals</li>\n  <li>PrEP/PEP information and navigation support</li>\n  <li>Safer‑sex education and harm‑reduction resources</li>\n</ul>\n\n<h2>Who it’s for</h2>\n<p>LGBTQ+ people, allies, and communities who need accurate information, affirming services, and a supportive pathway to care.</p>\n\n<h2>Why it matters</h2>\n<p>Early testing and prevention options save lives—especially when people have safe, stigma‑free access to services.</p>",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1678376871117-8a32e22e61c5?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [3, 10],
+      "locale": "ng"
+    },
+    {
+      "id": "gender-affirming-care",
+      "title": "Gender‑Affirming Care Navigation",
+      "summary": "Respectful guidance for trans and gender-diverse people seeking safe, affirming healthcare and trusted referrals.",
+      "description": "<p>Trans and gender‑diverse people deserve care that recognizes who they are. We offer navigation support and referrals to services that prioritize dignity and safety.</p>\n\n<h2>What we support</h2>\n<ul>\n  <li>Affirming provider referrals and appointment support</li>\n  <li>Information on gender‑affirming care options</li>\n  <li>Peer support and community connection</li>\n</ul>\n\n<h2>Our approach</h2>\n<p>We listen first. Then we help you find safe pathways to care—at your pace, with informed consent and confidentiality.</p>",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1684952850909-4b22b426ddd1?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [3, 5, 10, 16],
+      "locale": "ng"
+    },
+    {
+      "id": "mental-health-peer-support",
+      "title": "Mental Health & Peer Support Circles",
+      "summary": "Trauma‑informed spaces for connection, healing, and resilience—facilitated by trained peers.",
+      "description": "<p>Living through stigma and exclusion can take a real toll. Our peer support circles offer a safer space for community connection and mental wellbeing.</p>\n\n<h2>What you can expect</h2>\n<ul>\n  <li>Peer‑led support circles and wellbeing check‑ins</li>\n  <li>Stress management tools and coping strategies</li>\n  <li>Referrals to affirming mental health professionals where available</li>\n</ul>\n\n<h2>Values</h2>\n<ul>\n  <li>Confidentiality and consent</li>\n  <li>Kindness, respect, and non‑judgment</li>\n  <li>Community care and shared strength</li>\n</ul>",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1661425222897-c1f88a392923?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [3, 10],
+      "locale": "ng"
+    },
+    {
+      "id": "rights-legal-aid",
+      "title": "Human Rights, Safety & Legal Aid",
+      "summary": "Know‑your‑rights education, case support, and referrals to trusted legal partners when rights are threatened.",
+      "description": "<p>Health and safety are deeply connected to rights. We support community members with information and referrals when they face discrimination, harassment, or other rights violations.</p>\n\n<h2>Support includes</h2>\n<ul>\n  <li>Know‑your‑rights sessions and safety planning</li>\n  <li>Documentation and case support</li>\n  <li>Referrals to vetted legal aid partners</li>\n</ul>\n\n<h2>Goal</h2>\n<p>To help people stay safe, informed, and supported—while strengthening community resilience.</p>",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1698084059560-9a53de7b816b?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [16, 10, 5],
+      "locale": "ng"
+    },
+    {
+      "id": "skills-livelihood-empowerment",
+      "title": "Skills & Livelihood Empowerment",
+      "summary": "Workshops and mentorship to strengthen economic independence—because dignity includes opportunity.",
+      "description": "<p>Economic empowerment reduces vulnerability and supports wellbeing. This program builds practical skills and connects people to opportunities in a supportive, community‑affirming way.</p>\n\n<h2>Activities</h2>\n<ul>\n  <li>Skills workshops and learning circles</li>\n  <li>CV support, mentorship, and peer networking</li>\n  <li>Referral pathways for training and opportunities</li>\n</ul>\n\n<h2>Why we do this</h2>\n<p>When people have access to resources and opportunity, they can thrive—on their own terms.</p>",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1705717317549-8d14a67a34d2?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [8, 10, 4],
+      "locale": "ng"
+    }
+  ],
   "blogPosts": [
     {
       "id": "00c68279-c124-4611-af62-b775bc3d6c8d",

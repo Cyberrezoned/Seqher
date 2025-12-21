@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, HeartHandshake, ShieldCheck, Sparkles } from 'lucide-react';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,6 +33,27 @@ export default function ProgramsClient({ programs }: { programs: Program[] }) {
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
+        <div className="mx-auto mb-10 max-w-4xl rounded-xl border bg-gradient-to-br from-fuchsia-500/10 via-amber-400/10 to-cyan-400/10 p-6">
+          <h2 className="font-headline text-2xl md:text-3xl font-bold text-primary">Built by community. Made for care.</h2>
+          <p className="mt-2 text-muted-foreground">
+            We create safer pathways to health and rights through confidential, affirming, and community‑led programs.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1">
+              <HeartHandshake className="h-4 w-4 text-primary" />
+              Compassionate support
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              Safety & confidentiality
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1">
+              <Sparkles className="h-4 w-4 text-primary" />
+              Inclusive & affirming care
+            </span>
+          </div>
+        </div>
+
         {programs.length === 0 && (
           <div className="text-center p-8 text-muted-foreground border-dashed border-2 rounded-lg">
             <h2 className="text-2xl font-bold font-headline mb-4">No Programs Found</h2>
@@ -51,7 +72,7 @@ export default function ProgramsClient({ programs }: { programs: Program[] }) {
               const imageSrc = program.imageUrl || programImage?.imageUrl;
               return (
                 <motion.div key={program.id} variants={itemVariants} className="h-full">
-                  <Card className="group flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300 h-full hover:-translate-y-1">
+                  <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 h-full hover:-translate-y-1 hover:shadow-xl bg-gradient-to-br from-fuchsia-500/5 via-transparent to-cyan-400/10">
                     <CardHeader className="p-0">
                       {imageSrc && (
                         <div className="overflow-hidden">
@@ -63,6 +84,7 @@ export default function ProgramsClient({ programs }: { programs: Program[] }) {
                             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                             data-ai-hint={programImage?.imageHint}
                           />
+                          <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-fuchsia-500 via-amber-400 to-cyan-400 opacity-90" />
                         </div>
                       )}
                     </CardHeader>

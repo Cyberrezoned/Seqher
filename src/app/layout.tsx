@@ -22,6 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const isLanding = pathname === '/';
   return (
     <html lang="en" className="h-full">
       <head>
@@ -33,11 +34,11 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col bg-background')}>
         <AuthProvider>
-            <Header />
+            {!isLanding && <Header />}
             <MotionProvider key={pathname}>
               <main className="flex-grow">{children}</main>
             </MotionProvider>
-            <Footer />
+            {!isLanding && <Footer />}
             <Toaster />
         </AuthProvider>
       </body>
