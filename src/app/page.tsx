@@ -98,9 +98,6 @@ export default function GlobalLandingPage() {
               </span>
             </h1>
             <p className="mt-3 text-muted-foreground">Society for Equal Health and Rights</p>
-            <p className="mt-5 text-lg md:text-xl text-foreground/90">
-              Care that feels safe. Health that meets you where you are. Rights that don’t require permission.
-            </p>
           </motion.div>
 
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
