@@ -1,14 +1,18 @@
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Facebook, Instagram, Music2, Twitter } from 'lucide-react';
 import Logo from '@/components/icons/Logo';
 import { Button } from '@/components/ui/button';
 
 export default function Footer() {
   const socialLinks = [
-    { name: 'Facebook', icon: <Facebook className="h-5 w-5" />, href: '#' },
-    { name: 'Twitter', icon: <Twitter className="h-5 w-5" />, href: '#' },
-    { name: 'Instagram', icon: <Instagram className="h-5 w-5" />, href: '#' },
-    { name: 'LinkedIn', icon: <Linkedin className="h-5 w-5" />, href: '#' },
+    { name: 'Facebook', icon: <Facebook className="h-5 w-5" />, href: 'https://www.facebook.com/share/18rF2QiaNY/' },
+    { name: 'X (Twitter)', icon: <Twitter className="h-5 w-5" />, href: 'https://x.com/Seqherinitiativ?t=OY1j8i25QLbZckBzOpbxqw&s=09' },
+    { name: 'Instagram', icon: <Instagram className="h-5 w-5" />, href: 'https://www.instagram.com/seqherinitiativ?igsh=MTlzdHJsdXFnenkzcg==' },
+    {
+      name: 'TikTok',
+      icon: <Music2 className="h-5 w-5" />,
+      href: 'https://www.tiktok.com/@seqherinitiativ?_r=1&_d=edl9hl31fc8mj0&sec_uid=MS4wLjABAAAAOUJqf4RL6vpml8RkbvyzjpmZT99c8gXMzeJ9SUwacCOeGFaTVWErudFaSlvjP8oj&share_author_id=7377005085425452037&sharer_language=en&source=h5_m&u_code=eee8b92m37m0f2&timestamp=1765958944&user_id=7377005085425452037&sec_user_id=MS4wLjABAAAAOUJqf4RL6vpml8RkbvyzjpmZT99c8gXMzeJ9SUwacCOeGFaTVWErudFaSlvjP8oj&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7576955429353604865&share_link_id=50963718-d4d1-496d-864f-445ab9a11474&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb7360&social_share_type=5&enable_checksum=1',
+    },
   ];
 
   const footerLinks = [
@@ -59,21 +63,34 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
-             <h3 className="font-semibold font-headline text-lg mb-4">Connect With Us</h3>
-            <div className="flex space-x-4">
-                {socialLinks.map((social) => (
-                <Button key={social.name} variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary hover:bg-primary/10">
-                    <a href={social.href} aria-label={social.name}>
-                        {social.icon}
-                    </a>
-                </Button>
-                ))}
-            </div>
-            <p className="mt-4 text-muted-foreground text-sm">contact@seqher.org</p>
-            <p className="text-muted-foreground text-sm">+1 (234) 567-890</p>
-          </div>
-        </div>
+	          <div>
+	             <h3 className="font-semibold font-headline text-lg mb-4">Connect With Us</h3>
+	            <div className="flex space-x-4">
+	                {socialLinks.map((social) => (
+	                <Button key={social.name} variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary hover:bg-primary/10">
+	                    <a href={social.href} aria-label={social.name} target="_blank" rel="noreferrer">
+	                        {social.icon}
+	                    </a>
+	                </Button>
+	                ))}
+	            </div>
+	            <p className="mt-4 text-muted-foreground text-sm">
+	              <a className="hover:text-primary transition-colors" href="mailto:info@seqher.org">
+	                info@seqher.org
+	              </a>
+	            </p>
+	            <p className="text-muted-foreground text-sm">
+	              <a className="hover:text-primary transition-colors" href="tel:+2348064454657">
+	                +234 806 445 4657
+	              </a>
+	            </p>
+	            <p className="text-muted-foreground text-sm">
+	              <a className="hover:text-primary transition-colors" href="tel:+2349020484873">
+	                +234 902 048 4873
+	              </a>
+	            </p>
+	          </div>
+	        </div>
         
         <div className="mt-12 border-t pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} SEQHER. All Rights Reserved.</p>

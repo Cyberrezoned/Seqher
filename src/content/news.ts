@@ -224,7 +224,7 @@ export const NG_NEWS_POSTS: NewsPost[] = [
     publishedDate: '2025-06-01T00:00:00.000Z',
     category: 'Sustainability',
     locale: 'ng',
-    imageUrl: '/images/placeholder-teal.svg',
+    imageUrl: 'https://images.unsplash.com/photo-1578911220678-01334f9c8689?auto=format&fit=crop&w=1200&h=800&q=80',
     contentHtml: `
       <p><strong>Fun and Cunty!</strong> was the theme of the first edition of the Vogue for Awareness class.</p>
       <p>If you missed it, here’s a little rundown — and you don’t want to miss the next one.</p>

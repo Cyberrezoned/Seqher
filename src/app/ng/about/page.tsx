@@ -54,9 +54,11 @@ export default function AboutPage() {
     email: 'Samsegun01@gmail.com',
     website: 'https://seqher.org',
     social: {
-      facebook: 'https://facebook.com/Seqherinitiativ',
-      instagram: 'https://instagram.com/Seqherinitiativ',
-      x: 'https://x.com/Seqherinitiativ',
+      facebook: 'https://www.facebook.com/share/18rF2QiaNY/',
+      instagram: 'https://www.instagram.com/seqherinitiativ?igsh=MTlzdHJsdXFnenkzcg==',
+      x: 'https://x.com/Seqherinitiativ?t=OY1j8i25QLbZckBzOpbxqw&s=09',
+      tiktok:
+        'https://www.tiktok.com/@seqherinitiativ?_r=1&_d=edl9hl31fc8mj0&sec_uid=MS4wLjABAAAAOUJqf4RL6vpml8RkbvyzjpmZT99c8gXMzeJ9SUwacCOeGFaTVWErudFaSlvjP8oj&share_author_id=7377005085425452037&sharer_language=en&source=h5_m&u_code=eee8b92m37m0f2&timestamp=1765958944&user_id=7377005085425452037&sec_user_id=MS4wLjABAAAAOUJqf4RL6vpml8RkbvyzjpmZT99c8gXMzeJ9SUwacCOeGFaTVWErudFaSlvjP8oj&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7576955429353604865&share_link_id=50963718-d4d1-496d-864f-445ab9a11474&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb7360&social_share_type=5&enable_checksum=1',
     },
   };
 
@@ -379,21 +381,24 @@ export default function AboutPage() {
                   </div>
                 </div>
 
-                <div>
-                  <h3 className="font-headline text-lg font-bold text-primary">Social Media</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">Official handle: @Seqherinitiativ</p>
-                  <div className="mt-4 flex flex-col gap-2 text-sm">
-                    <a className="text-primary hover:underline" href={contact.social.facebook} target="_blank" rel="noreferrer">
-                      Facebook
-                    </a>
-                    <a className="text-primary hover:underline" href={contact.social.x} target="_blank" rel="noreferrer">
-                      X (Twitter)
-                    </a>
-                    <a className="text-primary hover:underline" href={contact.social.instagram} target="_blank" rel="noreferrer">
-                      Instagram
-                    </a>
-                  </div>
-                </div>
+	                <div>
+	                  <h3 className="font-headline text-lg font-bold text-primary">Social Media</h3>
+	                  <p className="mt-2 text-sm text-muted-foreground">Official handle: @Seqherinitiativ</p>
+	                  <div className="mt-4 flex flex-col gap-2 text-sm">
+	                    <a className="text-primary hover:underline" href={contact.social.facebook} target="_blank" rel="noreferrer">
+	                      Facebook
+	                    </a>
+	                    <a className="text-primary hover:underline" href={contact.social.x} target="_blank" rel="noreferrer">
+	                      X (Twitter)
+	                    </a>
+	                    <a className="text-primary hover:underline" href={contact.social.instagram} target="_blank" rel="noreferrer">
+	                      Instagram
+	                    </a>
+	                    <a className="text-primary hover:underline" href={contact.social.tiktok} target="_blank" rel="noreferrer">
+	                      TikTok
+	                    </a>
+	                  </div>
+	                </div>
               </div>
             </div>
           </div>
