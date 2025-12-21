@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="0.45" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.28" filter="url(#soft)">
+    <circle cx="210" cy="460" r="200" fill="#22c55e"/>
+    <circle cx="1020" cy="140" r="220" fill="#f59e0b"/>
+    <circle cx="760" cy="520" r="160" fill="#60a5fa"/>
+  </g>
+  <g opacity="0.95">
+    <rect x="0" y="0" width="18" height="630" fill="#ef4444"/>
+    <rect x="18" y="0" width="18" height="630" fill="#f97316"/>
+    <rect x="36" y="0" width="18" height="630" fill="#f59e0b"/>
+    <rect x="54" y="0" width="18" height="630" fill="#22c55e"/>
+    <rect x="72" y="0" width="18" height="630" fill="#3b82f6"/>
+    <rect x="90" y="0" width="18" height="630" fill="#8b5cf6"/>
+  </g>
+  <rect x="140" y="128" width="980" height="374" rx="28" fill="#0b1220" opacity="0.55"/>
+  <rect x="140" y="128" width="980" height="374" rx="28" fill="url(#shine)" opacity="0.75"/>
+  <text x="170" y="210" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="28" fill="#d1fae5" opacity="0.92" letter-spacing="2">
+    SEQHER
+  </text>
+  <text x="170" y="300" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="72" font-weight="800" fill="#ffffff">
+    Community Stories
+  </text>
+  <text x="170" y="360" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="28" fill="#e5e7eb" opacity="0.92">
+    Society for Equal Health and Rights
+  </text>
+  <g transform="translate(910 190)" opacity="0.9">
+    <path d="M120 20c46 0 80 30 80 72 0 56-57 100-80 116-23-16-80-60-80-116 0-42 34-72 80-72z" fill="#f472b6"/>
+    <path d="M120 38c-36 0-62 22-62 54 0 44 45 80 62 92 17-12 62-48 62-92 0-32-26-54-62-54z" fill="#0ea5e9" opacity="0.85"/>
+  </g>
+</svg>

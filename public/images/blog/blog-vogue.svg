@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.4" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#f472b6"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.22" filter="url(#soft)">
+    <circle cx="260" cy="170" r="210" fill="#22c55e"/>
+    <circle cx="980" cy="460" r="260" fill="#60a5fa"/>
+    <circle cx="720" cy="290" r="180" fill="#f59e0b"/>
+  </g>
+  <g opacity="0.95">
+    <rect x="0" y="0" width="18" height="630" fill="#ef4444"/>
+    <rect x="18" y="0" width="18" height="630" fill="#f97316"/>
+    <rect x="36" y="0" width="18" height="630" fill="#f59e0b"/>
+    <rect x="54" y="0" width="18" height="630" fill="#22c55e"/>
+    <rect x="72" y="0" width="18" height="630" fill="#3b82f6"/>
+    <rect x="90" y="0" width="18" height="630" fill="#8b5cf6"/>
+  </g>
+  <rect x="140" y="128" width="980" height="374" rx="28" fill="#0b1220" opacity="0.55"/>
+  <text x="170" y="210" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="28" fill="#ddd6fe" letter-spacing="2">
+    SEQHER
+  </text>
+  <text x="170" y="300" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="72" font-weight="800" fill="#ffffff">
+    Vogue &amp; Culture
+  </text>
+  <text x="170" y="360" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="28" fill="#e5e7eb" opacity="0.92">
+    Joy, expression, and community power
+  </text>
+  <g transform="translate(930 210)" opacity="0.95">
+    <rect x="0" y="0" width="170" height="170" rx="28" fill="#111827" opacity="0.5"/>
+    <path d="M60 124c12-18 18-40 19-66h18c1 26 7 48 19 66H60z" fill="#ffffff" opacity="0.18"/>
+    <path d="M82 52c18-8 36-8 54 0l-10 18c-11-5-23-5-34 0L82 52z" fill="#22c55e"/>
+    <path d="M74 92c22-18 52-18 74 0l-12 14c-15-12-35-12-50 0L74 92z" fill="#60a5fa"/>
+    <path d="M64 76c28-28 74-28 102 0l-12 12c-21-21-57-21-78 0L64 76z" fill="#f472b6"/>
+  </g>
+</svg>

@@ -44,15 +44,75 @@
     },
     {
       "id": "blog-community-gardens",
-      "description": "An urban community garden with fresh vegetables.",
-      "imageUrl": "https://images.unsplash.com/photo-1759716705272-8d1697eccf7a?auto=format&fit=crop&w=800&h=600&q=80",
-      "imageHint": "community garden"
+      "description": "A vibrant community banner in SEQHER pride colors.",
+      "imageUrl": "/images/blog/blog-community.svg",
+      "imageHint": "queer community"
     },
     {
       "id": "blog-volunteer-story",
       "description": "A portrait of a smiling volunteer.",
-      "imageUrl": "https://images.unsplash.com/photo-1699860777054-13e8d1d6245a?auto=format&fit=crop&w=800&h=600&q=80",
-      "imageHint": "volunteer portrait"
+      "imageUrl": "/images/blog/blog-community.svg",
+      "imageHint": "community support"
+    },
+    {
+      "id": "blog-community",
+      "description": "A vibrant community banner in SEQHER pride colors.",
+      "imageUrl": "/images/blog/blog-community.svg",
+      "imageHint": "community story"
+    },
+    {
+      "id": "blog-health-equity",
+      "description": "A bold cover image for health equity stories.",
+      "imageUrl": "/images/blog/blog-health-equity.svg",
+      "imageHint": "health equity"
+    },
+    {
+      "id": "blog-hiv-health",
+      "description": "A bold cover image for HIV and STI care updates.",
+      "imageUrl": "/images/blog/blog-hiv-health.svg",
+      "imageHint": "hiv care"
+    },
+    {
+      "id": "blog-trans-awareness",
+      "description": "A bold cover image for trans awareness stories.",
+      "imageUrl": "/images/blog/blog-trans-awareness.svg",
+      "imageHint": "trans awareness"
+    },
+    {
+      "id": "blog-vogue",
+      "description": "A bold cover image for vogue and culture stories.",
+      "imageUrl": "/images/blog/blog-vogue.svg",
+      "imageHint": "dance culture"
+    },
+    {
+      "id": "blog-human-rights",
+      "description": "A bold cover image for human rights and justice updates.",
+      "imageUrl": "/images/blog/blog-human-rights.svg",
+      "imageHint": "human rights"
+    },
+    {
+      "id": "blog-mental-health",
+      "description": "A bold cover image for mental health and wellbeing content.",
+      "imageUrl": "/images/blog/blog-mental-health.svg",
+      "imageHint": "mental health"
+    },
+    {
+      "id": "blog-emergency-response",
+      "description": "A bold cover image for emergency response and relief updates.",
+      "imageUrl": "/images/blog/blog-emergency-response.svg",
+      "imageHint": "emergency relief"
+    },
+    {
+      "id": "blog-capacity-building",
+      "description": "A bold cover image for training and capacity building updates.",
+      "imageUrl": "/images/blog/blog-capacity-building.svg",
+      "imageHint": "capacity building"
+    },
+    {
+      "id": "blog-careers",
+      "description": "A bold cover image for job and opportunity announcements.",
+      "imageUrl": "/images/blog/blog-careers.svg",
+      "imageHint": "careers"
     },
     {
       "id": "avatar-1",

@@ -1,6 +1,8 @@
 import type { Announcement, BlogPost, NewsArticle, Program } from '@/lib/types';
 import raw from '@/content/wordpress-export.json';
-import { extractFirstImageUrl } from '@/lib/content/wp';
+import ngBlogPostsRaw from '@/content/blogposts.ng.json';
+import { extractFirstImageUrl, htmlToText, isBlockedSeqherWpMediaUrl } from '@/lib/content/wp';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 type ExportPayload = {
   images?: unknown[];
@@ -10,7 +12,12 @@ type ExportPayload = {
   announcements?: unknown[];
 };
 
-const payload = raw as ExportPayload;
+const basePayload = raw as ExportPayload;
+const ngPayload = ngBlogPostsRaw as { blogPosts?: unknown[] };
+const payload: ExportPayload = {
+  ...basePayload,
+  blogPosts: [...(basePayload.blogPosts ?? []), ...(ngPayload.blogPosts ?? [])],
+};
 
 function asArray(value: unknown): any[] {
   return Array.isArray(value) ? value : [];
@@ -22,6 +29,7 @@ function normalizeImageUrl(value: unknown): string | null {
   if (!trimmed) return null;
   if (trimmed.startsWith('/')) return trimmed;
   if (!/^https?:\/\//i.test(trimmed)) return null;
+  if (isBlockedSeqherWpMediaUrl(trimmed)) return null;
   return trimmed;
 }
 
@@ -31,6 +39,39 @@ function firstValidImageUrl(...candidates: unknown[]): string | null {
     if (normalized) return normalized;
   }
   return null;
+}
+
+function resolvePlaceholderImageUrl(id: string): string | null {
+  const found = PlaceHolderImages.find((p) => p.id === id);
+  return found?.imageUrl ?? null;
+}
+
+function guessBlogImageId(title: string, content: string): string {
+  const haystack = `${title}\n${htmlToText(content)}`.toLowerCase();
+
+  if (/\bvogue\b|\bdance\b|\bballroom\b/.test(haystack)) return 'blog-vogue';
+  if (/\btransgender\b|\btrans\b|\btaw\b|\bawareness week\b/.test(haystack)) return 'blog-trans-awareness';
+  if (/\bhiv\b|\baids\b|\bprep\b|\bpep\b|\bsti\b/.test(haystack)) return 'blog-hiv-health';
+  if (/\bmental health\b|\bwellbeing\b|\bwell-being\b|\bpodcast\b/.test(haystack)) return 'blog-mental-health';
+  if (/\bhuman rights\b|\bright(s)?\b|\bjustice\b|\badvocacy\b/.test(haystack)) return 'blog-human-rights';
+  if (/\bflood\b|\brelief\b|\bhumanitarian\b|\bdisplaced\b/.test(haystack)) return 'blog-emergency-response';
+  if (/\btraining\b|\bcapacity\b|\bmentorship\b|\bworkshop\b/.test(haystack)) return 'blog-capacity-building';
+  if (/\bopen position\b|\bjob\b|\bapplication\b|\bdeadline\b|\bprogram assistant\b|\blaboratory\b|\bmedical officer\b/.test(haystack))
+    return 'blog-careers';
+
+  if (/\bhealth\b|\bclinic\b|\bcheck-?up\b|\bcare\b/.test(haystack)) return 'blog-health-equity';
+  return 'blog-community';
+}
+
+function rewriteWpHtmlImages(html: string, replacementUrl: string | null): string {
+  if (!html) return '';
+  if (!replacementUrl) return html;
+
+  const withMissingSrcFixed = html.replace(/<img(?![^>]*\ssrc=)([^>]*)>/gi, `<img src="${replacementUrl}"$1>`);
+  return withMissingSrcFixed.replace(
+    /(<img[^>]*\ssrc=)[\"']https?:\/\/(www\.)?seqher\.org\/wp-content\/[^\"']+[\"']/gi,
+    `$1"${replacementUrl}"`
+  );
 }
 
 export function getStaticPrograms(locale: Program['locale']): Program[] {
@@ -60,13 +101,14 @@ export function getStaticProgramById(locale: Program['locale'], id: string): Pro
 }
 
 export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
+  const seenSlugs = new Set<string>();
   return asArray(payload.blogPosts)
     .filter((p) => (p?.locale ?? 'ng') === locale || (p?.locale ?? 'ng') === 'global')
     .map(
       (p): BlogPost => {
-        const content = String(p.content ?? '');
+        const rawContent = String(p.content ?? '');
         const rawImageId = String(p.imageId ?? p.image_id ?? '');
-        const extractedUrl = extractFirstImageUrl(content);
+        const extractedUrl = extractFirstImageUrl(rawContent);
         const imageUrl =
           firstValidImageUrl(
             p.imageUrl,
@@ -74,7 +116,16 @@ export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
             rawImageId.startsWith('http') ? rawImageId : null,
             extractedUrl
           ) ?? null;
-        const imageId = (rawImageId.startsWith('http') ? '' : rawImageId) || (!imageUrl ? 'blog-community-gardens' : '');
+
+        const fallbackImageId = guessBlogImageId(String(p.title ?? ''), rawContent);
+        const imageId =
+          (rawImageId.startsWith('http') ? '' : rawImageId) ||
+          (!imageUrl ? fallbackImageId : '') ||
+          fallbackImageId;
+
+        const resolvedForContent = imageUrl ?? resolvePlaceholderImageUrl(imageId);
+        const content = rewriteWpHtmlImages(rawContent, resolvedForContent);
+
         return {
           id: String(p.id ?? p.slug ?? p.title ?? ''),
           slug: String(p.slug ?? ''),
@@ -90,6 +141,11 @@ export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
       }
     )
     .filter((p) => p.slug && p.title)
+    .filter((p) => {
+      if (seenSlugs.has(p.slug)) return false;
+      seenSlugs.add(p.slug);
+      return true;
+    })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 

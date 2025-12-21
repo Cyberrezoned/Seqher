@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.5" stop-color="#ef4444"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.22" filter="url(#soft)">
+    <circle cx="210" cy="460" r="210" fill="#22c55e"/>
+    <circle cx="980" cy="170" r="240" fill="#f59e0b"/>
+    <circle cx="650" cy="280" r="190" fill="#a78bfa"/>
+  </g>
+  <g opacity="0.95">
+    <rect x="0" y="0" width="18" height="630" fill="#ef4444"/>
+    <rect x="18" y="0" width="18" height="630" fill="#f97316"/>
+    <rect x="36" y="0" width="18" height="630" fill="#f59e0b"/>
+    <rect x="54" y="0" width="18" height="630" fill="#22c55e"/>
+    <rect x="72" y="0" width="18" height="630" fill="#3b82f6"/>
+    <rect x="90" y="0" width="18" height="630" fill="#8b5cf6"/>
+  </g>
+  <rect x="140" y="128" width="980" height="374" rx="28" fill="#0b1220" opacity="0.55"/>
+  <text x="170" y="210" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="28" fill="#fee2e2" letter-spacing="2">
+    SEQHER
+  </text>
+  <text x="170" y="300" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="72" font-weight="800" fill="#ffffff">
+    HIV &amp; STI Care
+  </text>
+  <text x="170" y="360" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="28" fill="#e5e7eb" opacity="0.92">
+    Prevention, testing, and community support
+  </text>
+  <g transform="translate(928 210)" opacity="0.95">
+    <rect x="0" y="0" width="174" height="174" rx="28" fill="#111827" opacity="0.5"/>
+    <path d="M48 70h78c9 0 16 7 16 16v24c0 9-7 16-16 16H48c-9 0-16-7-16-16V86c0-9 7-16 16-16z" fill="#ffffff" opacity="0.16"/>
+    <path d="M63 86h14v34H63zM92 86h14v34H92zM121 86h14v34h-14z" fill="#ffffff" opacity="0.7"/>
+    <path d="M64 58c12-12 29-16 44-10 16 6 25 20 25 37h-18c0-9-5-16-13-20-8-3-17-1-24 6l-14-13z" fill="#34d399"/>
+  </g>
+</svg>
