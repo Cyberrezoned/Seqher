@@ -7,17 +7,14 @@ const Logo = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="2.25"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
     className={cn(props.className)}
   >
-    <path d="M12 22c-5.523 0-10-4.477-10-10S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
-    <path d="M12 2a10 10 0 0 0-4.472 18.156" />
-    <path d="M12 2a10 10 0 0 1 4.472 18.156" />
-    <path d="M2 12a10 10 0 0 1 15.528-8.32" />
-    <path d="M22 12a10 10 0 0 0-15.528-8.32" />
+    <circle cx="12" cy="12" r="7.5" />
+    <path d="M12 4.5a7.5 7.5 0 0 1 6.5 3.75" opacity="0.45" />
   </svg>
 );
 

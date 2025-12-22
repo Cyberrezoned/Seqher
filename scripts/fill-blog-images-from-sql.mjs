@@ -124,6 +124,29 @@ function isHttpUrl(value) {
   return /^https?:\/\//i.test(String(value).trim());
 }
 
+function rewriteSeqherUploadUrl(value) {
+  if (!value) return value;
+  const raw = String(value).trim();
+  if (!raw) return raw;
+  try {
+    const parsed = new URL(raw);
+    const isSeqher = parsed.hostname === 'seqher.org' || parsed.hostname === 'www.seqher.org';
+    if (!isSeqher) return raw;
+    if (!parsed.pathname.startsWith('/wp-content/uploads/')) return raw;
+    parsed.hostname = 'sirpek.wordpress.com';
+    parsed.protocol = 'https:';
+    return parsed.toString();
+  } catch {
+    return raw;
+  }
+}
+
+function rewriteSeqherUploadsInHtml(html) {
+  if (!html) return '';
+  return String(html)
+    .replace(/https?:\/\/(www\.)?seqher\.org\/wp-content\/uploads\//gi, 'https://sirpek.wordpress.com/wp-content/uploads/');
+}
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -233,7 +256,12 @@ function mapRows(columns, rows, placeholders) {
         imageUrl = chooseFallbackImageUrl({ title: title ?? '', content: contentRaw, placeholders });
       }
 
-      const content = ensureContentHasImage({ title: title ?? '', content: contentRaw, imageUrl });
+      imageUrl = rewriteSeqherUploadUrl(imageUrl);
+      const content = ensureContentHasImage({
+        title: title ?? '',
+        content: rewriteSeqherUploadsInHtml(contentRaw),
+        imageUrl,
+      });
 
       const out = {
         id,

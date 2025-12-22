@@ -84,7 +84,10 @@ export default function Header() {
     )}>
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-          <Logo className="h-8 w-8 text-primary" />
+          <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-2xl border bg-background/70 shadow-sm ring-1 ring-border/60 backdrop-blur">
+            <span className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.18),transparent_60%)]" />
+            <Logo className="relative h-7 w-7 text-primary" />
+          </span>
           <span className="font-bold text-xl font-headline tracking-tight">SEQHER</span>
         </Link>
         
