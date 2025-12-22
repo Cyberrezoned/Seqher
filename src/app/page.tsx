@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Eye, HandHeart, MapPin, Sparkles, Stethoscope, Target, Users } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import Logo from '@/components/icons/Logo';
 import {
   Card,
   CardContent,
@@ -13,43 +14,19 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-function PortalMockup({ variant }: { variant: 'ng' | 'ca' }) {
-  const isNigeria = variant === 'ng';
-  const accent = isNigeria
-    ? 'bg-gradient-to-r from-emerald-500 via-teal-400 to-indigo-500'
-    : 'bg-gradient-to-r from-red-500 via-pink-500 to-violet-500';
-  const bg = isNigeria ? 'bg-emerald-500/10' : 'bg-red-500/10';
-
-  return (
-    <div className="mt-6 overflow-hidden rounded-2xl border bg-background shadow-sm">
-      <div className="flex h-9 items-center gap-2 border-b bg-muted/40 px-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-400/90" />
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
-        <div className="ml-2 h-2 w-32 rounded-full bg-muted-foreground/20" />
-      </div>
-      <div className={`p-4 text-left ${bg}`}>
-        <div className={`h-2.5 w-28 rounded-full ${accent}`} />
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          <div className="h-10 rounded-xl bg-background/70 shadow-sm" />
-          <div className="h-10 rounded-xl bg-background/70 shadow-sm" />
-          <div className="h-10 rounded-xl bg-background/70 shadow-sm" />
-        </div>
-        <div className="mt-3 space-y-2">
-          <div className="h-3 rounded-full bg-background/60" />
-          <div className="h-3 w-5/6 rounded-full bg-background/60" />
-          <div className="h-3 w-2/3 rounded-full bg-background/60" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function GlobalLandingPage() {
+  const shouldReduceMotion = useReducedMotion();
   const [suggestedRegion, setSuggestedRegion] = useState<{
     name: string;
     code: string;
   } | null>(null);
+  const taglines = [
+    'Igniting Actions that drive change.',
+    'Equality for all — not for some.',
+    'A society where equality thrives.',
+    'Respect • Solidarity • Courage.',
+  ] as const;
+  const [taglineIndex, setTaglineIndex] = useState(0);
 
   useEffect(() => {
     // To avoid hydration errors, we only run the fetch on the client
@@ -70,14 +47,23 @@ export default function GlobalLandingPage() {
       );
   }, []);
 
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    const id = window.setInterval(() => {
+      setTaglineIndex((i) => (i + 1) % taglines.length);
+    }, 4500);
+    return () => window.clearInterval(id);
+  }, [shouldReduceMotion, taglines.length]);
+
   return (
     <div className="flex flex-col">
       {/* Mission & Vision */}
       <section className="relative overflow-hidden py-16 md:py-24">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-gradient-to-br from-emerald-400/25 via-sky-400/20 to-violet-400/25 blur-3xl" />
-          <div className="absolute -bottom-32 -right-28 h-96 w-96 rounded-full bg-gradient-to-br from-pink-400/25 via-amber-300/20 to-indigo-400/25 blur-3xl" />
-          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-red-500 via-amber-400 via-emerald-400 via-sky-400 via-indigo-500 to-fuchsia-500 opacity-70" />
+          <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-gradient-to-br from-primary/25 via-primary/10 to-primary/20 blur-3xl" />
+          <div className="absolute -bottom-32 -right-28 h-96 w-96 rounded-full bg-gradient-to-br from-primary/18 via-primary/10 to-primary/22 blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-primary via-primary/70 to-primary/40 opacity-70" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.12),transparent_60%)]" />
         </div>
 
         <div className="container relative mx-auto px-4">
@@ -88,16 +74,65 @@ export default function GlobalLandingPage() {
             transition={{ duration: 0.6 }}
           >
             <div className="mx-auto inline-flex items-center gap-2 rounded-full border bg-background/70 px-4 py-2 shadow-sm backdrop-blur">
-              <Sparkles className="h-4 w-4 text-fuchsia-500" />
-              <span className="text-sm font-medium">Queer‑affirming health • Community • Rights</span>
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-xs font-medium text-foreground/90 sm:text-sm">
+                Society for Equal Health and Rights
+              </span>
             </div>
 
-            <h1 className="mt-6 font-headline text-4xl md:text-6xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-emerald-500 via-sky-500 to-fuchsia-500 bg-clip-text text-transparent">
-                SEQHER
-              </span>
-            </h1>
-            <p className="mt-3 text-muted-foreground">Society for Equal Health and Rights</p>
+            <div className="mt-8 flex flex-col items-center">
+              <div className="flex items-center justify-center gap-3">
+                <motion.div
+                  className="relative h-14 w-14"
+                  style={{ perspective: 900 }}
+                  initial={{ opacity: 0, scale: 0.9, rotateX: 12, rotateY: -10 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    rotateX: [0, 10, 0, -10, 0],
+                    rotateY: [0, -12, 0, 12, 0],
+                    y: [0, -2, 0, 2, 0],
+                  }}
+                  whileHover={{ scale: 1.06, rotateX: 0, rotateY: 0 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/55 via-primary/22 to-primary/10 blur-md" />
+                  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border bg-background/70 shadow-[0_18px_45px_hsl(var(--primary)/0.22)] backdrop-blur">
+                    <Logo className="h-9 w-9 text-primary drop-shadow-[0_10px_18px_hsl(var(--primary)/0.32)]" aria-hidden="true" />
+                  </div>
+                </motion.div>
+
+                <h1 className="font-headline text-4xl font-bold tracking-tight md:text-6xl">
+                  <motion.span
+                    className="bg-gradient-to-r from-primary via-primary/80 to-primary/55 bg-clip-text text-transparent drop-shadow-[0_18px_30px_hsl(var(--primary)/0.22)]"
+                    style={{ backgroundSize: '200% 200%' }}
+                    animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    SEQHER
+                  </motion.span>
+                </h1>
+              </div>
+
+              <div className="mt-3 text-sm text-muted-foreground">
+                {shouldReduceMotion ? (
+                  <span>{taglines[0]}</span>
+                ) : (
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={taglineIndex}
+                      className="inline-block"
+                      initial={{ opacity: 0, y: 6, filter: 'blur(2px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      exit={{ opacity: 0, y: -6, filter: 'blur(2px)' }}
+                      transition={{ duration: 0.35, ease: 'easeOut' }}
+                    >
+                      {taglines[taglineIndex]}
+                    </motion.span>
+                  </AnimatePresence>
+                )}
+              </div>
+            </div>
           </motion.div>
 
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
@@ -106,35 +141,51 @@ export default function GlobalLandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.05 }}
-            >
-              <div className="h-full rounded-xl bg-gradient-to-br from-emerald-400 via-sky-400 to-fuchsia-500 p-[1px] shadow-sm">
-                <Card className="h-full border-0 bg-background/80 backdrop-blur">
-                  <CardHeader className="flex flex-row items-center gap-3">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-sky-500 text-white shadow-sm">
-                      <Target className="h-5 w-5" />
-                    </span>
-                    <div className="text-left">
-                      <CardTitle>Our Mission</CardTitle>
-                      <p className="mt-1 text-sm text-muted-foreground">What we build, together.</p>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground">
-                    We close gaps in care and opportunity through inclusive health support, education, economic empowerment,
-                    and rights‑forward advocacy — with community safety at the center.
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-700 dark:text-emerald-300">
-                        Queer‑affirming services
-                      </span>
-                      <span className="rounded-full bg-sky-500/10 px-3 py-1 text-sm text-sky-700 dark:text-sky-300">
-                        Health access
-                      </span>
-                      <span className="rounded-full bg-fuchsia-500/10 px-3 py-1 text-sm text-fuchsia-700 dark:text-fuchsia-300">
-                        Rights & dignity
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+	            >
+	              <motion.div
+	                className="group h-full transform-gpu"
+	                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+	                animate={
+	                  shouldReduceMotion
+	                    ? undefined
+                    : {
+                        y: [0, -4, 0, 4, 0],
+                        rotateX: [0, 2, 0, -2, 0],
+                        rotateY: [0, -2.5, 0, 2.5, 0],
+                      }
+                }
+	                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+	                whileHover={shouldReduceMotion ? undefined : { y: -10, rotateX: 0, rotateY: 0, scale: 1.02 }}
+	              >
+	                <div className="h-full rounded-xl bg-gradient-to-br from-primary via-primary/70 to-primary/40 p-[1px] shadow-sm transition-shadow duration-300 group-hover:shadow-[0_24px_70px_hsl(var(--primary)/0.18)]">
+	                  <Card className="h-full border-0 bg-background/80 backdrop-blur transition-colors duration-300 group-hover:bg-background/90 group-hover:ring-1 group-hover:ring-primary/15">
+	                    <CardHeader className="flex flex-row items-center gap-3">
+	                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm transition-transform duration-300 group-hover:scale-[1.06]">
+	                        <Target className="h-5 w-5" />
+	                      </span>
+	                      <div className="text-left">
+	                        <CardTitle>Our Mission</CardTitle>
+                        <p className="mt-1 text-sm text-muted-foreground">What we build, together.</p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="text-muted-foreground">
+	                      We advance equal health and human rights for marginalized and vulnerable people through advocacy,
+	                      health promotion, protection, and empowerment — with dignity and safety at the center.
+	                      <div className="mt-5 flex flex-wrap gap-2">
+	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
+	                          Respect & dignity
+	                        </span>
+	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
+	                          Health access
+	                        </span>
+	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
+	                          Rights & justice
+	                        </span>
+	                      </div>
+	                    </CardContent>
+	                  </Card>
+                </div>
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -142,35 +193,50 @@ export default function GlobalLandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <div className="h-full rounded-xl bg-gradient-to-br from-amber-400 via-pink-500 to-indigo-500 p-[1px] shadow-sm">
-                <Card className="h-full border-0 bg-background/80 backdrop-blur">
-                  <CardHeader className="flex flex-row items-center gap-3">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-pink-500 text-white shadow-sm">
-                      <Eye className="h-5 w-5" />
-                    </span>
-                    <div className="text-left">
-                      <CardTitle>Our Vision</CardTitle>
-                      <p className="mt-1 text-sm text-muted-foreground">The future we’re inviting.</p>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground">
-                    A society where LGBTQ+ people and all communities can access respectful health care, live openly and safely,
-                    and thrive — without shame, fear, or exclusion.
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      <span className="rounded-full bg-amber-500/10 px-3 py-1 text-sm text-amber-700 dark:text-amber-300">
-                        Safer communities
-                      </span>
-                      <span className="rounded-full bg-pink-500/10 px-3 py-1 text-sm text-pink-700 dark:text-pink-300">
-                        Belonging
-                      </span>
-                      <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-sm text-indigo-700 dark:text-indigo-300">
-                        Equal rights
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+	            >
+	              <motion.div
+	                className="group h-full transform-gpu"
+	                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+	                animate={
+	                  shouldReduceMotion
+	                    ? undefined
+                    : {
+                        y: [0, 4, 0, -4, 0],
+                        rotateX: [0, -2, 0, 2, 0],
+                        rotateY: [0, 2.5, 0, -2.5, 0],
+                      }
+                }
+	                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+	                whileHover={shouldReduceMotion ? undefined : { y: -10, rotateX: 0, rotateY: 0, scale: 1.02 }}
+	              >
+	                <div className="h-full rounded-xl bg-gradient-to-br from-primary via-primary/70 to-primary/40 p-[1px] shadow-sm transition-shadow duration-300 group-hover:shadow-[0_24px_70px_hsl(var(--primary)/0.18)]">
+	                  <Card className="h-full border-0 bg-background/80 backdrop-blur transition-colors duration-300 group-hover:bg-background/90 group-hover:ring-1 group-hover:ring-primary/15">
+	                    <CardHeader className="flex flex-row items-center gap-3">
+	                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm transition-transform duration-300 group-hover:scale-[1.06]">
+	                        <Eye className="h-5 w-5" />
+	                      </span>
+	                      <div className="text-left">
+	                        <CardTitle>Our Vision</CardTitle>
+                        <p className="mt-1 text-sm text-muted-foreground">The future we’re inviting.</p>
+                      </div>
+                    </CardHeader>
+	                    <CardContent className="text-muted-foreground">
+	                      A society where equality thrives.
+	                      <div className="mt-5 flex flex-wrap gap-2">
+	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
+	                          Safer communities
+	                        </span>
+	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
+	                          Solidarity
+	                        </span>
+	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
+	                          Equality
+	                        </span>
+	                      </div>
+	                    </CardContent>
+	                  </Card>
+	                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -178,7 +244,7 @@ export default function GlobalLandingPage() {
 
       {/* Portal Selection */}
       <section className="relative border-t bg-secondary/30 py-16 md:py-24">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500 via-amber-400 via-emerald-400 via-sky-400 via-indigo-500 to-fuchsia-500 opacity-60" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40 opacity-60" />
         <div className="container mx-auto px-4">
           <motion.h2 
             className="font-headline text-3xl md:text-4xl font-bold text-center mb-4"
@@ -206,136 +272,162 @@ export default function GlobalLandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <Card className="max-w-md mx-auto border-primary/50 shadow-lg bg-secondary">
-                <CardHeader className="flex flex-row items-center gap-4 pb-4">
-                  <MapPin className="h-6 w-6 text-primary" />
-                  <CardTitle>Suggested Region for You</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">
-                    Based on your location, we recommend the{' '}
-                    {suggestedRegion.name} portal.
-                  </p>
-                  <Button asChild className="w-full">
-                    <Link href={`/${suggestedRegion.code}`}>
-                      Enter the {suggestedRegion.name} Portal
-                      <ArrowRight className="ml-2" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+              <motion.div
+                className="transform-gpu"
+                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        y: [0, -3, 0, 3, 0],
+                        rotateX: [0, 1.2, 0, -1.2, 0],
+                        rotateY: [0, -1.4, 0, 1.4, 0],
+                      }
+                }
+                transition={shouldReduceMotion ? undefined : { duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
+                whileHover={shouldReduceMotion ? undefined : { y: -8, rotateX: 0, rotateY: 0, scale: 1.015 }}
+              >
+                <Card className="max-w-md mx-auto border-primary/50 shadow-lg bg-secondary">
+                  <CardHeader className="flex flex-row items-center gap-4 pb-4">
+                    <MapPin className="h-6 w-6 text-primary" />
+                    <CardTitle>Suggested Region for You</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">
+                      Based on your location, we recommend the{' '}
+                      {suggestedRegion.name} portal.
+                    </p>
+                    <Button asChild className="w-full">
+                      <Link href={`/${suggestedRegion.code}`}>
+                        Enter the {suggestedRegion.name} Portal
+                        <ArrowRight className="ml-2" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </motion.div>
           )}
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <motion.div 
-              whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Link href="/ng" className="block group">
-                <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
-                            <rect width="900" height="600" fill="#fff"/>
-                            <rect width="300" height="600" fill="#008751"/>
-                            <rect x="600" width="300" height="600" fill="#008751"/>
-                        </svg>
-                      Nigeria Portal
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      Explore local initiatives, opportunities, and resources
-                      for Nigeria.
-                    </p>
-                    <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                      <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-400 text-white shadow-sm">
-                          <Stethoscope className="h-5 w-5" />
-                        </span>
-                        <span className="text-sm font-medium">Health services</span>
+              <motion.div
+                className="h-full transform-gpu"
+                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                animate={shouldReduceMotion ? undefined : { y: [0, -3, 0, 3, 0] }}
+                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }}
+                whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02, rotateX: 0, rotateY: 0, transition: { duration: 0.2 } }}
+              >
+                <Link href="/ng" className="block group">
+                  <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
+                    <CardHeader>
+                      <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
+                              <rect width="900" height="600" fill="#fff"/>
+                              <rect width="300" height="600" fill="#008751"/>
+                              <rect x="600" width="300" height="600" fill="#008751"/>
+                          </svg>
+                        Nigeria Portal
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">
+                        Explore local initiatives, opportunities, and resources
+                        for Nigeria.
+                      </p>
+                      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
+                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
+                            <Stethoscope className="h-5 w-5" />
+                          </span>
+                          <span className="text-sm font-medium">Health services</span>
+                        </div>
+                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
+                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
+                            <HandHeart className="h-5 w-5" />
+                          </span>
+                          <span className="text-sm font-medium">Safe support</span>
+                        </div>
+                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
+                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
+                            <Sparkles className="h-5 w-5" />
+                          </span>
+                          <span className="text-sm font-medium">Pride‑affirming</span>
+                        </div>
                       </div>
-                      <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 to-pink-500 text-white shadow-sm">
-                          <HandHeart className="h-5 w-5" />
-                        </span>
-                        <span className="text-sm font-medium">Safe support</span>
-                      </div>
-                      <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-sm">
-                          <Sparkles className="h-5 w-5" />
-                        </span>
-                        <span className="text-sm font-medium">Pride‑affirming</span>
-                      </div>
-                    </div>
 
-                    <PortalMockup variant="ng" />
-
-                    <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
-                      Explore Nigeria <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </CardContent>
-                </Card>
-              </Link>
+                      <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
+                        Explore Nigeria <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
             </motion.div>
             <motion.div 
-              whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
               >
-              <Link href="/ca" className="block group">
-                <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
-                        <rect width="1200" height="600" fill="#fff"/>
-                        <rect width="300" height="600" fill="#d52b1e"/>
-                        <rect x="900" width="300" height="600" fill="#d52b1e"/>
-                        <path fill="#d52b1e" d="M600 400.9l-52.5-30.3-13.3 58.7-41.9-41.9-30.3 52.5-41.9-41.9-58.7 13.3 13.3-58.7-52.5-30.3 52.5-30.3-13.3-58.7 58.7 13.3 41.9-41.9 30.3 52.5 41.9-41.9L547.5 370.6l52.5 30.3zm0-100.9v-52.5h-13.3v52.5l-58.7 58.7V250h-52.5v150h36.1l75-75 75 75h36.1V250h-52.5v50.2l-58.7-58.7z"/>
-                      </svg>
-                      Canada Portal
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      Discover programs, events, and ways to get involved in
-                      Canada.
-                    </p>
-                    <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                      <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-red-500 to-orange-500 text-white shadow-sm">
-                          <Users className="h-5 w-5" />
-                        </span>
-                        <span className="text-sm font-medium">Community</span>
+              <motion.div
+                className="h-full transform-gpu"
+                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                animate={shouldReduceMotion ? undefined : { y: [0, 3, 0, -3, 0] }}
+                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.55 }}
+                whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02, rotateX: 0, rotateY: 0, transition: { duration: 0.2 } }}
+              >
+                <Link href="/ca" className="block group">
+                  <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
+                    <CardHeader>
+                      <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
+                          <rect width="1200" height="600" fill="#fff"/>
+                          <rect width="300" height="600" fill="#d52b1e"/>
+                          <rect x="900" width="300" height="600" fill="#d52b1e"/>
+                          <path fill="#d52b1e" d="M600 400.9l-52.5-30.3-13.3 58.7-41.9-41.9-30.3 52.5-41.9-41.9-58.7 13.3 13.3-58.7-52.5-30.3 52.5-30.3-13.3-58.7 58.7 13.3 41.9-41.9 30.3 52.5 41.9-41.9L547.5 370.6l52.5 30.3zm0-100.9v-52.5h-13.3v52.5l-58.7 58.7V250h-52.5v150h36.1l75-75 75 75h36.1V250h-52.5v50.2l-58.7-58.7z"/>
+                        </svg>
+                        Canada Portal
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">
+                        Discover programs, events, and ways to get involved in
+                        Canada.
+                      </p>
+                      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
+                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
+                            <Users className="h-5 w-5" />
+                          </span>
+                          <span className="text-sm font-medium">Community</span>
+                        </div>
+                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
+                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
+                            <Stethoscope className="h-5 w-5" />
+                          </span>
+                          <span className="text-sm font-medium">Wellbeing</span>
+                        </div>
+                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
+                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
+                            <Sparkles className="h-5 w-5" />
+                          </span>
+                          <span className="text-sm font-medium">Inclusive</span>
+                        </div>
                       </div>
-                      <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 text-white shadow-sm">
-                          <Stethoscope className="h-5 w-5" />
-                        </span>
-                        <span className="text-sm font-medium">Wellbeing</span>
-                      </div>
-                      <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-pink-500 text-white shadow-sm">
-                          <Sparkles className="h-5 w-5" />
-                        </span>
-                        <span className="text-sm font-medium">Inclusive</span>
-                      </div>
-                    </div>
 
-                    <PortalMockup variant="ca" />
-
-                    <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
-                      Explore Canada <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </CardContent>
-                </Card>
-              </Link>
+                      <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
+                        Explore Canada <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
             </motion.div>
           </div>
         </div>

@@ -63,7 +63,7 @@ export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
         <div className="relative z-10 text-center text-white p-4">
           <h1 className="font-headline text-4xl md:text-6xl font-extrabold tracking-tight">SEQHER Stories — Nigeria</h1>
           <p className="mt-3 max-w-2xl text-lg md:text-xl text-primary-foreground/95">
-            Queer health, dignity, and community updates—grounded in empathy and powered by solidarity.
+            Health, dignity, and community updates—grounded in empathy and powered by solidarity.
           </p>
         </div>
       </section>

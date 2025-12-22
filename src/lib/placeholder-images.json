@@ -46,7 +46,7 @@
       "id": "blog-community-gardens",
       "description": "A vibrant community banner in SEQHER pride colors.",
       "imageUrl": "/images/blog/blog-community.svg",
-      "imageHint": "queer community"
+      "imageHint": "community pride banner"
     },
     {
       "id": "blog-volunteer-story",
@@ -176,9 +176,9 @@
     },
     {
       "id": "about-mission",
-      "description": "Queer health and rights support in Nigeria.",
+      "description": "Health and rights support in Nigeria.",
       "imageUrl": "/images/about-mission-queer-health-ng.svg",
-      "imageHint": "queer health nigeria"
+      "imageHint": "health rights nigeria"
     },
     {
       "id": "news-hero",

@@ -34,6 +34,7 @@ export function extractFirstImageUrl(input: string): string | null {
 }
 
 export function isBlockedSeqherWpMediaUrl(url: string): boolean {
-  if (!url) return false;
-  return /^https?:\/\/(www\.)?seqher\.org\/wp-content\//i.test(url.trim());
+  // Previously blocked WP media hotlinks. We now allow them so blog/program images
+  // referenced from exports (SQL/WordPress) can render as real images.
+  return false;
 }

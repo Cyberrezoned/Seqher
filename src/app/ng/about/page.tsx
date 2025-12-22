@@ -67,24 +67,24 @@ export default function AboutPage() {
       icon: <Users className="h-10 w-10 text-primary" />,
       title: 'Respect',
       description:
-        'We respect everyone, regardless of who they are, and expect the same from partners and team members.',
+        'We respect everyone, regardless of who they are, and expect the same from partners and team members—so respect becomes the norm in our society.',
     },
     {
       icon: <HeartHandshake className="h-10 w-10 text-primary" />,
       title: 'Solidarity',
       description:
-        'We stand with people who are treated differently and work to ensure they receive the rights they deserve.',
+        'We know being treated differently can feel lonely. We are here with you, and we fight to ensure you get the rights you deserve.',
     },
     {
       icon: <Flame className="h-10 w-10 text-primary" />,
       title: 'Passion',
-      description: 'We care deeply about equality and do everything within our power to advance it for all.',
+      description: 'We care deeply about equality and do everything within our power to advance it for all—not for some.',
     },
     {
       icon: <Scale className="h-10 w-10 text-primary" />,
       title: 'Justice',
       description:
-        'No human should be treated less than another; we speak up, condemn abuses, and defend human rights.',
+        'No human should be treated as less human. When abuses arise, we speak up, condemn them, and defend human rights regardless of identity, orientation, or affiliation.',
     },
     {
       icon: <Globe className="h-10 w-10 text-primary" />,
@@ -94,7 +94,7 @@ export default function AboutPage() {
     {
       icon: <Shield className="h-10 w-10 text-primary" />,
       title: 'Courage',
-      description: 'We are not afraid to pursue our goals and challenge exclusionary systems and practices.',
+      description: 'We are courageous people. We are not afraid to take on the world in pursuit of our goal.',
     },
   ];
 
@@ -157,6 +157,15 @@ export default function AboutPage() {
                 inequality in our society. We work to address systematic gaps and foster an inclusive and just society.
               </p>
               <div className="rounded-lg border bg-secondary/40 p-5">
+                <p className="text-sm font-semibold text-primary">Strategic goals</p>
+                <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                  <li>Community strengthening</li>
+                  <li>Improved visibility</li>
+                  <li>Acceptance</li>
+                  <li>Quality of life for marginalized populations in Nigeria</li>
+                </ul>
+              </div>
+              <div className="rounded-lg border bg-secondary/40 p-5">
                 <p className="text-sm font-semibold text-primary">{contact.name}</p>
                 <p className="text-sm text-muted-foreground">{contact.role}</p>
                 <p className="mt-3 text-sm text-muted-foreground">
@@ -198,9 +207,8 @@ export default function AboutPage() {
             <div className="rounded-lg bg-background p-6 shadow-md">
               <h3 className="font-headline text-xl font-bold text-primary">Our Mission</h3>
               <p className="mt-2 text-muted-foreground">
-                Advancing a better world by closing the gaps of inequality through education, economic empowerment,
-                human rights, gender and social justice, health and wellbeing, food security, inclusivity, and cultural
-                connections.
+                To advocate for human rights and equality, and to advance equal health and wellbeing for marginalized and
+                vulnerable people through community strengthening, protection, and empowerment.
               </p>
             </div>
             <div className="rounded-lg bg-background p-6 shadow-md">
@@ -268,9 +276,9 @@ export default function AboutPage() {
               <div className="rounded-lg bg-background p-6 shadow-md">
                 <h3 className="font-headline text-xl font-bold text-primary">Objectives</h3>
                 <ul className="mt-3 list-disc pl-5 text-muted-foreground space-y-2">
-                  <li>Advocate for human rights and equality for marginalized and vulnerable people.</li>
+                  <li>Advocate for human rights and equality for marginalized and vulnerable people, including persons with special needs.</li>
                   <li>Increase socio-economic capacity of marginalized and vulnerable persons.</li>
-                  <li>Promote healthy living and good mental wellbeing.</li>
+                  <li>Promote healthy, positive living and good mental wellbeing.</li>
                   <li>
                     Accelerate life-saving and life-improving innovations for people impacted by conflict, climate change,
                     and other complex emergencies.
@@ -285,7 +293,7 @@ export default function AboutPage() {
               <div className="rounded-lg bg-background p-6 shadow-md">
                 <h3 className="font-headline text-xl font-bold text-primary">Thematic Areas</h3>
                 <ul className="mt-3 list-disc pl-5 text-muted-foreground space-y-2">
-                  <li>Comprehensive Health Promotion and Service Delivery (SRHR, STIs, Mental Health, TB, Malaria).</li>
+                  <li>Comprehensive Health Promotion and Service Delivery (SRHR, STIs, mental health, cervical cancer, tuberculosis, malaria).</li>
                   <li>Human Rights, Gender and Social Justice (advocacy, protection, GBV, safety and security).</li>
                   <li>Civic Engagement and Inclusion (leadership development and movement building).</li>
                   <li>Economic Empowerment (vocational and entrepreneurial training).</li>
@@ -319,6 +327,48 @@ export default function AboutPage() {
                   confidentiality, and accountability while demystifying harmful stereotypes and promoting dignity.
                 </li>
               </ul>
+            </div>
+
+            <div className="mt-8 rounded-lg bg-background p-6 shadow-md">
+              <h3 className="font-headline text-xl font-bold text-primary">Current Programs</h3>
+              <p className="mt-2 text-muted-foreground">
+                Active initiatives strengthening community protection, leadership capacity, and safe support systems.
+              </p>
+
+              <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div className="rounded-lg border bg-secondary/30 p-5">
+                  <p className="text-sm font-semibold text-primary">A. Awareness &amp; Consciousness Creation</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Enhancing protection for LGBTQI+ communities; stimulating movement building; and fostering acceptance
+                    and tolerance.
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Supported and funded by <span className="font-medium text-foreground">ISDAO</span>.
+                  </p>
+                </div>
+
+                <div className="rounded-lg border bg-secondary/30 p-5">
+                  <p className="text-sm font-semibold text-primary">B. Organizational Leadership, Governance &amp; Management</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    A 6‑month training strengthening SEQHER staff leadership, governance, and management skills.
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Piloted by <span className="font-medium text-foreground">Grantshub</span> with funding from{' '}
+                    <span className="font-medium text-foreground">Kaleidoscope</span>.
+                  </p>
+                </div>
+
+                <div className="rounded-lg border bg-secondary/30 p-5">
+                  <p className="text-sm font-semibold text-primary">C. SEQHER ABODE (Safe Housing)</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    A 12‑month safe‑housing initiative supporting 50 displaced individuals from gender‑diverse and sexual
+                    minority communities in Borno State, Nigeria.
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Funded by <span className="font-medium text-foreground">Rainbow Railroad</span>.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

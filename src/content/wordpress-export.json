@@ -3,7 +3,7 @@
   "programs": [
     {
       "id": "queer-health-navigation",
-      "title": "Queer Health Navigation & Referrals",
+      "title": "Health Navigation & Referrals",
       "summary": "Confidential support connecting LGBTQ+ people to affirming providers, testing, and care—without judgment.",
       "description": "<p>Accessing healthcare should feel safe, respectful, and affirming. This program helps LGBTQ+ people navigate services with dignity—whether you need information, referrals, or follow‑up support.</p>\n\n<h2>What we do</h2>\n<ul>\n  <li>Private one‑on‑one navigation and referrals</li>\n  <li>Support with appointments, follow‑ups, and continuity of care</li>\n  <li>Health information that is stigma‑free and community‑centered</li>\n</ul>\n\n<h2>How it works</h2>\n<p>Reach out via our appointment form. A trained community navigator will respond, understand your needs, and connect you to the right support—confidentially.</p>\n\n<h2>Our commitment</h2>\n<ul>\n  <li>Confidentiality and informed consent</li>\n  <li>Trauma‑informed, non‑judgmental support</li>\n  <li>Respect for every identity and experience</li>\n</ul>",
       "imageUrl": "https://plus.unsplash.com/premium_photo-1713453396480-8830accd64bd?auto=format&fit=crop&w=800&h=600&q=80",
@@ -13,7 +13,7 @@
     {
       "id": "hiv-sti-prep",
       "title": "HIV/STI Testing + PrEP/PEP Support",
-      "summary": "Community-led education, testing referrals, and medication navigation to help queer communities stay informed and protected.",
+      "summary": "Community-led education, testing referrals, and medication navigation to help communities stay informed and protected.",
       "description": "<p>We promote sexual health through education, confidential referrals, and support that meets people where they are—without shame.</p>\n\n<h2>Services</h2>\n<ul>\n  <li>HIV and STI testing referrals</li>\n  <li>PrEP/PEP information and navigation support</li>\n  <li>Safer‑sex education and harm‑reduction resources</li>\n</ul>\n\n<h2>Who it’s for</h2>\n<p>LGBTQ+ people, allies, and communities who need accurate information, affirming services, and a supportive pathway to care.</p>\n\n<h2>Why it matters</h2>\n<p>Early testing and prevention options save lives—especially when people have safe, stigma‑free access to services.</p>",
       "imageUrl": "https://plus.unsplash.com/premium_photo-1678376871117-8a32e22e61c5?auto=format&fit=crop&w=800&h=600&q=80",
       "sdgGoals": [3, 10],
@@ -53,6 +53,33 @@
       "description": "<p>Economic empowerment reduces vulnerability and supports wellbeing. This program builds practical skills and connects people to opportunities in a supportive, community‑affirming way.</p>\n\n<h2>Activities</h2>\n<ul>\n  <li>Skills workshops and learning circles</li>\n  <li>CV support, mentorship, and peer networking</li>\n  <li>Referral pathways for training and opportunities</li>\n</ul>\n\n<h2>Why we do this</h2>\n<p>When people have access to resources and opportunity, they can thrive—on their own terms.</p>",
       "imageUrl": "https://plus.unsplash.com/premium_photo-1705717317549-8d14a67a34d2?auto=format&fit=crop&w=800&h=600&q=80",
       "sdgGoals": [8, 10, 4],
+      "locale": "ng"
+    },
+    {
+      "id": "awareness-consciousness-creation",
+      "title": "Awareness & Consciousness Creation",
+      "summary": "Enhancing protection for LGBTQI+ communities while strengthening acceptance, tolerance, and community safety.",
+      "description": "<p>This program strengthens community protection and movement building by improving understanding of human rights, increasing awareness of available services, and engaging both state and non-state actors to reduce stigma and discrimination.</p>\n\n<h2>Key focus areas</h2>\n<ul>\n  <li>Enhancing protection for LGBTQI+ communities</li>\n  <li>Stimulating movement building and community solidarity</li>\n  <li>Reducing stigma, discrimination, and human rights violations</li>\n</ul>\n\n<h2>What we aim to reduce</h2>\n<ul>\n  <li>Arbitrary arrest and unlawful detention</li>\n  <li>Ill-treatment and extortion</li>\n  <li>Stigma and discrimination in community and service settings</li>\n</ul>\n\n<p><strong>Support:</strong> This project is supported and funded by ISDAO.</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [16, 10, 3],
+      "locale": "ng"
+    },
+    {
+      "id": "organizational-leadership-governance-management",
+      "title": "Organizational Leadership, Governance & Management",
+      "summary": "A 6-month capacity building initiative to strengthen SEQHER staff leadership, governance, and management skills.",
+      "description": "<p>This initiative provides structured training and mentorship to strengthen SEQHER’s leadership, governance, and management capacity as a foundation for effective service delivery and sustainable impact.</p>\n\n<h2>Duration</h2>\n<p>6 months</p>\n\n<h2>Partners</h2>\n<ul>\n  <li>Piloted by <strong>GrantsHub</strong></li>\n  <li>Funded by <strong>Kaleidoscope</strong></li>\n</ul>",
+      "imageUrl": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [16, 17],
+      "locale": "ng"
+    },
+    {
+      "id": "seqher-abode",
+      "title": "SEQHER ABODE (Safe Housing)",
+      "summary": "A 12-month safe-housing initiative supporting 50 displaced individuals from gender-diverse and sexual minority communities in Borno State, Nigeria.",
+      "description": "<p><strong>SEQHER ABODE</strong> is a safe-housing facility designed to respond to the complex challenges faced by displaced gender-diverse and sexual minority communities in Borno State, Nigeria.</p>\n\n<h2>What it provides</h2>\n<ul>\n  <li>Safe accommodation and case support</li>\n  <li>Referrals for health, legal, and psychosocial services</li>\n  <li>Support to address homelessness, violence, and discrimination</li>\n</ul>\n\n<h2>Scale</h2>\n<p>Support for <strong>50</strong> displaced individuals over <strong>12 months</strong>.</p>\n\n<p><strong>Funding:</strong> This project is funded by Rainbow Railroad.</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&h=600&q=80",
+      "sdgGoals": [3, 10, 16],
       "locale": "ng"
     }
   ],

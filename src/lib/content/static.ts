@@ -16,7 +16,8 @@ const basePayload = raw as ExportPayload;
 const ngPayload = ngBlogPostsRaw as { blogPosts?: unknown[] };
 const payload: ExportPayload = {
   ...basePayload,
-  blogPosts: [...(basePayload.blogPosts ?? []), ...(ngPayload.blogPosts ?? [])],
+  // Prefer the SQL-derived Nigeria payload for overlapping slugs.
+  blogPosts: [...(ngPayload.blogPosts ?? []), ...(basePayload.blogPosts ?? [])],
 };
 
 function asArray(value: unknown): any[] {
