@@ -2349,27 +2349,15 @@
   ],
   "programs": [
     {
-      "id": "queer-health-navigation",
-      "title": "Health Navigation & Referrals",
-      "summary": "Confidential support connecting LGBTQ+ people to affirming providers, testing, and care—without judgment.",
-      "description": "<p>Accessing healthcare should feel safe, respectful, and affirming. This program helps LGBTQ+ people navigate services with dignity—whether you need information, referrals, or follow‑up support.</p>\n\n<h2>What we do</h2>\n<ul>\n  <li>Private one‑on‑one navigation and referrals</li>\n  <li>Support with appointments, follow‑ups, and continuity of care</li>\n  <li>Health information that is stigma‑free and community‑centered</li>\n</ul>\n\n<h2>How it works</h2>\n<p>Reach out via our appointment form. A trained community navigator will respond, understand your needs, and connect you to the right support—confidentially.</p>\n\n<h2>Our commitment</h2>\n<ul>\n  <li>Confidentiality and informed consent</li>\n  <li>Trauma‑informed, non‑judgmental support</li>\n  <li>Respect for every identity and experience</li>\n</ul>",
-      "imageUrl": "https://plus.unsplash.com/premium_photo-1713453396480-8830accd64bd?auto=format&fit=crop&w=800&h=600&q=80",
+      "id": "hiv-sti-prep",
+      "title": "Comprehensive health promotion and service delivery",
+      "summary": "Confidential health navigation, testing referrals, and PrEP/PEP support—community-led, stigma-free, and centered on dignity.",
+      "description": "<p>We strengthen access to essential health services through education, confidential navigation and referrals, and HIV/STI prevention support—so individuals can get accurate information, the right services, and follow-up care without judgment.</p>\n\n<h2>What we do</h2>\n<ul>\n  <li>Private one‑on‑one health navigation and referrals</li>\n  <li>HIV and STI testing referrals and follow‑up support</li>\n  <li>PrEP/PEP information and medication navigation support</li>\n  <li>Support with appointments, continuity of care, and linkage to services</li>\n  <li>Safer‑sex education and harm‑reduction resources</li>\n</ul>\n\n<h2>How it works</h2>\n<p>Reach out via our appointment form. A trained community navigator will respond, understand your needs, and connect you to the right support—confidentially.</p>\n\n<h2>Our commitment</h2>\n<ul>\n  <li>Confidentiality and informed consent</li>\n  <li>Trauma‑informed, non‑judgmental support</li>\n  <li>Respect for every identity and experience</li>\n</ul>",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1678376871117-8a32e22e61c5?auto=format&fit=crop&w=800&h=600&q=80",
       "sdgGoals": [
         3,
         10,
         16
-      ],
-      "locale": "ng"
-    },
-    {
-      "id": "hiv-sti-prep",
-      "title": "HIV/STI Testing + PrEP/PEP Support",
-      "summary": "Community-led education, testing referrals, and medication navigation to help communities stay informed and protected.",
-      "description": "<p>We promote sexual health through education, confidential referrals, and support that meets people where they are—without shame.</p>\n\n<h2>Services</h2>\n<ul>\n  <li>HIV and STI testing referrals</li>\n  <li>PrEP/PEP information and navigation support</li>\n  <li>Safer‑sex education and harm‑reduction resources</li>\n</ul>\n\n<h2>Who it’s for</h2>\n<p>LGBTQ+ people, allies, and communities who need accurate information, affirming services, and a supportive pathway to care.</p>\n\n<h2>Why it matters</h2>\n<p>Early testing and prevention options save lives—especially when people have safe, stigma‑free access to services.</p>",
-      "imageUrl": "https://plus.unsplash.com/premium_photo-1678376871117-8a32e22e61c5?auto=format&fit=crop&w=800&h=600&q=80",
-      "sdgGoals": [
-        3,
-        10
       ],
       "locale": "ng"
     },
@@ -2401,7 +2389,7 @@
     },
     {
       "id": "rights-legal-aid",
-      "title": "Human Rights, Safety & Legal Aid",
+      "title": "Human rights, gender and social justice",
       "summary": "Know‑your‑rights education, case support, and referrals to trusted legal partners when rights are threatened.",
       "description": "<p>Health and safety are deeply connected to rights. We support community members with information and referrals when they face discrimination, harassment, or other rights violations.</p>\n\n<h2>Support includes</h2>\n<ul>\n  <li>Know‑your‑rights sessions and safety planning</li>\n  <li>Documentation and case support</li>\n  <li>Referrals to vetted legal aid partners</li>\n</ul>\n\n<h2>Goal</h2>\n<p>To help people stay safe, informed, and supported—while strengthening community resilience.</p>",
       "imageUrl": "https://plus.unsplash.com/premium_photo-1698084059560-9a53de7b816b?auto=format&fit=crop&w=800&h=600&q=80",
@@ -2414,8 +2402,8 @@
     },
     {
       "id": "skills-livelihood-empowerment",
-      "title": "Skills & Livelihood Empowerment",
-      "summary": "Workshops and mentorship to strengthen economic independence—because dignity includes opportunity.",
+      "title": "Economic empowerment, economic autonomy and digital competence",
+      "summary": "Workshops, mentorship, and digital skills to strengthen economic independence—because dignity includes opportunity.",
       "description": "<p>Economic empowerment reduces vulnerability and supports wellbeing. This program builds practical skills and connects people to opportunities in a supportive, community‑affirming way.</p>\n\n<h2>Activities</h2>\n<ul>\n  <li>Skills workshops and learning circles</li>\n  <li>CV support, mentorship, and peer networking</li>\n  <li>Referral pathways for training and opportunities</li>\n</ul>\n\n<h2>Why we do this</h2>\n<p>When people have access to resources and opportunity, they can thrive—on their own terms.</p>",
       "imageUrl": "https://plus.unsplash.com/premium_photo-1705717317549-8d14a67a34d2?auto=format&fit=crop&w=800&h=600&q=80",
       "sdgGoals": [
@@ -2482,7 +2470,7 @@
       "title": "Queer & Youth Justice",
       "summary": "Support, protection, and rights-based advocacy for queer communities and young people facing stigma, exclusion, or rights violations.",
       "description": "<p>This program strengthens protection and access to justice for queer communities and young people—through safe reporting pathways, rights education, and support that prioritizes confidentiality and dignity.</p>\n\n<h2>Focus areas</h2>\n<ul>\n  <li>Know-your-rights education and community legal literacy</li>\n  <li>Safety planning and referral pathways for support services</li>\n  <li>Documentation and response support for rights violations</li>\n  <li>Community dialogue and advocacy to reduce stigma and discrimination</li>\n</ul>\n\n<h2>Goal</h2>\n<p>To ensure young people and queer communities can live safely, access support, and claim their rights—without fear.</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&h=600&q=80",
+      "imageUrl": "https://images.unsplash.com/photo-1457694716743-eb419114c894?auto=format&fit=crop&w=800&h=600&q=80",
       "sdgGoals": [
         16,
         10,

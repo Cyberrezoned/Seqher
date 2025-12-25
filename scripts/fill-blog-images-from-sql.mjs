@@ -147,6 +147,18 @@ function rewriteSeqherUploadsInHtml(html) {
     .replace(/https?:\/\/(www\.)?seqher\.org\/wp-content\/uploads\//gi, 'https://sirpek.wordpress.com/wp-content/uploads/');
 }
 
+function sanitizeNyScReferences(input) {
+  if (!input) return '';
+  return String(input)
+    .replace(/Minimum of 2 years of verifiable post-?NYSC experience/gi, 'Minimum of 2 years of verifiable experience')
+    .replace(/Minimum of 2 years of post-?NYSC clinical experience/gi, 'Minimum of 2 years of verifiable clinical experience')
+    .replace(/,\s*with verifiable experience in/gi, ', with experience in')
+    .replace(/post-?NYSC/gi, 'post-qualification')
+    .replace(/\bNYSC\b/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([,.;:])/g, '$1');
+}
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -206,7 +218,7 @@ function chooseFallbackImageUrl({ title, content, placeholders }) {
     return pick('blog-climate-action', 'https://images.unsplash.com/photo-1584923772421-93474e5ce2d1?auto=format&fit=crop&w=1600&q=80');
   }
   if (/\bcommunity\b|\bvolunteer\b|\bmovement\b|\bsolidarity\b/.test(text)) {
-    return pick('hero-community', 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=80');
+    return pick('hero-community', 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1600&q=80');
   }
 
   return pick('blog-hero', 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1600&q=80');
@@ -259,7 +271,7 @@ function mapRows(columns, rows, placeholders) {
       imageUrl = rewriteSeqherUploadUrl(imageUrl);
       const content = ensureContentHasImage({
         title: title ?? '',
-        content: rewriteSeqherUploadsInHtml(contentRaw),
+        content: sanitizeNyScReferences(rewriteSeqherUploadsInHtml(contentRaw)),
         imageUrl,
       });
 

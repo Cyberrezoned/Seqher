@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Newspaper, CalendarPlus, Heart, LayoutGrid, Globe, Info, Briefcase } from 'lucide-react';
+import { Menu, X, Newspaper, CalendarPlus, Heart, LayoutGrid, Globe, Info, Briefcase, Users } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -24,6 +24,7 @@ import { useScrollPosition } from '@/hooks/use-scroll-position';
 
 const navLinks = [
   { href: '/ng/about', label: 'About Us', icon: <Info className="h-4 w-4" /> },
+  { href: '/ng/people', label: 'People', icon: <Users className="h-4 w-4" /> },
   { href: '/ng/programs', label: 'Programs', icon: <LayoutGrid className="h-4 w-4" /> },
   { href: '/ng/blog', label: 'Blog', icon: <Newspaper className="h-4 w-4" /> },
   { href: '/ng/news', label: 'News', icon: <Globe className="h-4 w-4" /> },
@@ -84,9 +85,9 @@ export default function Header() {
     )}>
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-          <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-2xl border bg-background/70 shadow-sm ring-1 ring-border/60 backdrop-blur">
-            <span className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.18),transparent_60%)]" />
-            <Logo className="relative h-7 w-7 text-primary" />
+          <span className="relative inline-flex h-10 w-10 items-center justify-center">
+            <span className="pointer-events-none absolute -inset-3 rounded-full bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.22),transparent_65%)] blur-sm" />
+            <Logo className="relative h-7 w-7 text-primary drop-shadow-[0_8px_18px_hsl(var(--primary)/0.25)]" />
           </span>
           <span className="font-bold text-xl font-headline tracking-tight">SEQHER</span>
         </Link>

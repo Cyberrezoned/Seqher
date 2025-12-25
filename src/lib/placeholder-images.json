@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-community",
-      "description": "A diverse group of community members working together on a project.",
-      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
-      "imageHint": "community volunteers"
+      "description": "A community meeting focused on inclusion, wellbeing, and equal rights.",
+      "imageUrl": "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=2400&h=1200&q=80",
+      "imageHint": "community meeting"
     },
     {
       "id": "program-education",
@@ -170,9 +170,9 @@
     },
     {
       "id": "about-hero",
-      "description": "A team of diverse volunteers planning a project together.",
-      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
-      "imageHint": "team collaboration"
+      "description": "An abstract teal illustration representing equal health and rights.",
+      "imageUrl": "/images/about-hero.svg",
+      "imageHint": "health rights illustration"
     },
     {
       "id": "about-mission",
@@ -320,9 +320,9 @@
     },
     {
       "id": "news-partnerships-for-goals",
-      "description": "A diverse group of people in a meeting, shaking hands.",
-      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
-      "imageHint": "partnerships for goals"
+      "description": "Partners collaborating and planning together in a meeting.",
+      "imageUrl": "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1200&h=800&q=80",
+      "imageHint": "community meeting"
     }
   ]
 }

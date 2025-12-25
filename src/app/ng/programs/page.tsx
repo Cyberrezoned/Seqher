@@ -32,11 +32,11 @@ export default async function ProgramsPage() {
           />
         )}
         <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-fuchsia-500 via-amber-400 to-cyan-400 opacity-90" />
+        <div className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-primary via-primary/70 to-primary/40 opacity-90" />
         <div className="relative z-10 text-center text-white p-4">
-          <h1 className="font-headline text-4xl md:text-5xl font-bold">Equal Health &amp; Rights Programs in Nigeria</h1>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold">Our Programs in Nigeria</h1>
           <p className="mt-2 max-w-2xl text-lg text-primary-foreground">
-            Community-led care, safety, and empowerment—built with and for marginalized and vulnerable people.
+            Transforming Vulnerabilities to empowerment
           </p>
         </div>
       </section>

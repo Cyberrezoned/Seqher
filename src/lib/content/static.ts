@@ -1,7 +1,7 @@
 import type { Announcement, BlogPost, NewsArticle, Program } from '@/lib/types';
 import raw from '@/content/wordpress-export.json';
 import ngBlogPostsRaw from '@/content/blogposts.ng.json';
-import { extractFirstImageUrl, htmlToText, isBlockedSeqherWpMediaUrl } from '@/lib/content/wp';
+import { extractFirstImageUrl, htmlToText, isBlockedSeqherWpMediaUrl, sanitizeNyScReferences } from '@/lib/content/wp';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 type ExportPayload = {
@@ -98,7 +98,8 @@ export function getStaticPrograms(locale: Program['locale']): Program[] {
 }
 
 export function getStaticProgramById(locale: Program['locale'], id: string): Program | null {
-  return getStaticPrograms(locale).find((p) => p.id === id) ?? null;
+  const normalizedId = id === 'queer-health-navigation' ? 'hiv-sti-prep' : id;
+  return getStaticPrograms(locale).find((p) => p.id === normalizedId) ?? null;
 }
 
 export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
@@ -107,7 +108,7 @@ export function getStaticBlogPosts(locale: BlogPost['locale']): BlogPost[] {
     .filter((p) => (p?.locale ?? 'ng') === locale || (p?.locale ?? 'ng') === 'global')
     .map(
       (p): BlogPost => {
-        const rawContent = String(p.content ?? '');
+        const rawContent = sanitizeNyScReferences(String(p.content ?? ''));
         const rawImageId = String(p.imageId ?? p.image_id ?? '');
         const extractedUrl = extractFirstImageUrl(rawContent);
         const imageUrl =

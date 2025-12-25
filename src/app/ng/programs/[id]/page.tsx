@@ -20,9 +20,14 @@ async function getProgram(id: string): Promise<Program | null> {
 }
 
 export async function generateStaticParams() {
-  return getStaticPrograms('ng')
+  const ids = getStaticPrograms('ng')
     .filter((p) => p.locale === 'ng')
-    .map((p) => ({ id: p.id }));
+    .map((p) => p.id);
+
+  // Backwards-compatible alias for the merged program.
+  ids.push('queer-health-navigation');
+
+  return Array.from(new Set(ids)).map((id) => ({ id }));
 }
 
 

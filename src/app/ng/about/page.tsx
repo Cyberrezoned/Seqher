@@ -2,6 +2,7 @@
 'use client';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { ORG_MISSION, ORG_MOTTO, ORG_VISION } from '@/lib/org-profile';
 import { motion } from 'framer-motion';
 import { Flame, Globe, HeartHandshake, Scale, Shield, Users } from 'lucide-react';
 import SafeImage from '@/components/ui/safe-image';
@@ -169,7 +170,7 @@ export default function AboutPage() {
                 <p className="text-sm font-semibold text-primary">{contact.name}</p>
                 <p className="text-sm text-muted-foreground">{contact.role}</p>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Our motto is <span className="font-medium text-foreground">“Igniting Actions that drive change.”</span>
+                  Our motto is <span className="font-medium text-foreground">“{ORG_MOTTO}”</span>
                 </p>
               </div>
             </div>
@@ -207,17 +208,16 @@ export default function AboutPage() {
             <div className="rounded-lg bg-background p-6 shadow-md">
               <h3 className="font-headline text-xl font-bold text-primary">Our Mission</h3>
               <p className="mt-2 text-muted-foreground">
-                To advocate for human rights and equality, and to advance equal health and wellbeing for marginalized and
-                vulnerable people through community strengthening, protection, and empowerment.
+                {ORG_MISSION}
               </p>
             </div>
             <div className="rounded-lg bg-background p-6 shadow-md">
               <h3 className="font-headline text-xl font-bold text-primary">Our Vision</h3>
-              <p className="mt-2 text-muted-foreground">A society where equality thrives.</p>
+              <p className="mt-2 text-muted-foreground">{ORG_VISION}</p>
             </div>
             <div className="rounded-lg bg-background p-6 shadow-md">
               <h3 className="font-headline text-xl font-bold text-primary">Our Motto</h3>
-              <p className="mt-2 text-muted-foreground">Igniting Actions that drive change.</p>
+              <p className="mt-2 text-muted-foreground">{ORG_MOTTO}</p>
             </div>
           </div>
         </div>

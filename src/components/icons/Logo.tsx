@@ -13,8 +13,8 @@ const Logo = (props: SVGProps<SVGSVGElement>) => (
     {...props}
     className={cn(props.className)}
   >
-    <circle cx="12" cy="12" r="7.5" />
-    <path d="M12 4.5a7.5 7.5 0 0 1 6.5 3.75" opacity="0.45" />
+    <ellipse cx="12" cy="12" rx="7.7" ry="7.3" />
+    <path d="M12 4.7a7.5 7.2 0 0 1 6.55 3.65" opacity="0.45" />
   </svg>
 );
 

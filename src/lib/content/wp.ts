@@ -27,6 +27,18 @@ export function makeExcerpt(input: string, maxChars = 160): string {
   return `${(lastSpace > 40 ? sliced.slice(0, lastSpace) : sliced).trim()}…`;
 }
 
+export function sanitizeNyScReferences(input: string): string {
+  if (!input) return '';
+  return String(input)
+    .replace(/Minimum of 2 years of verifiable post-?NYSC experience/gi, 'Minimum of 2 years of verifiable experience')
+    .replace(/Minimum of 2 years of post-?NYSC clinical experience/gi, 'Minimum of 2 years of verifiable clinical experience')
+    .replace(/,\s*with verifiable experience in/gi, ', with experience in')
+    .replace(/post-?NYSC/gi, 'post-qualification')
+    .replace(/\bNYSC\b/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([,.;:])/g, '$1');
+}
+
 export function extractFirstImageUrl(input: string): string | null {
   const html = stripWpBlockComments(input);
   const match = html.match(/<img[^>]+src=[\"']([^\"']+)[\"'][^>]*>/i);

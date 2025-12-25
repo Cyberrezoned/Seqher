@@ -7,6 +7,7 @@ import { ArrowRight, Eye, HandHeart, MapPin, Sparkles, Stethoscope, Target, User
 
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/icons/Logo';
+import { ORG_MISSION, ORG_MOTTO, ORG_VISION } from '@/lib/org-profile';
 import {
   Card,
   CardContent,
@@ -21,9 +22,9 @@ export default function GlobalLandingPage() {
     code: string;
   } | null>(null);
   const taglines = [
-    'Igniting Actions that drive change.',
+    ORG_MOTTO,
     'Equality for all — not for some.',
-    'A society where equality thrives.',
+    ORG_VISION,
     'Respect • Solidarity • Courage.',
   ] as const;
   const [taglineIndex, setTaglineIndex] = useState(0);
@@ -96,10 +97,8 @@ export default function GlobalLandingPage() {
                   whileHover={{ scale: 1.06, rotateX: 0, rotateY: 0 }}
                   transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/55 via-primary/22 to-primary/10 blur-md" />
-                  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border bg-background/70 shadow-[0_18px_45px_hsl(var(--primary)/0.22)] backdrop-blur">
-                    <Logo className="h-9 w-9 text-primary drop-shadow-[0_10px_18px_hsl(var(--primary)/0.32)]" aria-hidden="true" />
-                  </div>
+                  <div className="pointer-events-none absolute -inset-4 rounded-full bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.28),transparent_65%)] blur-md" />
+                  <Logo className="relative h-14 w-14 text-primary drop-shadow-[0_18px_35px_hsl(var(--primary)/0.22)]" aria-hidden="true" />
                 </motion.div>
 
                 <h1 className="font-headline text-4xl font-bold tracking-tight md:text-6xl">
@@ -169,8 +168,7 @@ export default function GlobalLandingPage() {
                       </div>
                     </CardHeader>
                     <CardContent className="text-muted-foreground">
-	                      We advance equal health and human rights for marginalized and vulnerable people through advocacy,
-	                      health promotion, protection, and empowerment — with dignity and safety at the center.
+	                      {ORG_MISSION}
 	                      <div className="mt-5 flex flex-wrap gap-2">
 	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
 	                          Respect & dignity
@@ -221,7 +219,7 @@ export default function GlobalLandingPage() {
                       </div>
                     </CardHeader>
 	                    <CardContent className="text-muted-foreground">
-	                      A society where equality thrives.
+	                      {ORG_VISION}
 	                      <div className="mt-5 flex flex-wrap gap-2">
 	                        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary transition-colors duration-300 group-hover:bg-primary/15">
 	                          Safer communities

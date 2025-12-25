@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="900" viewBox="0 0 1920 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B3A36"/>
+      <stop offset="0.55" stop-color="#0E4B45"/>
+      <stop offset="1" stop-color="#7B9F8A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="55%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#EAF3ED" stop-opacity="0.24"/>
+      <stop offset="0.45" stop-color="#EAF3ED" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#EAF3ED" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="900" fill="url(#bg)"/>
+  <rect width="1920" height="900" fill="url(#glow)"/>
+
+  <!-- Soft blobs -->
+  <g filter="url(#blur)" opacity="0.85">
+    <circle cx="360" cy="220" r="220" fill="#EAF3ED" opacity="0.10"/>
+    <circle cx="1580" cy="650" r="260" fill="#EAF3ED" opacity="0.10"/>
+    <circle cx="1180" cy="160" r="180" fill="#EAF3ED" opacity="0.08"/>
+  </g>
+
+  <!-- Subtle pattern grid -->
+  <g opacity="0.10" stroke="#EAF3ED" stroke-width="2">
+    <path d="M120 120H180" />
+    <path d="M150 90V150" />
+    <path d="M340 300H400" />
+    <path d="M370 270V330" />
+    <path d="M1580 170H1640" />
+    <path d="M1610 140V200" />
+    <path d="M1460 520H1520" />
+    <path d="M1490 490V550" />
+    <path d="M1060 720H1120" />
+    <path d="M1090 690V750" />
+  </g>
+
+  <!-- Center emblem: people + health + justice -->
+  <g transform="translate(960 450)" filter="url(#softShadow)">
+    <!-- Ring -->
+    <ellipse cx="0" cy="0" rx="210" ry="196" fill="none" stroke="#EAF3ED" stroke-opacity="0.26" stroke-width="16"/>
+    <path d="M0 -196a210 196 0 0 1 180 96" fill="none" stroke="#EAF3ED" stroke-opacity="0.14" stroke-width="16" stroke-linecap="round"/>
+
+    <!-- Three people -->
+    <g fill="#EAF3ED" fill-opacity="0.82">
+      <circle cx="-72" cy="-6" r="18"/>
+      <circle cx="0" cy="-22" r="22"/>
+      <circle cx="72" cy="-6" r="18"/>
+      <path d="M-122 96c8-44 32-66 50-74 18-8 28-8 44 0 16 8 34 30 42 74" fill-opacity="0.18"/>
+      <path d="M-54 112c10-60 40-90 54-98 14-8 26-8 40 0 14 8 44 38 54 98" fill-opacity="0.18"/>
+      <path d="M22 96c8-44 26-66 42-74 16-8 26-8 44 0 18 8 42 30 50 74" fill-opacity="0.18"/>
+    </g>
+
+    <!-- Health cross -->
+    <g transform="translate(0 170)" opacity="0.9" fill="#EAF3ED">
+      <rect x="-16" y="-46" width="32" height="92" rx="12" fill-opacity="0.70"/>
+      <rect x="-46" y="-16" width="92" height="32" rx="12" fill-opacity="0.70"/>
+    </g>
+
+    <!-- Justice scales -->
+    <g transform="translate(0 -165)" stroke="#EAF3ED" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.55" fill="none">
+      <path d="M0 10V78"/>
+      <path d="M-82 26H82"/>
+      <path d="M-66 26l-40 56h80l-40-56Z" opacity="0.30"/>
+      <path d="M66 26l-40 56h80l-40-56Z" opacity="0.30"/>
+    </g>
+  </g>
+
+  <!-- Bottom divider bar -->
+  <rect x="0" y="884" width="1920" height="16" fill="#EAF3ED" opacity="0.16"/>
+</svg>
+

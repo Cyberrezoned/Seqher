@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { ORG_MISSION, ORG_VISION } from '@/lib/org-profile';
 
 const heroImage = PlaceHolderImages.find((p) => p.id === 'hero-canada');
 const aboutImage1 = PlaceHolderImages.find(p => p.id === 'about-canada-1');
@@ -82,7 +83,12 @@ export default function CanadaHomePage() {
                 </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-white/70 bg-white/15 text-white shadow-[0_14px_32px_rgba(0,0,0,0.35)] backdrop-blur hover:border-white hover:bg-white/25 focus-visible:ring-2 focus-visible:ring-white/50"
+                >
                   <Link href="/ca/programs">Our Programs</Link>
                 </Button>
             </motion.div>
@@ -103,10 +109,11 @@ export default function CanadaHomePage() {
             <div className="space-y-4">
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Our Vision for Canada</h2>
               <p className="text-lg text-muted-foreground">
-                SEQHER Canada is committed to adapting our global mission to the unique context of Canadian communities. We focus on environmental stewardship, social equity, and economic innovation in line with the UN's Sustainable Development Goals.
+                SEQHER’s vision is <span className="font-medium text-foreground">{ORG_VISION}</span> Our mission is{' '}
+                <span className="font-medium text-foreground">{ORG_MISSION}</span>
               </p>
               <p className="text-muted-foreground">
-                Our goal is to build partnerships that foster resilience and create a sustainable future for all Canadians. We are actively developing programs, grants, and volunteer opportunities.
+                In Canada, we adapt this work to local communities by focusing on environmental stewardship, social equity, and economic innovation. We are actively developing programs, grants, and volunteer opportunities.
               </p>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
                 <Button asChild className="mt-4">

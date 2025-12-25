@@ -93,7 +93,12 @@ export default function NigeriaHomeClient({
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-white/70 bg-white/15 text-white shadow-[0_14px_32px_rgba(0,0,0,0.35)] backdrop-blur hover:border-white hover:bg-white/25 focus-visible:ring-2 focus-visible:ring-white/50"
+              >
                 <Link href="/ng/programs">Our Programs</Link>
               </Button>
             </motion.div>

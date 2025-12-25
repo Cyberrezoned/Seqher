@@ -17,6 +17,7 @@ export default function Footer() {
 
   const footerLinks = [
       { title: 'About Us', href: '/ng/about' },
+      { title: 'People', href: '/ng/people' },
       { title: 'Programs', href: '/ng/programs' },
       { title: 'Blog', href: '/ng/blog' },
       { title: 'News', href: '/ng/news' },
