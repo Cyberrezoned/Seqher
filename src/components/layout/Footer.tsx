@@ -1,9 +1,15 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Facebook, Instagram, Music2, Twitter } from 'lucide-react';
 import Logo from '@/components/icons/Logo';
 import { Button } from '@/components/ui/button';
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isCanada = pathname.startsWith('/ca');
+
   const socialLinks = [
     { name: 'Facebook', icon: <Facebook className="h-5 w-5" />, href: 'https://www.facebook.com/share/18rF2QiaNY/' },
     { name: 'X (Twitter)', icon: <Twitter className="h-5 w-5" />, href: 'https://x.com/Seqherinitiativ?t=OY1j8i25QLbZckBzOpbxqw&s=09' },
@@ -15,13 +21,21 @@ export default function Footer() {
     },
   ];
 
-  const footerLinks = [
-      { title: 'About Us', href: '/ng/about' },
-      { title: 'People', href: '/ng/people' },
-      { title: 'Programs', href: '/ng/programs' },
-      { title: 'Blog', href: '/ng/blog' },
-      { title: 'News', href: '/ng/news' },
-  ]
+  const footerLinks = isCanada
+    ? [
+        { title: 'About Us', href: '/ca#purpose' },
+        { title: 'Services', href: '/ca#navigation' },
+        { title: 'Projects', href: '/ca#projects' },
+        { title: 'International News', href: '/ca/news' },
+      ]
+    : [
+        { title: 'About Us', href: '/ng/about' },
+        { title: 'People', href: '/ng/people' },
+        { title: 'Services', href: '/ng/programs' },
+        { title: 'Projects', href: '/ng/projects' },
+        { title: 'News & Stories', href: '/ng/news' },
+        { title: 'Grants', href: '/ng/grants' },
+      ];
 
   return (
     <footer className="bg-secondary text-secondary-foreground">
@@ -50,15 +64,29 @@ export default function Footer() {
 
           <div>
             <h3 className="font-semibold font-headline text-lg mb-4">Get Involved</h3>
-            <ul className="space-y-2">
+           <ul className="space-y-2">
                <li>
-                    <Link href="/ng/donate" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Link
+                      href={isCanada ? '/ca/donate' : '/ng/donate'}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
                         Donate
                     </Link>
                 </li>
                 <li>
-                    <Link href="/ng/appointment" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Link
+                      href={isCanada ? '/ca/volunteer' : '/ng/volunteer'}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
                         Volunteer
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                      href={isCanada ? '/ca/appointment' : '/ng/appointment?location=Nigeria'}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                        Book Appointment
                     </Link>
                 </li>
             </ul>
@@ -80,16 +108,20 @@ export default function Footer() {
 	                info@seqher.org
 	              </a>
 	            </p>
-	            <p className="text-muted-foreground text-sm">
-	              <a className="hover:text-primary transition-colors" href="tel:+2348064454657">
-	                +234 806 445 4657
-	              </a>
-	            </p>
-	            <p className="text-muted-foreground text-sm">
-	              <a className="hover:text-primary transition-colors" href="tel:+2349020484873">
-	                +234 902 048 4873
-	              </a>
-	            </p>
+              {!isCanada && (
+                <>
+                  <p className="text-muted-foreground text-sm">
+                    <a className="hover:text-primary transition-colors" href="tel:+2348064454657">
+                      +234 806 445 4657
+                    </a>
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    <a className="hover:text-primary transition-colors" href="tel:+2349020484873">
+                      +234 902 048 4873
+                    </a>
+                  </p>
+                </>
+              )}
 	          </div>
 	        </div>
         

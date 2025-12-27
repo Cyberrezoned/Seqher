@@ -32,7 +32,13 @@ function formatSubject(subject: string | null, fallback: string) {
   return subject?.trim() ? subject.trim() : fallback;
 }
 
-export default function CareersClient({ jobs }: { jobs: CareerJob[] }) {
+export default function CareersClient({
+  jobs,
+  fullPageHrefBase = '/ng/blog',
+}: {
+  jobs: CareerJob[];
+  fullPageHrefBase?: string | null;
+}) {
   if (!jobs.length) {
     return (
       <Card className="border bg-background/70">
@@ -121,12 +127,14 @@ export default function CareersClient({ jobs }: { jobs: CareerJob[] }) {
                           Apply via email
                         </a>
                       </Button>
-                      <Button asChild variant="outline">
-                        <Link href={`/ng/blog/${job.slug}`}>
-                          <ExternalLink className="mr-2 h-4 w-4" />
-                          Open full page
-                        </Link>
-                      </Button>
+                      {fullPageHrefBase ? (
+                        <Button asChild variant="outline">
+                          <Link href={`${fullPageHrefBase}/${job.slug}`}>
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Open full page
+                          </Link>
+                        </Button>
+                      ) : null}
                     </div>
                   </div>
 
@@ -143,4 +151,3 @@ export default function CareersClient({ jobs }: { jobs: CareerJob[] }) {
     </div>
   );
 }
-

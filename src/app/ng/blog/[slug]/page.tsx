@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props) {
     return { title: 'Post Not Found' };
   }
   return {
-    title: `${post.title} | SEQHER Blog`,
+    title: `${post.title} | SEQHER Story`,
     description: post.content.substring(0, 150),
   };
 }
@@ -64,8 +64,8 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="max-w-3xl mx-auto">
         <article className="space-y-8">
             <div className="space-y-4 text-center">
-                <Link href="/ng/blog" className="text-sm text-primary hover:underline">
-                    &larr; Back to Blog
+                <Link href="/ng/news" className="text-sm text-primary hover:underline">
+                    &larr; Back to News &amp; Stories
                 </Link>
                 <h1 className="font-headline text-3xl md:text-5xl font-extrabold tracking-tight">{post.title}</h1>
                 <div className="flex flex-wrap items-center justify-center gap-3 text-muted-foreground">

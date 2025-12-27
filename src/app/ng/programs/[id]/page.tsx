@@ -59,7 +59,7 @@ export default async function ProgramDetailPage({ params }: Props) {
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <Link href="/ng/programs" className="text-sm text-primary hover:underline">
-            &larr; Back to Programs
+            &larr; Back to Services
           </Link>
         </div>
 
@@ -100,7 +100,7 @@ export default async function ProgramDetailPage({ params }: Props) {
                     <Link href="/ng/donate">Donate Now</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                    <Link href="/ng/appointment">Volunteer</Link>
+                    <Link href="/ng/volunteer">Volunteer</Link>
                 </Button>
               </div>
           </div>

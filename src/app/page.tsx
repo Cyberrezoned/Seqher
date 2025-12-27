@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Eye, HandHeart, MapPin, Sparkles, Stethoscope, Target, Users } from 'lucide-react';
+import { ArrowRight, Eye, MapPin, Sparkles, Target } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/icons/Logo';
@@ -17,6 +17,7 @@ import {
 
 export default function GlobalLandingPage() {
   const shouldReduceMotion = useReducedMotion();
+  const router = useRouter();
   const [suggestedRegion, setSuggestedRegion] = useState<{
     name: string;
     code: string;
@@ -56,8 +57,178 @@ export default function GlobalLandingPage() {
     return () => window.clearInterval(id);
   }, [shouldReduceMotion, taglines.length]);
 
+  const setRegionAndGo = (region: 'ng' | 'ca') => {
+    document.cookie = `seqher_region=${region}; path=/; max-age=31536000; samesite=lax`;
+    router.push(`/${region}`);
+  };
+
   return (
     <div className="flex flex-col">
+      {/* Country Selection */}
+      <section className="relative overflow-hidden bg-secondary/30 py-14 md:py-20">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-28 -top-24 h-80 w-80 rounded-full bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.18),transparent_70%)] blur-3xl" />
+          <div className="absolute -bottom-28 -right-24 h-96 w-96 rounded-full bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.14),transparent_70%)] blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-primary via-primary/70 to-primary/40 opacity-70" />
+        </div>
+
+        <div className="container relative mx-auto px-4">
+          <motion.h2
+            className="font-headline text-3xl md:text-4xl font-bold text-center mb-3"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Nigeria or Canada
+          </motion.h2>
+          <motion.p
+            className="mx-auto mb-10 max-w-2xl text-center text-muted-foreground"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.08 }}
+          >
+            Select your country to continue.
+          </motion.p>
+
+          {suggestedRegion && (
+            <motion.div
+              className="mb-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <motion.div
+                className="transform-gpu"
+                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        y: [0, -3, 0, 3, 0],
+                        rotateX: [0, 1.2, 0, -1.2, 0],
+                        rotateY: [0, -1.4, 0, 1.4, 0],
+                      }
+                }
+                transition={shouldReduceMotion ? undefined : { duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
+                whileHover={shouldReduceMotion ? undefined : { y: -8, rotateX: 0, rotateY: 0, scale: 1.015 }}
+              >
+                <Card className="max-w-md mx-auto border-primary/50 shadow-lg bg-secondary">
+                  <CardHeader className="flex flex-row items-center gap-4 pb-4">
+                    <MapPin className="h-6 w-6 text-primary" />
+                    <CardTitle>Suggested for you</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">Based on your location, we recommend {suggestedRegion.name}.</p>
+                    <Button className="w-full" onClick={() => setRegionAndGo(suggestedRegion.code === 'ca' ? 'ca' : 'ng')}>
+                      Open {suggestedRegion.name}
+                      <ArrowRight className="ml-2" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </motion.div>
+          )}
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.05 }}
+            >
+              <motion.div
+                className="h-full transform-gpu"
+                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                animate={shouldReduceMotion ? undefined : { y: [0, -3, 0, 3, 0] }}
+                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }}
+                whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02, rotateX: 0, rotateY: 0, transition: { duration: 0.2 } }}
+              >
+                <button
+                  type="button"
+                  className="block w-full text-left group"
+                  onClick={() => setRegionAndGo('ng')}
+                >
+                  <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
+                    <CardHeader>
+                      <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 900 600"
+                          className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110"
+                        >
+                          <rect width="900" height="600" fill="#fff" />
+                          <rect width="300" height="600" fill="#008751" />
+                          <rect x="600" width="300" height="600" fill="#008751" />
+                        </svg>
+                        Nigeria
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">
+                        Explore services, projects, updates, and ways to get involved in Nigeria.
+                      </p>
+                      <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
+                        Continue <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </CardContent>
+                  </Card>
+                </button>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <motion.div
+                className="h-full transform-gpu"
+                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                animate={shouldReduceMotion ? undefined : { y: [0, 3, 0, -3, 0] }}
+                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.55 }}
+                whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02, rotateX: 0, rotateY: 0, transition: { duration: 0.2 } }}
+              >
+                <button
+                  type="button"
+                  className="block w-full text-left group"
+                  onClick={() => setRegionAndGo('ca')}
+                >
+                  <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
+                    <CardHeader>
+                      <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 1200 600"
+                          className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110"
+                        >
+                          <rect width="1200" height="600" fill="#fff" />
+                          <rect width="300" height="600" fill="#d52b1e" />
+                          <rect x="900" width="300" height="600" fill="#d52b1e" />
+                          <path
+                            fill="#d52b1e"
+                            d="M600 400.9l-52.5-30.3-13.3 58.7-41.9-41.9-30.3 52.5-41.9-41.9-58.7 13.3 13.3-58.7-52.5-30.3 52.5-30.3-13.3-58.7 58.7 13.3 41.9-41.9 30.3 52.5 41.9-41.9L547.5 370.6l52.5 30.3zm0-100.9v-52.5h-13.3v52.5l-58.7 58.7V250h-52.5v150h36.1l75-75 75 75h36.1V250h-52.5v50.2l-58.7-58.7z"
+                          />
+                        </svg>
+                        Canada
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">
+                        Explore services, projects, updates, and ways to get involved in Canada.
+                      </p>
+                      <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
+                        Continue <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </CardContent>
+                  </Card>
+                </button>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Mission & Vision */}
       <section className="relative overflow-hidden py-16 md:py-24">
         <div className="pointer-events-none absolute inset-0">
@@ -237,196 +408,29 @@ export default function GlobalLandingPage() {
               </motion.div>
             </motion.div>
           </div>
-        </div>
-      </section>
 
-      {/* Portal Selection */}
-      <section className="relative border-t bg-secondary/30 py-16 md:py-24">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40 opacity-60" />
-        <div className="container mx-auto px-4">
-          <motion.h2 
-            className="font-headline text-3xl md:text-4xl font-bold text-center mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Select Your Location to Continue
-          </motion.h2>
-          <motion.p 
-            className="mt-2 mb-10 max-w-2xl mx-auto text-center text-muted-foreground"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            >
-            Choose your portal to access programs, updates, and resources tailored to your region — with inclusive, community‑led support.
-          </motion.p>
-
-          {suggestedRegion && (
-            <motion.div
-              className="mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <motion.div
-                className="transform-gpu"
-                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
-                animate={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        y: [0, -3, 0, 3, 0],
-                        rotateX: [0, 1.2, 0, -1.2, 0],
-                        rotateY: [0, -1.4, 0, 1.4, 0],
-                      }
-                }
-                transition={shouldReduceMotion ? undefined : { duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
-                whileHover={shouldReduceMotion ? undefined : { y: -8, rotateX: 0, rotateY: 0, scale: 1.015 }}
-              >
-                <Card className="max-w-md mx-auto border-primary/50 shadow-lg bg-secondary">
-                  <CardHeader className="flex flex-row items-center gap-4 pb-4">
-                    <MapPin className="h-6 w-6 text-primary" />
-                    <CardTitle>Suggested Region for You</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Based on your location, we recommend the{' '}
-                      {suggestedRegion.name} portal.
-                    </p>
-                    <Button asChild className="w-full">
-                      <Link href={`/${suggestedRegion.code}`}>
-                        Enter the {suggestedRegion.name} Portal
-                        <ArrowRight className="ml-2" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </motion.div>
-          )}
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <motion.div
-                className="h-full transform-gpu"
-                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
-                animate={shouldReduceMotion ? undefined : { y: [0, -3, 0, 3, 0] }}
-                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }}
-                whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02, rotateX: 0, rotateY: 0, transition: { duration: 0.2 } }}
-              >
-                <Link href="/ng" className="block group">
-                  <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
-                    <CardHeader>
-                      <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
-                              <rect width="900" height="600" fill="#fff"/>
-                              <rect width="300" height="600" fill="#008751"/>
-                              <rect x="600" width="300" height="600" fill="#008751"/>
-                          </svg>
-                        Nigeria Portal
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">
-                        Explore local initiatives, opportunities, and resources
-                        for Nigeria.
-                      </p>
-                      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
-                            <Stethoscope className="h-5 w-5" />
-                          </span>
-                          <span className="text-sm font-medium">Health services</span>
-                        </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
-                            <HandHeart className="h-5 w-5" />
-                          </span>
-                          <span className="text-sm font-medium">Safe support</span>
-                        </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
-                            <Sparkles className="h-5 w-5" />
-                          </span>
-                          <span className="text-sm font-medium">Pride‑affirming</span>
-                        </div>
-                      </div>
-
-                      <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
-                        Explore Nigeria <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </span>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
-            </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              >
-              <motion.div
-                className="h-full transform-gpu"
-                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
-                animate={shouldReduceMotion ? undefined : { y: [0, 3, 0, -3, 0] }}
-                transition={shouldReduceMotion ? undefined : { duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 0.55 }}
-                whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02, rotateX: 0, rotateY: 0, transition: { duration: 0.2 } }}
-              >
-                <Link href="/ca" className="block group">
-                  <Card className="text-center p-8 lg:p-12 h-full hover:shadow-xl hover:border-primary transition-all duration-300">
-                    <CardHeader>
-                      <CardTitle className="text-2xl font-headline flex items-center justify-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" className="h-6 w-9 rounded-md shadow-md transition-transform group-hover:scale-110">
-                          <rect width="1200" height="600" fill="#fff"/>
-                          <rect width="300" height="600" fill="#d52b1e"/>
-                          <rect x="900" width="300" height="600" fill="#d52b1e"/>
-                          <path fill="#d52b1e" d="M600 400.9l-52.5-30.3-13.3 58.7-41.9-41.9-30.3 52.5-41.9-41.9-58.7 13.3 13.3-58.7-52.5-30.3 52.5-30.3-13.3-58.7 58.7 13.3 41.9-41.9 30.3 52.5 41.9-41.9L547.5 370.6l52.5 30.3zm0-100.9v-52.5h-13.3v52.5l-58.7 58.7V250h-52.5v150h36.1l75-75 75 75h36.1V250h-52.5v50.2l-58.7-58.7z"/>
-                        </svg>
-                        Canada Portal
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">
-                        Discover programs, events, and ways to get involved in
-                        Canada.
-                      </p>
-                      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
-                            <Users className="h-5 w-5" />
-                          </span>
-                          <span className="text-sm font-medium">Community</span>
-                        </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
-                            <Stethoscope className="h-5 w-5" />
-                          </span>
-                          <span className="text-sm font-medium">Wellbeing</span>
-                        </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/55 text-primary-foreground shadow-sm">
-                            <Sparkles className="h-5 w-5" />
-                          </span>
-                          <span className="text-sm font-medium">Inclusive</span>
-                        </div>
-                      </div>
-
-                      <span className="mt-6 inline-flex items-center text-primary font-semibold group-hover:underline">
-                        Explore Canada <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </span>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
-            </motion.div>
+          <div className="mx-auto mt-10 max-w-4xl rounded-xl border bg-background/70 p-6">
+            <h2 className="font-headline text-xl font-bold text-primary">Who we serve</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Our work includes women, children, adolescents, school children, people with disabilities, displaced persons, and other
+              marginalized and vulnerable communities.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2 text-sm">
+              {[
+                'Women',
+                'Children',
+                'Adolescents',
+                'School children',
+                'People with disabilities',
+                'Displaced persons',
+                'Vulnerable communities',
+                'Gender-diverse persons',
+              ].map((label) => (
+                <span key={label} className="rounded-full bg-primary/10 px-3 py-1 text-primary">
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>

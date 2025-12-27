@@ -3,7 +3,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Newspaper, CalendarPlus, Heart, LayoutGrid, Globe, Info, Briefcase, Users } from 'lucide-react';
+import { Menu, X, CalendarPlus, Heart, LayoutGrid, Globe, Info, Briefcase, Users, HandHeart, Gift, FolderKanban } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -22,21 +23,42 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useScrollPosition } from '@/hooks/use-scroll-position';
 
 
-const navLinks = [
-  { href: '/ng/about', label: 'About Us', icon: <Info className="h-4 w-4" /> },
-  { href: '/ng/people', label: 'People', icon: <Users className="h-4 w-4" /> },
-  { href: '/ng/programs', label: 'Programs', icon: <LayoutGrid className="h-4 w-4" /> },
-  { href: '/ng/blog', label: 'Blog', icon: <Newspaper className="h-4 w-4" /> },
-  { href: '/ng/news', label: 'News', icon: <Globe className="h-4 w-4" /> },
-  { href: '/ng/careers', label: 'Careers', icon: <Briefcase className="h-4 w-4" /> },
-  { href: '/ng/appointment', label: 'Book Appointment', icon: <CalendarPlus className="h-4 w-4" /> },
-];
+type NavLink = {
+  href: string;
+  label: string;
+  icon: ReactNode;
+  activePrefix?: string;
+};
 
 export default function Header() {
   const pathname = usePathname();
   const { user, isAdmin, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const scrollY = useScrollPosition();
+
+  const isCanada = pathname.startsWith('/ca');
+
+  const navLinks: NavLink[] = isCanada
+    ? [
+        { href: '/ca#purpose', label: 'About Us', icon: <Info className="h-4 w-4" />, activePrefix: '/ca' },
+        { href: '/ca#navigation', label: 'Services', icon: <LayoutGrid className="h-4 w-4" />, activePrefix: '/ca' },
+        { href: '/ca#projects', label: 'Projects', icon: <FolderKanban className="h-4 w-4" />, activePrefix: '/ca' },
+        { href: '/ca/news', label: 'International News', icon: <Globe className="h-4 w-4" />, activePrefix: '/ca/news' },
+        { href: '/ca/volunteer', label: 'Volunteer', icon: <HandHeart className="h-4 w-4" />, activePrefix: '/ca/volunteer' },
+        { href: '/ca/careers', label: 'Careers', icon: <Briefcase className="h-4 w-4" />, activePrefix: '/ca/careers' },
+        { href: '/ca/appointment', label: 'Book Appointment', icon: <CalendarPlus className="h-4 w-4" />, activePrefix: '/ca/appointment' },
+      ]
+    : [
+        { href: '/ng/about', label: 'About Us', icon: <Info className="h-4 w-4" />, activePrefix: '/ng/about' },
+        { href: '/ng/people', label: 'People', icon: <Users className="h-4 w-4" />, activePrefix: '/ng/people' },
+        { href: '/ng/programs', label: 'Services', icon: <LayoutGrid className="h-4 w-4" />, activePrefix: '/ng/programs' },
+        { href: '/ng/projects', label: 'Projects', icon: <FolderKanban className="h-4 w-4" />, activePrefix: '/ng/projects' },
+        { href: '/ng/news', label: 'News & Stories', icon: <Globe className="h-4 w-4" />, activePrefix: '/ng/news' },
+        { href: '/ng/grants', label: 'Grants', icon: <Gift className="h-4 w-4" />, activePrefix: '/ng/grants' },
+        { href: '/ng/volunteer', label: 'Volunteer', icon: <HandHeart className="h-4 w-4" />, activePrefix: '/ng/volunteer' },
+        { href: '/ng/careers', label: 'Careers', icon: <Briefcase className="h-4 w-4" />, activePrefix: '/ng/careers' },
+        { href: '/ng/appointment?location=Nigeria', label: 'Book Appointment', icon: <CalendarPlus className="h-4 w-4" />, activePrefix: '/ng/appointment' },
+      ];
 
   const getInitials = (name?: string | null) => {
     if (!name) return 'U';
@@ -94,7 +116,12 @@ export default function Header() {
         
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
-            <Button key={link.href} asChild variant="ghost" className={cn(pathname.startsWith(link.href) ? 'text-primary' : 'text-muted-foreground')}>
+            <Button
+              key={link.href}
+              asChild
+              variant="ghost"
+              className={cn((link.activePrefix ? pathname.startsWith(link.activePrefix) : pathname === link.href) ? 'text-primary' : 'text-muted-foreground')}
+            >
                 <Link
                 href={link.href}
                 className='flex items-center gap-2'
@@ -109,7 +136,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2">
                  <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href="/ng/donate">
+                    <Link href={isCanada ? "/ca/donate" : "/ng/donate"}>
                         <Heart className="mr-2 h-4 w-4" />
                         Donate
                     </Link>
@@ -136,7 +163,7 @@ export default function Header() {
                     href={link.href}
                     className={cn(
                         'flex items-center gap-3 text-lg font-medium transition-colors hover:text-primary',
-                        pathname === link.href ? 'text-primary' : 'text-foreground'
+                        (link.activePrefix ? pathname.startsWith(link.activePrefix) : pathname === link.href) ? 'text-primary' : 'text-foreground'
                     )}
                     onClick={() => setIsMenuOpen(false)}
                     >
@@ -146,7 +173,7 @@ export default function Header() {
                 ))}
                 <div className="border-t pt-4 flex flex-col gap-4">
                     <Button asChild>
-                        <Link href="/ng/donate" onClick={() => setIsMenuOpen(false)}>
+                        <Link href={isCanada ? "/ca/donate" : "/ng/donate"} onClick={() => setIsMenuOpen(false)}>
                             <Heart className="mr-2 h-4 w-4" />
                             Donate
                         </Link>

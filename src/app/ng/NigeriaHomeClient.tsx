@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Handshake, Target, Leaf, HeartHandshake, ArrowRight, Megaphone } from 'lucide-react';
+import { Handshake, Target, Leaf, HeartHandshake, ArrowRight, Megaphone, Shield, Stethoscope, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
@@ -38,9 +38,30 @@ export default function NigeriaHomeClient({
   featuredPrograms: Program[];
   announcements: Announcement[];
 }) {
+  const navigationCards = [
+    {
+      title: 'Health Services',
+      description: 'Explore health promotion, referrals, testing support, and wellbeing services.',
+      href: '/ng/programs',
+      icon: <Stethoscope className="h-6 w-6 text-primary" />,
+    },
+    {
+      title: 'Safe Support',
+      description: 'Access confidential support pathways for safety, protection, and practical help.',
+      href: '/ng/appointment',
+      icon: <Shield className="h-6 w-6 text-primary" />,
+    },
+    {
+      title: 'Community',
+      description: 'Read updates, stories, and opportunities from SEQHER and partners.',
+      href: '/ng/news',
+      icon: <Users className="h-6 w-6 text-primary" />,
+    },
+  ];
+
   const impactStats = [
     { id: 1, icon: <Handshake className="h-10 w-10 text-primary" />, value: '10,000+', label: 'Lives Impacted' },
-    { id: 2, icon: <Target className="h-10 w-10 text-primary" />, value: '15+', label: 'Active Programs' },
+    { id: 2, icon: <Target className="h-10 w-10 text-primary" />, value: '15+', label: 'Active Services' },
     { id: 3, icon: <Leaf className="h-10 w-10 text-primary" />, value: '8', label: 'SDGs Supported' },
     { id: 4, icon: <HeartHandshake className="h-10 w-10 text-primary" />, value: '500+', label: 'Volunteers Engaged' },
   ];
@@ -79,7 +100,7 @@ export default function NigeriaHomeClient({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            Empowering communities with compassion—advancing equal health and rights across Nigeria.
+            Championing equal health and rights through compassionate, community-led action
           </motion.p>
           <motion.div
             className="mt-8 flex flex-wrap justify-center gap-4"
@@ -99,12 +120,41 @@ export default function NigeriaHomeClient({
                 variant="outline"
                 className="border-white/70 bg-white/15 text-white shadow-[0_14px_32px_rgba(0,0,0,0.35)] backdrop-blur hover:border-white hover:bg-white/25 focus-visible:ring-2 focus-visible:ring-white/50"
               >
-                <Link href="/ng/programs">Our Programs</Link>
+                <Link href="/ng/projects">Projects</Link>
               </Button>
             </motion.div>
           </motion.div>
         </motion.div>
       </section>
+
+      <motion.section
+        id="navigation"
+        className="py-12 md:py-16 bg-background"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={sectionVariants}
+      >
+        <div className="container mx-auto px-4">
+          <div className="grid gap-5 md:grid-cols-3">
+            {navigationCards.map((item) => (
+              <Link key={item.title} href={item.href} className="group">
+                <Card className="h-full border bg-background/70 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  <CardHeader className="flex flex-row items-start gap-3">
+                    <div className="mt-1 rounded-lg bg-primary/10 p-2">{item.icon}</div>
+                    <div>
+                      <CardTitle className="font-headline text-lg group-hover:text-primary transition-colors">
+                        {item.title}
+                      </CardTitle>
+                      <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </motion.section>
 
       {announcements.length > 0 && (
         <motion.section
@@ -134,9 +184,9 @@ export default function NigeriaHomeClient({
         variants={sectionVariants}
       >
         <div className="container mx-auto px-4">
-          <h2 className="font-headline text-3xl md:text-4xl font-bold text-center">Featured Programs</h2>
+          <h2 className="font-headline text-3xl md:text-4xl font-bold text-center">Featured Services</h2>
           <p className="mt-2 mb-12 max-w-3xl mx-auto text-center text-muted-foreground">
-            Explore some of our key initiatives that are transforming communities and empowering individuals.
+            Explore some of our key services supporting health, dignity, and rights.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredPrograms.map((program, index) => {

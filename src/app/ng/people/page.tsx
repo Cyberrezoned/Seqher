@@ -4,12 +4,27 @@ import { Handshake, Users } from 'lucide-react';
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
+type TeamPhoto = {
+  src: string;
+  alt: string;
+};
+
 type Partner = {
   name: string;
   subtitle: string;
   href?: string;
   logoSrc: string;
   logoAlt: string;
+};
+
+const teamPhotos: TeamPhoto[] = [
+  { src: '/images/team/team-01.jpeg', alt: 'SEQHER team gathering photo' },
+  { src: '/images/team/team-02.jpeg', alt: 'SEQHER team gathering photo (alternate)' },
+];
+
+const execLeadershipPhoto: TeamPhoto = {
+  src: '/images/team/exec-leadership-01.jpeg',
+  alt: 'Operations and executive leadership team photo',
 };
 
 const partners: Partner[] = [
@@ -65,6 +80,61 @@ export default function PeoplePage() {
           We collaborate with partners and supporters to strengthen communities, improve visibility, and advance equal health and rights.
         </p>
       </header>
+
+      <section className="mx-auto mt-10 max-w-6xl">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="font-headline text-2xl font-bold">The Team Behind SEQHER</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Moments from our staff and volunteer teams working together across communities.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {teamPhotos.map((photo) => (
+            <div
+              key={photo.src}
+              className="group relative overflow-hidden rounded-xl border bg-muted/20 shadow-sm transition-shadow hover:shadow-lg"
+            >
+              <div className="relative aspect-[3/4] md:aspect-[4/5]">
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-60" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto mt-10 max-w-6xl">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="font-headline text-2xl font-bold">Operations & Executive Leadership</h2>
+            <p className="mt-1 text-sm text-muted-foreground">The team responsible for operations and executive leadership.</p>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <div className="group relative overflow-hidden rounded-xl border bg-muted/20 shadow-sm transition-shadow hover:shadow-lg">
+            <div className="relative aspect-video">
+              <Image
+                src={execLeadershipPhoto.src}
+                alt={execLeadershipPhoto.alt}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+                sizes="(max-width: 768px) 100vw, 1200px"
+              />
+            </div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/0 to-black/0 opacity-60" />
+          </div>
+        </div>
+      </section>
 
       <section className="mx-auto mt-10 max-w-6xl">
         <div className="flex flex-wrap items-center justify-between gap-3">

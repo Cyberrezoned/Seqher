@@ -10,7 +10,7 @@
 
 **Offices**
 
-- **Headquarter:** Behind Monday Lodge, Shagari Low-cost Jere, Maiduguri, Borno State, Nigeria.
+- **Headquarter:** Pompomari Bypass Opp Meltdew Gas Station, Maiduguri, Borno State, Nigeria.
 - **Abuja Office:** A1 Akaton Homes, Plot 822 Durumi District, Abuja, Nigeria.
 - **Kogi Office:** Beside El Bethel Gbeganu, Kogi State, Nigeria.
 
@@ -18,7 +18,7 @@
 
 - **Contact person:** Omeiza Segun Samuel (Executive Director)
 - **Telephone:** +2348064454657, +2349020484873
-- **Email:** Samsegun01@gmail.com
+- **Email:** info@seqher.org
 - **Website:** https://seqher.org
 - **Social:** Facebook/Instagram/X: @Seqherinitiativ
 

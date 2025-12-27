@@ -7,6 +7,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 const appointmentSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
+  appointmentLocation: z.string().min(2),
   appointmentDate: z.date(),
   appointmentType: z.enum(['volunteering', 'partnership', 'general']),
   message: z.string().max(500).optional(),
@@ -27,7 +28,7 @@ export async function bookAppointment(
     return { success: false, message: 'Invalid form data.' };
   }
 
-  const { email, name, appointmentDate, appointmentType, message } = parsed.data;
+  const { email, name, appointmentLocation, appointmentDate, appointmentType, message } = parsed.data;
 
   try {
     // Use GenAI to validate email
@@ -47,6 +48,7 @@ export async function bookAppointment(
       .insert({
         name,
         email,
+        appointment_location: appointmentLocation,
         appointment_date: appointmentDate,
         appointment_type: appointmentType,
         message,

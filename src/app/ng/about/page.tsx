@@ -33,10 +33,12 @@ const cardVariants = {
 };
 
 export default function AboutPage() {
+  const canadaOfficeAddress = process.env.NEXT_PUBLIC_CA_OFFICE_ADDRESS || '';
+
   const offices = [
     {
       name: 'Headquarter',
-      address: 'Behind Monday Lodge, Shagari Low-cost Jere, Maiduguri, Borno State, Nigeria.',
+      address: 'Pompomari Bypass Opp Meltdew Gas Station, Maiduguri, Borno State, Nigeria.',
     },
     {
       name: 'Abuja Office',
@@ -46,13 +48,19 @@ export default function AboutPage() {
       name: 'Kogi Office',
       address: 'Beside El Bethel Gbeganu, Kogi State, Nigeria.',
     },
+    {
+      name: 'Canada Office',
+      address: canadaOfficeAddress || 'Canada office address to be confirmed.',
+    },
   ];
 
   const contact = {
     name: 'Omeiza Segun Samuel',
     role: 'Executive Director',
     phones: ['+2348064454657', '+2349020484873'],
-    email: 'Samsegun01@gmail.com',
+    executiveDirectorEmail: (process.env.NEXT_PUBLIC_EXECUTIVE_DIRECTOR_EMAIL || 'info@seqher.org') as string,
+    ceoEmail: (process.env.NEXT_PUBLIC_CEO_EMAIL || '') as string,
+    generalEmail: 'info@seqher.org',
     website: 'https://seqher.org',
     social: {
       facebook: 'https://www.facebook.com/share/18rF2QiaNY/',
@@ -417,9 +425,23 @@ export default function AboutPage() {
                       </div>
                     </div>
                     <div className="pt-1">
-                      <span className="text-muted-foreground">Email:</span>{' '}
-                      <a className="text-primary hover:underline" href={`mailto:${contact.email}`}>
-                        {contact.email}
+                      <span className="text-muted-foreground">Executive Director Email:</span>{' '}
+                      <a className="text-primary hover:underline" href={`mailto:${contact.executiveDirectorEmail}`}>
+                        {contact.executiveDirectorEmail}
+                      </a>
+                    </div>
+                    {contact.ceoEmail ? (
+                      <div className="pt-1">
+                        <span className="text-muted-foreground">CEO Email:</span>{' '}
+                        <a className="text-primary hover:underline" href={`mailto:${contact.ceoEmail}`}>
+                          {contact.ceoEmail}
+                        </a>
+                      </div>
+                    ) : null}
+                    <div className="pt-1">
+                      <span className="text-muted-foreground">General Email:</span>{' '}
+                      <a className="text-primary hover:underline" href={`mailto:${contact.generalEmail}`}>
+                        {contact.generalEmail}
                       </a>
                     </div>
                     <div className="pt-1">

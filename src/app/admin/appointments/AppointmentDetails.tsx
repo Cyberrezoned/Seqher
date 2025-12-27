@@ -45,6 +45,10 @@ export default function AppointmentDetails({ appointment }: { appointment: Appoi
             <span className="col-span-3 capitalize">{appointment.appointmentType}</span>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
+            <span className="text-right font-bold">Location</span>
+            <span className="col-span-3">{appointment.appointmentLocation}</span>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
             <span className="text-right font-bold">Preferred Date</span>
             <span className="col-span-3">{format(new Date(appointment.appointmentDate), 'PPP')}</span>
           </div>

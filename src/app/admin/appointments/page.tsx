@@ -24,7 +24,7 @@ export const dynamic = 'force-dynamic';
 async function getAppointments(): Promise<AppointmentRequest[]> {
   const { data, error } = await supabaseAdmin
     .from('appointments')
-    .select('id,name,email,appointment_date,appointment_type,message,status,created_at')
+    .select('id,name,email,appointment_location,appointment_date,appointment_type,message,status,created_at')
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -37,6 +37,7 @@ async function getAppointments(): Promise<AppointmentRequest[]> {
     id: row.id,
     name: row.name,
     email: row.email,
+    appointmentLocation: row.appointment_location || 'Nigeria',
     appointmentDate: row.appointment_date,
     appointmentType: row.appointment_type as AppointmentRequest['appointmentType'],
     message: row.message || '',
@@ -70,6 +71,7 @@ export default async function AdminAppointmentsPage() {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead className="hidden md:table-cell">Email</TableHead>
+                <TableHead className="hidden lg:table-cell">Location</TableHead>
                 <TableHead className="hidden lg:table-cell">Preferred Date</TableHead>
                 <TableHead className="hidden lg:table-cell">Type</TableHead>
                 <TableHead className="hidden md:table-cell">Submitted At</TableHead>
@@ -88,6 +90,9 @@ export default async function AdminAppointmentsPage() {
                     <a href={`mailto:${item.email}`} className="text-primary hover:underline">{item.email}</a>
                   </TableCell>
                    <TableCell className="hidden lg:table-cell">
+                    {item.appointmentLocation}
+                  </TableCell>
+                   <TableCell className="hidden lg:table-cell">
                     {format(new Date(item.appointmentDate), 'PP')}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell capitalize">
@@ -101,9 +106,9 @@ export default async function AdminAppointmentsPage() {
                   </TableCell>
                 </TableRow>
               ))}
-               {appointments.length === 0 && (
+              {appointments.length === 0 && (
                 <TableRow>
-                    <TableCell colSpan={6} className="text-center p-8 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center p-8 text-muted-foreground">
                         No appointment requests yet.
                     </TableCell>
                 </TableRow>

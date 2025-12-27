@@ -59,7 +59,7 @@ export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
           />
         )}
         <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-rose-500 via-amber-400 via-emerald-400 via-sky-500 to-violet-500" />
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
         <div className="relative z-10 text-center text-white p-4">
           <h1 className="font-headline text-4xl md:text-6xl font-extrabold tracking-tight">SEQHER Stories — Nigeria</h1>
           <p className="mt-3 max-w-2xl text-lg md:text-xl text-primary-foreground/95">
@@ -134,7 +134,7 @@ export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
                         </CardContent>
                         <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                           <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-primary/35" />
-                          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-rose-500 via-amber-400 via-emerald-400 via-sky-500 to-violet-500" />
+                          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
                         </div>
                       </Card>
                     </Link>

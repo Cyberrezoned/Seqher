@@ -125,6 +125,7 @@ create table if not exists public.appointments (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   email text not null,
+  appointment_location text not null default 'Nigeria',
   appointment_date timestamptz not null,
   appointment_type text not null check (appointment_type in ('volunteering','partnership','general')),
   message text,
@@ -133,6 +134,49 @@ create table if not exists public.appointments (
 );
 
 create index if not exists appointments_status_created_at_idx on public.appointments(status, created_at desc);
+
+-- Backfill for existing deployments (when `appointments` already existed before `appointment_location` was added).
+alter table public.appointments add column if not exists appointment_location text not null default 'Nigeria';
+
+-- News subscribers (public sign-up)
+create table if not exists public.news_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  locale text not null default 'ng' check (locale in ('ng','ca','global')),
+  created_at timestamptz not null default now()
+);
+
+create unique index if not exists news_subscribers_email_locale_uidx on public.news_subscribers(lower(email), locale);
+create index if not exists news_subscribers_locale_created_at_idx on public.news_subscribers(locale, created_at desc);
+
+-- Grant access subscriptions (public sign-up; plan selection captured for billing follow-up)
+create table if not exists public.grant_subscriptions (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  plan text not null check (plan in ('monthly','annual')),
+  locale text not null default 'ng' check (locale in ('ng','ca','global')),
+  created_at timestamptz not null default now()
+);
+
+create unique index if not exists grant_subscriptions_email_locale_uidx on public.grant_subscriptions(lower(email), locale);
+create index if not exists grant_subscriptions_locale_created_at_idx on public.grant_subscriptions(locale, created_at desc);
+
+-- Volunteer pathway submissions (public form)
+create table if not exists public.volunteer_applications (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  phone text,
+  preferred_location text not null,
+  interests text[] not null default '{}',
+  message text,
+  locale text not null default 'ng' check (locale in ('ng','ca','global')),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists volunteer_applications_locale_created_at_idx on public.volunteer_applications(locale, created_at desc);
 
 -- Optional: enable RLS + allow public reads for content.
 -- Uncomment if you want anon users to read content with RLS on.

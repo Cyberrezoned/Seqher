@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { bookAppointment } from './actions';
+import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -40,6 +41,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 const appointmentSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email(),
+  appointmentLocation: z.string().min(2, { message: 'Select a location for this appointment.' }),
   appointmentDate: z.date({
     required_error: 'A date for the appointment is required.',
   }),
@@ -47,16 +49,28 @@ const appointmentSchema = z.object({
   message: z.string().max(500).optional(),
 });
 
+type Props = {
+  defaultLocation?: 'Nigeria' | 'Canada';
+};
 
-export default function AppointmentForm() {
+export default function AppointmentForm({ defaultLocation }: Props) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const locationFromQuery = searchParams.get('location');
+
+  const normalizedQueryLocation = locationFromQuery?.trim();
+  const resolvedDefaultLocation: 'Nigeria' | 'Canada' =
+    normalizedQueryLocation === 'Canada' || normalizedQueryLocation === 'Nigeria'
+      ? normalizedQueryLocation
+      : defaultLocation || 'Nigeria';
 
   const form = useForm<z.infer<typeof appointmentSchema>>({
     resolver: zodResolver(appointmentSchema),
     defaultValues: {
       name: '',
       email: '',
+      appointmentLocation: resolvedDefaultLocation,
       appointmentType: 'general',
       message: '',
     },
@@ -155,6 +169,27 @@ export default function AppointmentForm() {
                         </FormItem>
                     )}
                     />
+                <FormField
+                  control={form.control}
+                  name="appointmentLocation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Location</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a location" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Nigeria">Nigeria</SelectItem>
+                          <SelectItem value="Canada">Canada</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                 control={form.control}
                 name="appointmentDate"

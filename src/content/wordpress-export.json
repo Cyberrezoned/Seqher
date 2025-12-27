@@ -2351,7 +2351,7 @@
     {
       "id": "hiv-sti-prep",
       "title": "Comprehensive health promotion and service delivery",
-      "summary": "Confidential health navigation, testing referrals, and PrEP/PEP support—community-led, stigma-free, and centered on dignity.",
+      "summary": "Confidential health navigation, testing referrals, and PrEP/PEP support—for everyone, stigma-free, and centered on dignity.",
       "description": "<p>We strengthen access to essential health services through education, confidential navigation and referrals, and HIV/STI prevention support—so individuals can get accurate information, the right services, and follow-up care without judgment.</p>\n\n<h2>What we do</h2>\n<ul>\n  <li>Private one‑on‑one health navigation and referrals</li>\n  <li>HIV and STI testing referrals and follow‑up support</li>\n  <li>PrEP/PEP information and medication navigation support</li>\n  <li>Support with appointments, continuity of care, and linkage to services</li>\n  <li>Safer‑sex education and harm‑reduction resources</li>\n</ul>\n\n<h2>How it works</h2>\n<p>Reach out via our appointment form. A trained community navigator will respond, understand your needs, and connect you to the right support—confidentially.</p>\n\n<h2>Our commitment</h2>\n<ul>\n  <li>Confidentiality and informed consent</li>\n  <li>Trauma‑informed, non‑judgmental support</li>\n  <li>Respect for every identity and experience</li>\n</ul>",
       "imageUrl": "https://plus.unsplash.com/premium_photo-1678376871117-8a32e22e61c5?auto=format&fit=crop&w=800&h=600&q=80",
       "sdgGoals": [
@@ -2467,9 +2467,9 @@
     },
     {
       "id": "queer-youth-justice",
-      "title": "Queer & Youth Justice",
-      "summary": "Support, protection, and rights-based advocacy for queer communities and young people facing stigma, exclusion, or rights violations.",
-      "description": "<p>This program strengthens protection and access to justice for queer communities and young people—through safe reporting pathways, rights education, and support that prioritizes confidentiality and dignity.</p>\n\n<h2>Focus areas</h2>\n<ul>\n  <li>Know-your-rights education and community legal literacy</li>\n  <li>Safety planning and referral pathways for support services</li>\n  <li>Documentation and response support for rights violations</li>\n  <li>Community dialogue and advocacy to reduce stigma and discrimination</li>\n</ul>\n\n<h2>Goal</h2>\n<p>To ensure young people and queer communities can live safely, access support, and claim their rights—without fear.</p>",
+      "title": "Youth Justice & Protection",
+      "summary": "Support, protection, and rights-based advocacy for young people and marginalized communities facing stigma, exclusion, or rights violations.",
+      "description": "<p>This program strengthens protection and access to justice for young people and marginalized communities—through safe reporting pathways, rights education, and support that prioritizes confidentiality and dignity.</p>\n\n<h2>Focus areas</h2>\n<ul>\n  <li>Know-your-rights education and community legal literacy</li>\n  <li>Safety planning and referral pathways for support services</li>\n  <li>Documentation and response support for rights violations</li>\n  <li>Community dialogue and advocacy to reduce stigma and discrimination</li>\n</ul>\n\n<h2>Goal</h2>\n<p>To ensure young people can live safely, access support, and claim their rights—without fear.</p>",
       "imageUrl": "https://images.unsplash.com/photo-1457694716743-eb419114c894?auto=format&fit=crop&w=800&h=600&q=80",
       "sdgGoals": [
         16,

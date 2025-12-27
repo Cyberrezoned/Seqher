@@ -33,10 +33,11 @@ export default function ProgramsClient({ programs }: { programs: Program[] }) {
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="mx-auto mb-10 max-w-4xl rounded-xl border bg-gradient-to-br from-fuchsia-500/10 via-amber-400/10 to-cyan-400/10 p-6">
-          <h2 className="font-headline text-2xl md:text-3xl font-bold text-primary">Built by community. Made for care.</h2>
+        <div className="mx-auto mb-10 max-w-4xl rounded-xl border bg-primary/5 p-6">
+          <h2 className="font-headline text-2xl md:text-3xl font-bold text-primary">Community-led services. Built for everyone.</h2>
           <p className="mt-2 text-muted-foreground">
-            We create safer pathways to health and rights through confidential, affirming, and community‑led programs.
+            We create safer pathways to health and rights through confidential, respectful, and community‑led support for women, children,
+            adolescents, school children, people with disabilities, and other vulnerable communities.
           </p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
             <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1">
@@ -49,7 +50,7 @@ export default function ProgramsClient({ programs }: { programs: Program[] }) {
             </span>
             <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1">
               <Sparkles className="h-4 w-4 text-primary" />
-              Inclusive & affirming care
+              Inclusive care
             </span>
           </div>
         </div>
@@ -70,9 +71,10 @@ export default function ProgramsClient({ programs }: { programs: Program[] }) {
             {programs.map((program) => {
               const programImage = PlaceHolderImages.find((p) => p.id === program.imageId);
               const imageSrc = program.imageUrl || programImage?.imageUrl;
+              const isGenderAffirmation = program.id === 'gender-affirming-care';
               return (
                 <motion.div key={program.id} variants={itemVariants} className="h-full">
-                  <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 h-full hover:-translate-y-1 hover:shadow-xl bg-gradient-to-br from-fuchsia-500/5 via-transparent to-cyan-400/10">
+                  <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 h-full hover:-translate-y-1 hover:shadow-xl bg-background/70">
                     <CardHeader className="p-0">
                       {imageSrc && (
                         <div className="overflow-hidden">
@@ -84,7 +86,13 @@ export default function ProgramsClient({ programs }: { programs: Program[] }) {
                             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                             data-ai-hint={programImage?.imageHint}
                           />
-                          <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-fuchsia-500 via-amber-400 to-cyan-400 opacity-90" />
+                          <div
+                            className={
+                              isGenderAffirmation
+                                ? 'pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-rose-500 via-amber-400 via-emerald-400 via-sky-500 to-violet-500 opacity-90'
+                                : 'pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40 opacity-80'
+                            }
+                          />
                         </div>
                       )}
                     </CardHeader>

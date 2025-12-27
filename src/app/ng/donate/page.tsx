@@ -35,6 +35,9 @@ export default function DonatePage() {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
+  const donationAccountId = process.env.NEXT_PUBLIC_DONATION_ACCOUNT_ID || '';
+  const donationDestinationLabel = process.env.NEXT_PUBLIC_DONATION_DESTINATION_LABEL || '';
+
   const form = useForm<z.infer<typeof paymentSchema>>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
@@ -48,8 +51,8 @@ export default function DonatePage() {
 
   function onSubmit(values: z.infer<typeof paymentSchema>) {
     setLoading(true);
-    // This is where you would integrate with a payment processor.
-    // For now, we'll just simulate a delay and show a success message.
+    // This is a demo form (no payment processor configured).
+    // We simulate a delay and show a success message for UI preview only.
     setTimeout(() => {
         toast({
             title: "Thank You For Your Support!",
@@ -83,6 +86,34 @@ export default function DonatePage() {
 
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-2xl">
+          <Card className="mb-6 border bg-background/70">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Donation destination</CardTitle>
+              <CardDescription>
+                Payments are not yet enabled on this website. This page is a preview-only donation form and will not charge any card.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground space-y-2">
+              <p>
+                <span className="font-semibold text-foreground">Account ID:</span>{' '}
+                {donationAccountId ? <span className="text-foreground">{donationAccountId}</span> : 'Not configured yet.'}
+              </p>
+              <p>
+                <span className="font-semibold text-foreground">Destination:</span>{' '}
+                {donationDestinationLabel ? (
+                  <span className="text-foreground">{donationDestinationLabel}</span>
+                ) : (
+                  'Contact us for the current donation account details.'
+                )}
+              </p>
+              <p>
+                Email:{' '}
+                <a className="text-primary hover:underline" href="mailto:info@seqher.org?subject=Donation%20Support">
+                  info@seqher.org
+                </a>
+              </p>
+            </CardContent>
+          </Card>
           <Card>
             <CardHeader>
                 <CardTitle>Make a Donation</CardTitle>

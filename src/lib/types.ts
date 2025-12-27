@@ -34,6 +34,7 @@ export type AppointmentRequest = {
     id: string;
     name: string;
     email: string;
+    appointmentLocation: string;
     appointmentDate: string; // ISO string
     appointmentType: 'volunteering' | 'partnership' | 'general';
     message?: string;
