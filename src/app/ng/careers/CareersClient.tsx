@@ -39,6 +39,9 @@ export default function CareersClient({
   jobs: CareerJob[];
   fullPageHrefBase?: string | null;
 }) {
+  const fallbackJobImage =
+    'https://images.unsplash.com/photo-1549497538-303791108f95?auto=format&fit=crop&w=1200&h=900&q=80';
+
   if (!jobs.length) {
     return (
       <Card className="border bg-background/70">
@@ -95,11 +98,9 @@ export default function CareersClient({
               <AccordionContent className="pb-5">
                 <div className="grid gap-5 md:grid-cols-[240px_1fr] md:items-start">
                   <div className="space-y-3">
-                    {job.imageUrl ? (
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-lg border bg-muted/30">
-                        <SafeImage src={job.imageUrl} alt={job.title} fill className="object-cover" />
-                      </div>
-                    ) : null}
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-lg border bg-muted/30">
+                      <SafeImage src={job.imageUrl ?? fallbackJobImage} alt={job.title} fill className="object-cover" />
+                    </div>
 
                     <div className="space-y-2 text-sm text-muted-foreground">
                       {job.meta.contractDuration ? (

@@ -67,7 +67,7 @@ export default function CareersPage() {
 
   const heroImage =
     careerJobs.find((j) => j.imageUrl)?.imageUrl ??
-    'https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop';
+    'https://images.unsplash.com/photo-1549497538-303791108f95?auto=format&fit=crop&w=1600&h=900&q=80';
 
   return (
     <div className="bg-background">

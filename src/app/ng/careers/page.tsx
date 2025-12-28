@@ -50,10 +50,12 @@ export default function CareersPage() {
       meta,
       contentHtml: job.content,
       applyEmail: 'job@seqher.org',
-    };
+      };
   });
 
-  const heroImage = careerJobs.find((j) => j.imageUrl)?.imageUrl ?? 'https://sirpek.wordpress.com/wp-content/uploads/2025/10/gbv-officer-1.png?w=819';
+  const heroImage =
+    careerJobs.find((j) => j.imageUrl)?.imageUrl ??
+    'https://images.unsplash.com/photo-1549497538-303791108f95?auto=format&fit=crop&w=1600&h=900&q=80';
 
   return (
     <div className="bg-background">

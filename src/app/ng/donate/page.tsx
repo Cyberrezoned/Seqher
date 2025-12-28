@@ -29,7 +29,7 @@ const paymentSchema = z.object({
   amount: z.coerce.number().min(5, { message: 'Donation must be at least $5.' }),
 });
 
-const heroImage = PlaceHolderImages.find(p => p.id === 'donate-hero');
+const heroImage = PlaceHolderImages.find((p) => p.id === 'donate-hero');
 
 export default function DonatePage() {
   const [loading, setLoading] = useState(false);
