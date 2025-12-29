@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import AnnouncementForm from "../../AnnouncementForm";
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { Announcement } from '@/lib/types';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 
 type Props = {
@@ -30,6 +31,9 @@ async function getAnnouncement(id: string): Promise<Announcement | null> {
 }
 
 export default async function EditAnnouncementPage({ params }: Props) {
+    const admin = await requireAdmin();
+    if (!admin) return null;
+
     const { id } = await params;
     const announcement = await getAnnouncement(id);
     if (!announcement) {

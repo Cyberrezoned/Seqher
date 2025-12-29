@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { validateEmail } from '@/ai/flows/validate-email-with-llm';
+import { validateEmailWithFallback } from '@/ai/validate-email';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
 const appointmentSchema = z.object({
@@ -32,7 +32,7 @@ export async function bookAppointment(
 
   try {
     // Use GenAI to validate email
-    const emailValidation = await validateEmail({ email });
+    const emailValidation = await validateEmailWithFallback(email);
 
     if (!emailValidation.isValid) {
       return {

@@ -1,6 +1,10 @@
 import ProgramForm from "../ProgramForm";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
-export default function NewProgramPage() {
+export default async function NewProgramPage() {
+    const admin = await requireAdmin();
+    if (!admin) return null;
+
     return (
         <div className="space-y-8">
             <div>

@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { AppointmentRequest } from "@/lib/types";
 import AppointmentDetails from "./AppointmentDetails";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +48,9 @@ async function getAppointments(): Promise<AppointmentRequest[]> {
 }
 
 export default async function AdminAppointmentsPage() {
+  const admin = await requireAdmin();
+  if (!admin) return null;
+
   const appointments = await getAppointments();
 
   return (
@@ -74,6 +78,7 @@ export default async function AdminAppointmentsPage() {
                 <TableHead className="hidden lg:table-cell">Location</TableHead>
                 <TableHead className="hidden lg:table-cell">Preferred Date</TableHead>
                 <TableHead className="hidden lg:table-cell">Type</TableHead>
+                <TableHead className="hidden md:table-cell">Status</TableHead>
                 <TableHead className="hidden md:table-cell">Submitted At</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -98,6 +103,9 @@ export default async function AdminAppointmentsPage() {
                   <TableCell className="hidden lg:table-cell capitalize">
                     {item.appointmentType}
                   </TableCell>
+                  <TableCell className="hidden md:table-cell capitalize">
+                    {item.status}
+                  </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {format(new Date(item.createdAt), 'PPpp')}
                   </TableCell>
@@ -108,7 +116,7 @@ export default async function AdminAppointmentsPage() {
               ))}
               {appointments.length === 0 && (
                 <TableRow>
-                    <TableCell colSpan={7} className="text-center p-8 text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center p-8 text-muted-foreground">
                         No appointment requests yet.
                     </TableCell>
                 </TableRow>

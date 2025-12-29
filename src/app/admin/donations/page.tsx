@@ -1,7 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign } from "lucide-react";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
-export default function AdminDonationsPage() {
+export default async function AdminDonationsPage() {
+    const admin = await requireAdmin();
+    if (!admin) return null;
 
     return (
         <div className="space-y-8">

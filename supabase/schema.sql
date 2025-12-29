@@ -178,6 +178,12 @@ create table if not exists public.volunteer_applications (
 
 create index if not exists volunteer_applications_locale_created_at_idx on public.volunteer_applications(locale, created_at desc);
 
+-- Optional management fields for admin review
+alter table public.volunteer_applications add column if not exists status text not null default 'new'
+  check (status in ('new','contacted','accepted','rejected'));
+alter table public.volunteer_applications add column if not exists admin_notes text;
+create index if not exists volunteer_applications_status_created_at_idx on public.volunteer_applications(status, created_at desc);
+
 -- Optional: enable RLS + allow public reads for content.
 -- Uncomment if you want anon users to read content with RLS on.
 -- alter table public.images enable row level security;

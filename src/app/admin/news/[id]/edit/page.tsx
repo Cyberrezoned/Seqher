@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import NewsForm from "../../NewsForm";
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { AdminNewsPost } from '../../types';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 
 type Props = {
@@ -48,6 +49,9 @@ async function getNewsPost(id: string): Promise<AdminNewsPost | null> {
 }
 
 export default async function EditNewsArticlePage({ params }: Props) {
+    const admin = await requireAdmin();
+    if (!admin) return null;
+
     const { id } = await params;
     const post = await getNewsPost(id);
     if (!post) {

@@ -3,18 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase-admin';
-
-// We need a way to get the admin user's UID on the server.
-// The most reliable way is to use a library that manages server-side sessions.
-// For now, we will assume we get it from a session, but this part is not fully implemented.
-// This placeholder function needs to be replaced with a real auth check.
-async function getAdminUid(): Promise<string | null> {
-    // In a real app, you'd get this from the session.
-    // For now, we can't securely verify the user, so we'll have to allow it
-    // for the sake of functionality, but this is NOT secure.
-    return 'admin-placeholder-uid'; 
-}
-
+import { assertAdmin } from '@/lib/auth/require-admin';
 
 const announcementSchema = z.object({
   id: z.string().optional(),
@@ -27,10 +16,7 @@ const announcementSchema = z.object({
 export async function createOrUpdateAnnouncement(
   data: z.infer<typeof announcementSchema>
 ) {
-    const adminUid = await getAdminUid();
-    if (!adminUid) { 
-        return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' }; 
-    }
+    await assertAdmin();
 
     const validation = announcementSchema.safeParse(data);
     if (!validation.success) {
@@ -79,10 +65,7 @@ export async function createOrUpdateAnnouncement(
 
 
 export async function deleteAnnouncement(id: string) {
-    const adminUid = await getAdminUid();
-    if (!adminUid) {
-        return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' };
-    }
+    await assertAdmin();
 
     if (!id) {
         return { success: false, message: 'Invalid ID.' };

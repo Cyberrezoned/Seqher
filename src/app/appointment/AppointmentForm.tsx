@@ -82,7 +82,7 @@ export default function AppointmentForm({ defaultLocation }: Props) {
       const result = await bookAppointment(values);
       if (result.success) {
         toast({
-          title: 'Appointment Requested',
+          title: 'Request Successful',
           description: 'Thank you! We will be in touch shortly to confirm your appointment.',
         });
         form.reset();

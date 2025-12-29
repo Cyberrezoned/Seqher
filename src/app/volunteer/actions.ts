@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 
-import { validateEmail } from '@/ai/flows/validate-email-with-llm';
+import { validateEmailWithFallback } from '@/ai/validate-email';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
 const volunteerSchema = z.object({
@@ -28,7 +28,7 @@ export async function submitVolunteerForm(values: z.infer<typeof volunteerSchema
   const { name, email, phone, preferredLocation, interests, message, locale } = parsed.data;
 
   try {
-    const emailValidation = await validateEmail({ email });
+    const emailValidation = await validateEmailWithFallback(email);
 
     if (!emailValidation.isValid) {
       return {
@@ -59,4 +59,3 @@ export async function submitVolunteerForm(values: z.infer<typeof volunteerSchema
     return { success: false, message: 'An unexpected server error occurred. Please try again later.' };
   }
 }
-

@@ -28,6 +28,7 @@ import { format } from "date-fns";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { AdminNewsPost } from "./types";
 import DeleteNewsButton from "./DeleteNewsButton";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export const dynamic = 'force-dynamic';
 
@@ -74,6 +75,9 @@ async function getNewsPosts(): Promise<AdminNewsPost[]> {
 }
 
 export default async function AdminNewsPage() {
+  const admin = await requireAdmin();
+  if (!admin) return null;
+
   const posts = await getNewsPosts();
   return (
     <div className="space-y-8">

@@ -27,6 +27,7 @@ import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Program } from "@/lib/types";
 import DeleteProgramButton from "./DeleteProgramButton";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export const dynamic = 'force-dynamic';
 
@@ -65,6 +66,9 @@ async function getPrograms(): Promise<Program[]> {
 }
 
 export default async function AdminProgramsPage() {
+  const admin = await requireAdmin();
+  if (!admin) return null;
+
   const programs = await getPrograms();
   return (
     <div className="space-y-8">

@@ -28,6 +28,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Announcement } from "@/lib/types";
 import DeleteAnnouncementButton from "./DeleteAnnouncementButton";
 import { Badge } from "@/components/ui/badge";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export const dynamic = 'force-dynamic';
 
@@ -53,6 +54,9 @@ async function getAnnouncements(): Promise<Announcement[]> {
 }
 
 export default async function AdminAnnouncementsPage() {
+  const admin = await requireAdmin();
+  if (!admin) return null;
+
   const announcements = await getAnnouncements();
   return (
     <div className="space-y-8">

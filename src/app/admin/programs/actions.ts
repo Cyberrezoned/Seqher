@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { assertAdmin } from '@/lib/auth/require-admin';
 
 const programSchema = z.object({
   id: z.string().optional(),
@@ -14,20 +15,10 @@ const programSchema = z.object({
   locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
-async function getAdminUid(): Promise<string | null> {
-    // In a real app, you'd get this from the session.
-    // For now, we can't securely verify the user, so we'll have to allow it
-    // for the sake of functionality, but this is NOT secure.
-    return 'admin-placeholder-uid';
-}
-
 export async function createOrUpdateProgram(
   data: z.infer<typeof programSchema>
 ) {
-    const adminUid = await getAdminUid();
-    if (!adminUid) { 
-        return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' }; 
-    }
+    await assertAdmin();
 
     const validation = programSchema.safeParse(data);
     if (!validation.success) {
@@ -106,10 +97,7 @@ export async function createOrUpdateProgram(
 
 
 export async function deleteProgram(id: string) {
-    const adminUid = await getAdminUid();
-    if (!adminUid) {
-        return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' };
-    }
+    await assertAdmin();
 
     if (!id) {
         return { success: false, message: 'Invalid ID.' };

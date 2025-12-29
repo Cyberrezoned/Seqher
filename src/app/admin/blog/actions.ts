@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase-admin';
-import type { AppUser } from '@/lib/types';
+import { assertAdmin } from '@/lib/auth/require-admin';
 
 
 const blogPostSchema = z.object({
@@ -15,29 +15,10 @@ const blogPostSchema = z.object({
   locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
-// This placeholder function needs to be replaced with a real auth check.
-async function getAdminUser(): Promise<AppUser | null> {
-    // In a real app, you'd verify a session token and get user data.
-    // For now, we'll return a placeholder user. This is NOT secure.
-    return { 
-        id: 'admin-placeholder-uid',
-        email: null,
-        displayName: 'Admin User',
-        role: 'admin',
-        locale: 'ng',
-        metadata: {},
-    };
-}
-
-
 export async function createOrUpdatePost(
   data: z.infer<typeof blogPostSchema>
 ) {
-    const user = await getAdminUser();
-
-    if (!user || user.role !== 'admin') { 
-        return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' }; 
-    }
+    const user = await assertAdmin();
 
     const validation = blogPostSchema.safeParse(data);
     if (!validation.success) {
@@ -98,10 +79,7 @@ export async function createOrUpdatePost(
 
 
 export async function deletePost(postId: string) {
-    const user = await getAdminUser();
-    if (!user || user.role !== 'admin') {
-        return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' };
-    }
+    await assertAdmin();
 
     if (!postId) {
         return { success: false, message: 'Invalid post ID.' };

@@ -53,7 +53,7 @@ export default function GrantsSubscribeForm({ onSubscribed }: Props) {
       if (result.success) {
         window.localStorage.setItem(STORAGE_KEY, 'true');
         setHasAccess(true);
-        toast({ title: 'Subscribed', description: result.message });
+        toast({ title: 'Request Successful', description: result.message });
         onSubscribed?.();
       } else {
         toast({ title: 'Subscription failed', description: result.message, variant: 'destructive' });
@@ -144,4 +144,3 @@ export default function GrantsSubscribeForm({ onSubscribed }: Props) {
     </Card>
   );
 }
-

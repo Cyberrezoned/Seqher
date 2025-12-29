@@ -42,6 +42,20 @@ export type AppointmentRequest = {
     status: 'pending' | 'confirmed' | 'cancelled';
 }
 
+export type VolunteerApplication = {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  preferredLocation: string;
+  interests: string[];
+  message?: string | null;
+  locale: 'ng' | 'ca' | 'global';
+  createdAt: string; // ISO string
+  status?: 'new' | 'contacted' | 'accepted' | 'rejected' | null;
+  adminNotes?: string | null;
+};
+
 export type NewsArticle = {
   id: string;
   title: string;

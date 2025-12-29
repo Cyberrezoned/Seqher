@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import ProgramForm from "../../ProgramForm";
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { Program } from '@/lib/types';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 
 type Props = {
@@ -43,6 +44,9 @@ async function getProgram(id: string): Promise<Program | null> {
 }
 
 export default async function EditProgramPage({ params }: Props) {
+    const admin = await requireAdmin();
+    if (!admin) return null;
+
     const { id } = await params;
     const program = await getProgram(id);
     if (!program) {

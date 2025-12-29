@@ -1,6 +1,10 @@
 import BlogForm from "../BlogForm";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
-export default function NewBlogPostPage() {
+export default async function NewBlogPostPage() {
+    const admin = await requireAdmin();
+    if (!admin) return null;
+
     return (
         <div className="space-y-8">
             <div>

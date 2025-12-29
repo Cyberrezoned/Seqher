@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import BlogForm from "../../BlogForm";
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import type { BlogPost } from '@/lib/types';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 
 type Props = {
@@ -43,6 +44,9 @@ async function getPost(id: string): Promise<BlogPost | null> {
 }
 
 export default async function EditBlogPostPage({ params }: Props) {
+    const admin = await requireAdmin();
+    if (!admin) return null;
+
     const { id } = await params;
     const post = await getPost(id);
     if (!post) {

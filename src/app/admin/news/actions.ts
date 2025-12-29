@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { assertAdmin } from '@/lib/auth/require-admin';
 
 const newsPostSchema = z.object({
   id: z.string().optional(),
@@ -14,16 +15,8 @@ const newsPostSchema = z.object({
   locale: z.enum(['ng', 'ca', 'global']).default('ng'),
 });
 
-async function getAdminUid(): Promise<string | null> {
-  // In a real app, you'd get this from the session.
-  return 'admin-placeholder-uid';
-}
-
 export async function createOrUpdateNewsArticle(data: z.infer<typeof newsPostSchema>) {
-  const adminUid = await getAdminUid();
-  if (!adminUid) {
-    return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' };
-  }
+  await assertAdmin();
 
   const validation = newsPostSchema.safeParse(data);
   if (!validation.success) {
@@ -105,10 +98,7 @@ export async function createOrUpdateNewsArticle(data: z.infer<typeof newsPostSch
 }
 
 export async function deleteNewsArticle(id: string) {
-  const adminUid = await getAdminUid();
-  if (!adminUid) {
-    return { success: false, message: 'Unauthorized: You must be an admin to perform this action.' };
-  }
+  await assertAdmin();
 
   if (!id) {
     return { success: false, message: 'Invalid ID.' };
@@ -126,4 +116,3 @@ export async function deleteNewsArticle(id: string) {
     return { success: false, message: error.message || 'Failed to delete news post.' };
   }
 }
-
