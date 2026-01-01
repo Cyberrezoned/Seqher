@@ -1,5 +1,4 @@
 'use client';
-import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { AuthProvider } from '@/context/AuthContext';
@@ -22,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const isLanding = pathname === '/';
+  const isAdminRoute = pathname.startsWith('/admin');
   return (
     <html lang="en" className="h-full">
       <head>
@@ -36,11 +35,11 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col bg-background')}>
         <AuthProvider>
-            {!isLanding && <Header />}
+            {!isAdminRoute && <Header />}
             <MotionProvider key={pathname}>
               <main className="flex-grow">{children}</main>
             </MotionProvider>
-            {!isLanding && <Footer />}
+            {!isAdminRoute && <Footer />}
             <Toaster />
         </AuthProvider>
       </body>
