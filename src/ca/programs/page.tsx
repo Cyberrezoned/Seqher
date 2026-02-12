@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {

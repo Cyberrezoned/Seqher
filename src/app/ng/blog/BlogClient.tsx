@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { formatLongDate } from '@/lib/i18n/format';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import SafeImage from '@/components/ui/safe-image';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export type BlogListItem = {
   id: string;
@@ -43,6 +44,7 @@ const itemVariants = {
 };
 
 export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
+  const { language } = useLanguage();
   const authorAvatar = PlaceHolderImages.find((p) => p.id.startsWith('avatar-'));
 
   return (
@@ -127,7 +129,7 @@ export default function BlogClient({ posts }: { posts: BlogListItem[] }) {
                             <div>
                               <p className="text-sm font-medium">{post.author}</p>
                               <p className="text-xs text-muted-foreground">
-                                {format(new Date(post.createdAt), 'MMMM d, yyyy')}
+                                {formatLongDate(post.createdAt, language, 'ng')}
                               </p>
                             </div>
                           </div>

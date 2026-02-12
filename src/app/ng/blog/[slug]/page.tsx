@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { notFound } from 'next/navigation';
-import { format } from 'date-fns';
+import { formatLongDate, formatShortDate } from '@/lib/i18n/format';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import type { BlogPost } from '@/lib/types';
@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params }: Props) {
                         <span className="font-medium">{post.author}</span>
                     </div>
                     <span>&middot;</span>
-                    <time dateTime={post.createdAt}>{format(new Date(post.createdAt), 'MMMM d, yyyy')}</time>
+                    <time dateTime={post.createdAt}>{formatLongDate(post.createdAt, 'en', 'ng')}</time>
                     <span>&middot;</span>
                     <span>{readingMinutes} min read</span>
                 </div>
@@ -141,7 +141,7 @@ export default async function BlogPostPage({ params }: Props) {
                               {p.title}
                             </p>
                             <p className="mt-1 text-xs text-muted-foreground">
-                              {format(new Date(p.createdAt), 'MMM d, yyyy')}
+                              {formatShortDate(p.createdAt, 'en', 'ng')}
                             </p>
                           </CardContent>
                         </Card>

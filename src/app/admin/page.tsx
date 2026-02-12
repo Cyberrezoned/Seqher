@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Newspaper, DollarSign, CalendarCheck, HeartHandshake, CreditCard } from "lucide-react";
+import { DollarSign, CalendarCheck, HeartHandshake, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { supabaseAdmin } from "@/lib/supabase-admin";

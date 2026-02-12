@@ -1,6 +1,5 @@
 'use client';
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { LayoutDashboard, Newspaper, Settings, LogOut, Megaphone, CalendarCheck, ClipboardList, DollarSign, Globe, HeartHandshake, CreditCard } from 'lucide-react';
@@ -22,7 +21,6 @@ import { Badge } from '@/components/ui/badge';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { user, isAdmin, loading, signOut } = useAuth();
-  const router = useRouter();
   const pathname = usePathname();
   const [notifications, setNotifications] = useState<null | {
     appointments: { pending: number; recent: number };
@@ -32,10 +30,39 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const [notifError, setNotifError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) {
-      // Don't redirect, show login form
-    }
-  }, [user, loading, router]);
+    if (!user || !isAdmin) return;
+    let cancelled = false;
+
+    const fetchNotifications = async () => {
+      try {
+        const res = await fetch('/api/admin/notifications', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`Failed to fetch notifications (${res.status})`);
+        const data = await res.json();
+        if (cancelled) return;
+        setNotifications(data);
+        setNotifError(null);
+      } catch {
+        if (cancelled) return;
+        setNotifError('Failed to fetch notifications');
+      }
+    };
+
+    fetchNotifications();
+    const interval = window.setInterval(fetchNotifications, 60_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, [user, isAdmin]);
+
+  const badgesByHref = useMemo(() => {
+    if (!notifications) return {};
+    return {
+      '/admin/appointments': notifications.appointments.recent,
+      '/admin/grants': notifications.grants.recent,
+      '/admin/volunteers': notifications.volunteers.recent,
+    } as Record<string, number>;
+  }, [notifications]);
 
   if (loading) {
     return (
@@ -66,41 +93,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
     )
   }
-
-  useEffect(() => {
-    if (!user || !isAdmin) return;
-    let cancelled = false;
-
-    const fetchNotifications = async () => {
-      try {
-        const res = await fetch('/api/admin/notifications', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`Failed to fetch notifications (${res.status})`);
-        const data = await res.json();
-        if (cancelled) return;
-        setNotifications(data);
-        setNotifError(null);
-      } catch (e: any) {
-        if (cancelled) return;
-        setNotifError(e?.message || 'Failed to fetch notifications');
-      }
-    };
-
-    fetchNotifications();
-    const interval = window.setInterval(fetchNotifications, 60_000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(interval);
-    };
-  }, [user, isAdmin]);
-
-  const badgesByHref = useMemo(() => {
-    if (!notifications) return {};
-    return {
-      '/admin/appointments': notifications.appointments.recent,
-      '/admin/grants': notifications.grants.recent,
-      '/admin/volunteers': notifications.volunteers.recent,
-    } as Record<string, number>;
-  }, [notifications]);
 
 
   const adminNavItems = [

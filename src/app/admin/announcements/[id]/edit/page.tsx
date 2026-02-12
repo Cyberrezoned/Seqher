@@ -10,11 +10,21 @@ type Props = {
 }
 
 async function getAnnouncement(id: string): Promise<Announcement | null> {
-    const { data, error } = await supabaseAdmin
+    let { data, error } = await supabaseAdmin
         .from('announcements')
         .select('id,title,content,locale,created_at')
         .eq('id', id)
         .single();
+
+    if (error) {
+        const fallback = await supabaseAdmin
+            .from('announcements')
+            .select('id,title,content,created_at')
+            .eq('id', id)
+            .single();
+        data = fallback.data as typeof data;
+        error = fallback.error;
+    }
 
     if (error || !data) {
         console.error('Failed to load announcement from Supabase:', error);

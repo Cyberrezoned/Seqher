@@ -26,25 +26,32 @@ async function getVolunteerApplications(): Promise<VolunteerApplication[]> {
   const base = "id,name,email,phone,preferred_location,interests,message,locale,created_at";
   const withMgmt = `${base},status,admin_notes`;
 
-  let { data, error } = await supabaseAdmin
+  let rows: any[] | null = null;
+
+  const primary = await supabaseAdmin
     .from("volunteer_applications")
     .select(withMgmt)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    ({ data, error } = await supabaseAdmin
+  let error = primary.error;
+  if (!primary.error) {
+    rows = (primary.data as any[] | null) ?? [];
+  } else {
+    const fallback = await supabaseAdmin
       .from("volunteer_applications")
       .select(base)
-      .order("created_at", { ascending: false }));
+      .order("created_at", { ascending: false });
+    rows = (fallback.data as any[] | null) ?? [];
+    error = fallback.error;
   }
 
   if (error) {
     console.error("Failed to load volunteer applications from Supabase:", error);
     return [];
   }
-  if (!data) return [];
+  if (!rows) return [];
 
-  return data.map((row: any) => ({
+  return rows.map((row) => ({
     id: row.id,
     name: row.name,
     email: row.email,
@@ -131,4 +138,3 @@ export default async function AdminVolunteersPage() {
     </div>
   );
 }
-

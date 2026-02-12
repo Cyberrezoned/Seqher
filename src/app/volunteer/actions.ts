@@ -21,6 +21,14 @@ type FormState = {
   field?: string;
 };
 
+function isMissingTableError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const record = error as Record<string, unknown>;
+  const code = record.code;
+  const message = String(record.message || '');
+  return code === 'PGRST205' || message.includes('Could not find the table');
+}
+
 export async function submitVolunteerForm(values: z.infer<typeof volunteerSchema>): Promise<FormState> {
   const parsed = volunteerSchema.safeParse(values);
   if (!parsed.success) return { success: false, message: 'Invalid form data.' };
@@ -51,7 +59,16 @@ export async function submitVolunteerForm(values: z.infer<typeof volunteerSchema
       created_at: new Date().toISOString(),
     });
 
-    if (error) throw error;
+    if (error) {
+      if (isMissingTableError(error)) {
+        return {
+          success: false,
+          message:
+            'Volunteer submission is not configured in Supabase yet. Ask the admin to run the latest Supabase schema migration and try again.',
+        };
+      }
+      throw error;
+    }
 
     return { success: true, message: 'Thanks! Your volunteer information has been received.' };
   } catch (error) {

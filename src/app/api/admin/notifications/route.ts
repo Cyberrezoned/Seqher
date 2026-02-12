@@ -36,8 +36,7 @@ export async function GET() {
         recent: recentVolunteerApplications.count ?? 0,
       },
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Unauthorized' }, { status: 401 });
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 }
-

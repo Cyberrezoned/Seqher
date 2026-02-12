@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser';
 import type { AppUser } from '@/lib/types';
@@ -45,10 +45,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const supabase = getSupabaseBrowserClient();
 
     const hydrateFromSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!mounted) return;
-      setUser(mapSupabaseUser(data.session?.user ?? null));
-      setLoading(false);
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!mounted) return;
+        setUser(mapSupabaseUser(data.session?.user ?? null));
+      } catch (error) {
+        console.error('Supabase session bootstrap failed. Continuing as signed-out user.', error);
+        try {
+          await supabase.auth.signOut({ scope: 'local' });
+        } catch (signOutError) {
+          console.warn('Supabase local sign-out after bootstrap failure also failed.', signOutError);
+        }
+        if (!mounted) return;
+        setUser(null);
+      } finally {
+        if (mounted) setLoading(false);
+      }
     };
 
     hydrateFromSession();
@@ -67,7 +80,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     const supabase = getSupabaseBrowserClient();
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Supabase sign-out failed.', error);
+      await supabase.auth.signOut({ scope: 'local' });
+    }
   };
 
   const isAdmin = user?.role === 'admin';

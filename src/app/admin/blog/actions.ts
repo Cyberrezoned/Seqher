@@ -73,7 +73,8 @@ export async function createOrUpdatePost(
         return { success: true, message: 'Post saved successfully' };
 
     } catch (error: any) {
-        return { success: false, message: error.message || 'Failed to save post.' };
+        console.error('Failed to save blog post:', error);
+        return { success: false, message: 'Failed to save post.' };
     }
 }
 
@@ -111,6 +112,7 @@ export async function deletePost(postId: string) {
         
         return { success: true, message: 'Post deleted successfully.' };
     } catch (error: any) {
+        console.error('Failed to delete blog post:', error);
         return { success: false, message: 'Failed to delete post.' };
     }
 }

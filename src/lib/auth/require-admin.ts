@@ -18,7 +18,7 @@ function mapSupabaseUserToAppUser(supaUser: any): AppUser {
 }
 
 export async function getServerUser(): Promise<AppUser | null> {
-  const supabase = getSupabaseServerClient();
+  const supabase = await getSupabaseServerClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) return null;
   return mapSupabaseUserToAppUser(data.user);
@@ -35,4 +35,3 @@ export async function assertAdmin(): Promise<AppUser> {
   if (!user) throw new Error('Unauthorized: admin access required.');
   return user;
 }
-

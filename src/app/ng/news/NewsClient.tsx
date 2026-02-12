@@ -1,17 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { format } from 'date-fns';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { formatShortDate } from '@/lib/i18n/format';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import SafeImage from '@/components/ui/safe-image';
 import NewsSubscribeForm from '@/app/ng/news/NewsSubscribeForm';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -43,8 +44,10 @@ export type UpdateItem = {
 type Filter = 'all' | 'news' | 'story';
 
 export default function NewsClient({ items, locale = 'ng' }: { items: UpdateItem[]; locale?: 'ng' | 'ca' | 'global' }) {
+  const { language } = useLanguage();
   const hasStories = useMemo(() => items.some((item) => item.type === 'story'), [items]);
   const [filter, setFilter] = useState<Filter>(hasStories ? 'all' : 'news');
+  const region = locale === 'ca' ? 'ca' : 'ng';
 
   const visibleItems = useMemo(() => {
     if (filter === 'all') return items;
@@ -126,7 +129,7 @@ export default function NewsClient({ items, locale = 'ng' }: { items: UpdateItem
                   </CardHeader>
                   <CardContent className="p-6 flex flex-col flex-grow">
                     <p className="text-sm text-muted-foreground mb-2 font-medium">
-                      {item.sourceLabel} &middot; {format(new Date(item.date), 'MMM d, yyyy')}
+                      {item.sourceLabel} &middot; {formatShortDate(item.date, language, region)}
                       {item.type === 'story' && item.readingMinutes ? ` \u00b7 ${item.readingMinutes} min read` : ''}
                     </p>
                     <h2 className="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">
@@ -161,7 +164,23 @@ export default function NewsClient({ items, locale = 'ng' }: { items: UpdateItem
         )}
 
         <div className="mt-12 max-w-3xl mx-auto">
-          <NewsSubscribeForm locale={locale} />
+          {locale === 'ng' ? (
+            <NewsSubscribeForm locale={locale} />
+          ) : (
+            <Card className="border bg-background/70">
+              <CardHeader>
+                <h3 className="font-headline text-xl font-bold">Subscribe</h3>
+                <p className="text-sm text-muted-foreground">
+                  Subscriptions are currently available on the Nigeria side only.
+                </p>
+              </CardHeader>
+              <CardContent>
+                <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Link href="/ng/subscribe">Go to Nigeria Subscribe Page</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </section>

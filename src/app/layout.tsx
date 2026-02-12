@@ -1,47 +1,56 @@
-'use client';
+import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { PT_Sans } from 'next/font/google';
+
 import './globals.css';
 import { cn } from '@/lib/utils';
-import { AuthProvider } from '@/context/AuthContext';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import { Toaster } from "@/components/ui/toaster";
-import { MotionProvider } from '@/context/MotionContext';
-import { usePathname } from 'next/navigation';
+import { Providers } from '@/app/providers';
+import { getHtmlLangFromCookies } from '@/lib/i18n/locale';
+import { getSiteOrigin } from '@/lib/seo/site';
 
+const ptSans = PT_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-body',
+});
 
-// This cannot be a client component
-// export const metadata: Metadata = {
-//   title: 'Society for Equal Health and Rights',
-//   description: 'An NGO in alignment with SDG GOALS',
-// };
+export const metadata: Metadata = {
+  metadataBase: getSiteOrigin(),
+  title: {
+    default: 'SEQHER',
+    template: '%s | SEQHER',
+  },
+  description: 'Society for Equal Health and Rights (SEQHER) — an NGO advancing equal health and rights.',
+  applicationName: 'SEQHER',
+  icons: {
+    icon: '/favicon.svg',
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'SEQHER',
+    title: 'SEQHER',
+    description: 'Society for Equal Health and Rights (SEQHER) — an NGO advancing equal health and rights.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SEQHER',
+    description: 'Society for Equal Health and Rights (SEQHER) — an NGO advancing equal health and rights.',
+  },
+};
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isAdminRoute = pathname.startsWith('/admin');
+  const cookieStore = await cookies();
+  const htmlLang = getHtmlLangFromCookies(cookieStore);
+
   return (
-    <html lang="en" className="h-full">
-      <head>
-        <title>Society for Equal Health and Rights</title>
-        <meta name="description" content="An NGO in alignment with SDG GOALS" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
-      </head>
+    <html lang={htmlLang} className={cn('h-full', ptSans.variable)}>
       <body className={cn('font-body antialiased min-h-screen flex flex-col bg-background')}>
-        <AuthProvider>
-            {!isAdminRoute && <Header />}
-            <MotionProvider key={pathname}>
-              <main className="flex-grow">{children}</main>
-            </MotionProvider>
-            {!isAdminRoute && <Footer />}
-            <Toaster />
-        </AuthProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -5,11 +5,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { CalendarIcon, Loader2 } from 'lucide-react';
-import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { bookAppointment } from './actions';
 import { useSearchParams } from 'next/navigation';
+import { useLanguage } from '@/hooks/useLanguage';
+import { formatLongDate } from '@/lib/i18n/format';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -57,6 +58,7 @@ export default function AppointmentForm({ defaultLocation }: Props) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const searchParams = useSearchParams();
+  const { language } = useLanguage();
   const locationFromQuery = searchParams.get('location');
 
   const normalizedQueryLocation = locationFromQuery?.trim();
@@ -64,6 +66,7 @@ export default function AppointmentForm({ defaultLocation }: Props) {
     normalizedQueryLocation === 'Canada' || normalizedQueryLocation === 'Nigeria'
       ? normalizedQueryLocation
       : defaultLocation || 'Nigeria';
+  const region = resolvedDefaultLocation === 'Canada' ? 'ca' : 'ng';
 
   const form = useForm<z.infer<typeof appointmentSchema>>({
     resolver: zodResolver(appointmentSchema),
@@ -99,7 +102,7 @@ export default function AppointmentForm({ defaultLocation }: Props) {
             });
         }
       }
-    } catch (error) {
+    } catch {
       toast({
         title: 'Server Error',
         description: 'An unexpected error occurred. Please try again later.',
@@ -207,7 +210,7 @@ export default function AppointmentForm({ defaultLocation }: Props) {
                             )}
                             >
                             {field.value ? (
-                                format(field.value, 'PPP')
+                                formatLongDate(field.value, language, region)
                             ) : (
                                 <span>Pick a date</span>
                             )}

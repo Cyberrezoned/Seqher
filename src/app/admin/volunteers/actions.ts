@@ -27,10 +27,10 @@ export async function updateVolunteerApplication(input: z.infer<typeof updateSch
 
   const { error } = await supabaseAdmin.from('volunteer_applications').update(updatePayload).eq('id', id);
   if (error) {
+    console.error('Failed to update volunteer application:', error);
     return {
       success: false,
       message:
-        error.message ||
         'Failed to update volunteer application. If this is a new deployment, ensure `volunteer_applications.status` and `volunteer_applications.admin_notes` exist.',
     };
   }
@@ -44,9 +44,11 @@ export async function deleteVolunteerApplication(id: string) {
   if (!id) return { success: false, message: 'Missing id.' };
 
   const { error } = await supabaseAdmin.from('volunteer_applications').delete().eq('id', id);
-  if (error) return { success: false, message: error.message || 'Failed to delete.' };
+  if (error) {
+    console.error('Failed to delete volunteer application:', error);
+    return { success: false, message: 'Failed to delete volunteer application.' };
+  }
 
   revalidatePath('/admin/volunteers');
   return { success: true, message: 'Volunteer application deleted.' };
 }
-

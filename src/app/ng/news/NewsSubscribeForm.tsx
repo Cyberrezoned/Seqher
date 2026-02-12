@@ -51,7 +51,7 @@ export default function NewsSubscribeForm({ locale = 'ng' }: { locale?: 'ng' | '
           });
         }
       }
-    } catch (error) {
+    } catch {
       toast({
         title: 'Server error',
         description: 'An unexpected error occurred. Please try again later.',

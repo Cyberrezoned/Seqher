@@ -33,10 +33,19 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 export const dynamic = 'force-dynamic';
 
 async function getAnnouncements(): Promise<Announcement[]> {
-  const { data, error } = await supabaseAdmin
+  let { data, error } = await supabaseAdmin
     .from('announcements')
     .select('id,title,content,locale,created_at')
     .order('created_at', { ascending: false });
+
+  if (error) {
+    const fallback = await supabaseAdmin
+      .from('announcements')
+      .select('id,title,content,created_at')
+      .order('created_at', { ascending: false });
+    data = fallback.data as typeof data;
+    error = fallback.error;
+  }
 
   if (error) {
     console.error('Failed to load announcements from Supabase:', error);

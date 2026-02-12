@@ -22,29 +22,77 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 
 export const dynamic = 'force-dynamic';
 
-async function getAppointments(): Promise<AppointmentRequest[]> {
-  const { data, error } = await supabaseAdmin
-    .from('appointments')
-    .select('id,name,email,appointment_location,appointment_date,appointment_type,message,status,created_at')
-    .order('created_at', { ascending: false });
+function isColumnSchemaError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const record = error as Record<string, unknown>;
+  const code = record.code;
+  const message = String(record.message || '');
+  return code === 'PGRST204' || code === '42703' || message.includes('Could not find') || message.includes('column');
+}
 
-  if (error) {
-    console.error('Failed to load appointments from Supabase:', error);
+function getFirstString(row: Record<string, unknown>, keys: string[], fallback = ''): string {
+  for (const key of keys) {
+    const value = row[key];
+    if (typeof value === 'string' && value.length > 0) return value;
+  }
+  return fallback;
+}
+
+async function getAppointments(): Promise<AppointmentRequest[]> {
+  const selectVariants: string[] = [
+    'id,name,email,appointment_location,appointment_date,appointment_type,appointmentdate,appointmenttype,message,status,created_at',
+    'id,name,email,appointment_location,appointment_date,appointment_type,message,status,created_at',
+    'id,name,email,appointment_location,appointmentdate,appointmenttype,message,status,created_at',
+    'id,name,email,appointmentLocation,appointmentDate,appointmentType,message,status,created_at',
+    'id,name,email,location,date,type,message,status,created_at',
+    'id,name,email,location,preferred_date,type,message,status,created_at',
+  ];
+
+  let data: Record<string, unknown>[] | null = null;
+  let lastError: unknown = null;
+
+  for (const selectColumns of selectVariants) {
+    const result = await supabaseAdmin.from('appointments').select(selectColumns).order('created_at', { ascending: false });
+    if (!result.error) {
+      data = (result.data as unknown as Record<string, unknown>[] | null) ?? [];
+      lastError = null;
+      break;
+    }
+
+    lastError = result.error;
+    if (!isColumnSchemaError(result.error)) break;
+  }
+
+  if (lastError) {
+    console.error('Failed to load appointments from Supabase:', lastError);
     return [];
   }
   if (!data) return [];
 
-  return data.map((row) => ({
-    id: row.id,
-    name: row.name,
-    email: row.email,
-    appointmentLocation: row.appointment_location || 'Nigeria',
-    appointmentDate: row.appointment_date,
-    appointmentType: row.appointment_type as AppointmentRequest['appointmentType'],
-    message: row.message || '',
-    createdAt: row.created_at || new Date().toISOString(),
-    status: (row.status as AppointmentRequest['status']) || 'pending',
-  }));
+  return data.map((row) => {
+    const createdAt = getFirstString(row, ['created_at'], new Date().toISOString());
+    const appointmentDate = getFirstString(
+      row,
+      ['appointment_date', 'appointmentdate', 'appointmentDate', 'preferred_date', 'date'],
+      createdAt
+    );
+
+    return {
+      id: getFirstString(row, ['id']),
+      name: getFirstString(row, ['name']),
+      email: getFirstString(row, ['email']),
+      appointmentLocation: getFirstString(row, ['appointment_location', 'appointmentLocation', 'location'], 'Nigeria'),
+      appointmentDate,
+      appointmentType: getFirstString(
+        row,
+        ['appointment_type', 'appointmenttype', 'appointmentType', 'type'],
+        'general'
+      ) as AppointmentRequest['appointmentType'],
+      message: getFirstString(row, ['message']),
+      createdAt,
+      status: getFirstString(row, ['status'], 'pending') as AppointmentRequest['status'],
+    };
+  });
 }
 
 export default async function AdminAppointmentsPage() {

@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { format } from 'date-fns';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { formatLongDate } from '@/lib/i18n/format';
 import { getNewsPostImageUrl, getNgNewsPost, NG_NEWS_POSTS } from '@/content/news';
 import RichText from '@/components/content/RichText';
 import { Badge } from '@/components/ui/badge';
@@ -45,7 +45,7 @@ export default async function NewsDetailPage({ params }: Props) {
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="secondary">{post.category}</Badge>
             <span className="text-sm text-muted-foreground">
-              {format(new Date(post.publishedDate), 'MMMM d, yyyy')}
+              {formatLongDate(post.publishedDate, 'en', 'ng')}
             </span>
           </div>
           <h1 className="font-headline text-3xl md:text-5xl font-bold tracking-tight">{post.title}</h1>

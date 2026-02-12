@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { Handshake, Target, Leaf, HeartHandshake, ArrowRight, Shield, Stethoscope, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -33,8 +34,20 @@ const cardVariants = {
   }),
 };
 
+type Activity = {
+  key: string;
+  title: string;
+  bullets: readonly string[];
+  badge?: string;
+};
+
 export default function CanadaHomePage() {
   const canadaOfficeAddress = process.env.NEXT_PUBLIC_CA_OFFICE_ADDRESS || '';
+
+  useEffect(() => {
+    if (window.location.hash) return;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
 
   const impactStats = [
     { id: 1, icon: <Handshake className="h-10 w-10 text-primary" />, value: '1,500+', label: 'People Engaged' },
@@ -47,21 +60,24 @@ export default function CanadaHomePage() {
     {
       title: 'Health Services',
       description: 'Health promotion, wellbeing education, and referral support in Canada.',
+      href: '/ca/health-services',
       icon: <Stethoscope className="h-6 w-6 text-primary" />,
     },
     {
-      title: 'Safe Support',
+      title: 'Safety Support',
       description: 'Confidential support pathways for safety, inclusion, and practical help.',
+      href: '/ca/safety-support',
       icon: <Shield className="h-6 w-6 text-primary" />,
     },
     {
       title: 'Community',
       description: 'Community-led activities, partnerships, and updates.',
+      href: '/ca/community',
       icon: <Users className="h-6 w-6 text-primary" />,
     },
   ];
 
-  const activities = [
+  const activities: readonly Activity[] = [
     {
       key: 'health-access-navigation',
       title: 'Health Access & Navigation',
@@ -170,7 +186,7 @@ export default function CanadaHomePage() {
         'Incorporate community feedback to improve service delivery and accountability.',
       ],
     },
-  ] as const;
+  ];
 
   return (
     <div className="flex flex-col">
@@ -239,18 +255,20 @@ export default function CanadaHomePage() {
         <div className="container mx-auto px-4">
           <div className="grid gap-5 md:grid-cols-3">
             {navigationCards.map((item) => (
-              <div
-                key={item.title}
-                className="h-full rounded-xl border bg-background/70 p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 rounded-lg bg-primary/10 p-2">{item.icon}</div>
-                  <div>
-                    <h3 className="font-headline text-lg font-bold">{item.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
+              <Link key={item.title} href={item.href} className="group block h-full">
+                <div className="h-full rounded-xl border bg-background/70 p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-lg">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 rounded-lg bg-primary/10 p-2">{item.icon}</div>
+                    <div>
+                      <h3 className="font-headline text-lg font-bold group-hover:text-primary transition-colors">{item.title}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
+                      <p className="mt-3 inline-flex items-center text-sm font-semibold text-primary">
+                        Open page <ArrowRight className="ml-1 h-4 w-4" />
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

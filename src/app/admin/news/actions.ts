@@ -93,7 +93,8 @@ export async function createOrUpdateNewsArticle(data: z.infer<typeof newsPostSch
 
     return { success: true, message: 'News post saved successfully' };
   } catch (error: any) {
-    return { success: false, message: error.message || 'Failed to save news post.' };
+    console.error('Failed to save news article:', error);
+    return { success: false, message: 'Failed to save news post.' };
   }
 }
 
@@ -113,6 +114,7 @@ export async function deleteNewsArticle(id: string) {
 
     return { success: true, message: 'News post deleted successfully.' };
   } catch (error: any) {
-    return { success: false, message: error.message || 'Failed to delete news post.' };
+    console.error('Failed to delete news article:', error);
+    return { success: false, message: 'Failed to delete news post.' };
   }
 }

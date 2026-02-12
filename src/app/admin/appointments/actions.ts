@@ -19,7 +19,10 @@ export async function updateAppointmentStatus(input: { id: string; status: z.inf
     .update({ status: parsedStatus.data })
     .eq('id', input.id);
 
-  if (error) return { success: false, message: error.message || 'Failed to update appointment.' };
+  if (error) {
+    console.error('Failed to update appointment status:', error);
+    return { success: false, message: 'Failed to update appointment.' };
+  }
 
   revalidatePath('/admin/appointments');
   return { success: true, message: 'Appointment updated.' };
@@ -30,9 +33,11 @@ export async function deleteAppointment(id: string) {
   if (!id) return { success: false, message: 'Missing id.' };
 
   const { error } = await supabaseAdmin.from('appointments').delete().eq('id', id);
-  if (error) return { success: false, message: error.message || 'Failed to delete appointment.' };
+  if (error) {
+    console.error('Failed to delete appointment:', error);
+    return { success: false, message: 'Failed to delete appointment.' };
+  }
 
   revalidatePath('/admin/appointments');
   return { success: true, message: 'Appointment deleted.' };
 }
-

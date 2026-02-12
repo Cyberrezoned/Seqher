@@ -17,6 +17,14 @@ type FormState = {
   field?: string;
 };
 
+function isMissingTableError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const record = error as Record<string, unknown>;
+  const code = record.code;
+  const message = String(record.message || '');
+  return code === 'PGRST205' || message.includes('Could not find the table');
+}
+
 export async function subscribeForNewsUpdates(values: z.infer<typeof subscribeSchema>): Promise<FormState> {
   const parsed = subscribeSchema.safeParse(values);
   if (!parsed.success) return { success: false, message: 'Invalid form data.' };
@@ -46,6 +54,13 @@ export async function subscribeForNewsUpdates(values: z.infer<typeof subscribeSc
     if (error) {
       if (error.code === '23505') {
         return { success: true, message: 'You are already subscribed for news updates.' };
+      }
+      if (isMissingTableError(error)) {
+        return {
+          success: false,
+          message:
+            'News subscription is not configured in Supabase yet. Ask the admin to run the latest Supabase schema migration and try again.',
+        };
       }
       throw error;
     }

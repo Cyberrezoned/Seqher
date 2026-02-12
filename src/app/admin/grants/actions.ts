@@ -9,9 +9,11 @@ export async function deleteGrantSubscription(id: string) {
   if (!id) return { success: false, message: 'Missing id.' };
 
   const { error } = await supabaseAdmin.from('grant_subscriptions').delete().eq('id', id);
-  if (error) return { success: false, message: error.message || 'Failed to delete.' };
+  if (error) {
+    console.error('Failed to delete grant subscription:', error);
+    return { success: false, message: 'Failed to delete grant request.' };
+  }
 
   revalidatePath('/admin/grants');
   return { success: true, message: 'Grant request deleted.' };
 }
-

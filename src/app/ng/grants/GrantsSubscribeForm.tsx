@@ -64,7 +64,7 @@ export default function GrantsSubscribeForm({ onSubscribed }: Props) {
           });
         }
       }
-    } catch (error) {
+    } catch {
       toast({ title: 'Server error', description: 'An unexpected error occurred. Please try again later.', variant: 'destructive' });
     } finally {
       setLoading(false);

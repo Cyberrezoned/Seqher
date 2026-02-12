@@ -12,6 +12,14 @@ const announcementSchema = z.object({
   locale: z.enum(['ng','ca','global']).default('ng'),
 });
 
+function isColumnSchemaError(error: unknown): boolean {
+    if (!error || typeof error !== 'object') return false;
+    const record = error as Record<string, unknown>;
+    const code = record.code;
+    const message = String(record.message || '');
+    return code === 'PGRST204' || code === '42703' || message.includes('Could not find') || message.includes('column');
+}
+
 
 export async function createOrUpdateAnnouncement(
   data: z.infer<typeof announcementSchema>
@@ -28,7 +36,7 @@ export async function createOrUpdateAnnouncement(
     try {
         if (id) {
             // Update existing announcement
-            const { error } = await supabaseAdmin
+            let { error } = await supabaseAdmin
                 .from('announcements')
                 .update({
                     title,
@@ -38,10 +46,21 @@ export async function createOrUpdateAnnouncement(
                 })
                 .eq('id', id);
 
+            if (error && isColumnSchemaError(error)) {
+                ({ error } = await supabaseAdmin
+                    .from('announcements')
+                    .update({
+                        title,
+                        content,
+                        updated_at: new Date().toISOString(),
+                    })
+                    .eq('id', id));
+            }
+
             if (error) throw error;
         } else {
             // Create new announcement
-            const { error } = await supabaseAdmin
+            let { error } = await supabaseAdmin
                 .from('announcements')
                 .insert({
                     title,
@@ -49,6 +68,16 @@ export async function createOrUpdateAnnouncement(
                     locale,
                     created_at: new Date().toISOString(),
                 });
+
+            if (error && isColumnSchemaError(error)) {
+                ({ error } = await supabaseAdmin
+                    .from('announcements')
+                    .insert({
+                        title,
+                        content,
+                        created_at: new Date().toISOString(),
+                    }));
+            }
 
             if (error) throw error;
         }
@@ -59,7 +88,8 @@ export async function createOrUpdateAnnouncement(
         return { success: true, message: 'Announcement saved successfully' };
 
     } catch (error: any) {
-        return { success: false, message: error.message || 'Failed to save announcement.' };
+        console.error('Failed to save announcement:', error);
+        return { success: false, message: 'Failed to save announcement.' };
     }
 }
 
@@ -84,6 +114,7 @@ export async function deleteAnnouncement(id: string) {
         
         return { success: true, message: 'Announcement deleted successfully.' };
     } catch (error: any) {
+        console.error('Failed to delete announcement:', error);
         return { success: false, message: 'Failed to delete announcement.' };
     }
 }
