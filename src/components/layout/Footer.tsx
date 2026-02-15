@@ -11,7 +11,7 @@ export default function Footer() {
   const pathname = usePathname();
   const isCanada = pathname.startsWith('/ca');
   const { messages } = useLanguage();
-  const canadaOfficeAddress = process.env.NEXT_PUBLIC_CA_OFFICE_ADDRESS || 'Canada office address to be confirmed.';
+  const canadaOfficeAddress = '2121 Weston Rd, Toronto, ON, Canada M4P 0E6';
   const nigeriaOfficeAddress = 'Pompomari Bypass Opp Meltdew Gas Station, Maiduguri, Borno State, Nigeria.';
   const primaryOfficeLabel = isCanada ? 'Canada' : 'Nigeria';
   const primaryOfficeAddress = isCanada ? canadaOfficeAddress : nigeriaOfficeAddress;

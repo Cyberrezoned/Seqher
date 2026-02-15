@@ -40,7 +40,7 @@ type Activity = {
 };
 
 export default function CanadaHomePage() {
-  const canadaOfficeAddress = process.env.NEXT_PUBLIC_CA_OFFICE_ADDRESS || '';
+  const canadaOfficeAddress = '2121 Weston Rd, Toronto, ON, Canada M4P 0E6';
 
   useEffect(() => {
     if (window.location.hash) return;
@@ -405,13 +405,9 @@ export default function CanadaHomePage() {
           <div className="mx-auto max-w-4xl rounded-xl border bg-secondary/30 p-8">
             <h2 className="font-headline text-2xl md:text-3xl font-bold text-primary">Canada contact</h2>
             <p className="mt-2 text-muted-foreground">
-              {canadaOfficeAddress ? (
-                <span>
-                  <span className="font-semibold text-foreground">Address:</span> {canadaOfficeAddress}
-                </span>
-              ) : (
-                'Canada office address will be published soon. In the meantime, reach us using the contacts below.'
-              )}
+              <span>
+                <span className="font-semibold text-foreground">Address:</span> {canadaOfficeAddress}
+              </span>
             </p>
             <div className="mt-4 grid gap-2 text-sm text-muted-foreground">
               <p>

@@ -33,7 +33,7 @@ const cardVariants = {
 };
 
 export default function AboutPage() {
-  const canadaOfficeAddress = process.env.NEXT_PUBLIC_CA_OFFICE_ADDRESS || '';
+  const canadaOfficeAddress = '2121 Weston Rd, Toronto, ON, Canada M4P 0E6';
 
   const offices = [
     {
@@ -50,7 +50,7 @@ export default function AboutPage() {
     },
     {
       name: 'Canada Office',
-      address: canadaOfficeAddress || 'Canada office address to be confirmed.',
+      address: canadaOfficeAddress,
     },
   ];
 
