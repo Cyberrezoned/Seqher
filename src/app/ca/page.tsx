@@ -7,14 +7,12 @@ import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ORG_MISSION, ORG_VISION } from '@/lib/org-profile';
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import SafeImage from '@/components/ui/safe-image';
 
 const heroImage = PlaceHolderImages.find((p) => p.id === 'hero-canada');
-const aboutImage1 = PlaceHolderImages.find(p => p.id === 'about-canada-1');
-const aboutImage2 = PlaceHolderImages.find(p => p.id === 'about-canada-2');
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -363,72 +361,6 @@ export default function CanadaHomePage() {
         </div>
       </motion.section>
 
-      {/* About Us Section */}
-      <motion.section 
-        className="py-16 md:py-24 bg-background overflow-hidden"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={sectionVariants}
-      >
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-4">
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Our Vision for Canada</h2>
-              <p className="text-lg text-muted-foreground">
-                SEQHER’s vision is <span className="font-medium text-foreground">{ORG_VISION}</span> Our mission is{' '}
-                <span className="font-medium text-foreground">{ORG_MISSION}</span>
-              </p>
-              <p className="text-muted-foreground">
-                In Canada, we adapt this work to local communities by focusing on environmental stewardship, social equity, and economic innovation. We are actively developing programs, grants, and volunteer opportunities.
-              </p>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
-                <Button asChild className="mt-4">
-                  <Link href="/ca#purpose">Learn More <ArrowRight className="ml-2" /></Link>
-                </Button>
-              </motion.div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-               <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  viewport={{ once: true }}
-                >
-                {aboutImage1 && (
-                  <SafeImage
-                    src={aboutImage1.imageUrl}
-                    alt={aboutImage1.description}
-                    data-ai-hint={aboutImage1.imageHint}
-                    width={400}
-                    height={500}
-                    className="rounded-lg shadow-lg object-cover aspect-[4/5]"
-                  />
-                )}
-              </motion.div>
-              <motion.div
-                 initial={{ opacity: 0, x: 20 }}
-                 whileInView={{ opacity: 1, x: 0 }}
-                 transition={{ duration: 0.6, delay: 0.4 }}
-                 viewport={{ once: true }}
-                 className="mt-8"
-                >
-                {aboutImage2 && (
-                  <SafeImage
-                    src={aboutImage2.imageUrl}
-                    alt={aboutImage2.description}
-                    data-ai-hint={aboutImage2.imageHint}
-                    width={400}
-                    height={500}
-                    className="rounded-lg shadow-lg object-cover aspect-[4/5]"
-                  />
-                )}
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </motion.section>
-
       {/* Impact Section */}
       <motion.section 
         className="py-16 md:py-24 bg-secondary"
@@ -490,12 +422,8 @@ export default function CanadaHomePage() {
               </p>
               <p>
                 Phone:{' '}
-                <a className="text-primary hover:underline" href="tel:+2348064454657">
-                  +234 806 445 4657
-                </a>{' '}
-                /{' '}
-                <a className="text-primary hover:underline" href="tel:+2349020484873">
-                  +234 902 048 4873
+                <a className="text-primary hover:underline" href="tel:+14377172446">
+                  +1 (437) 717-2446
                 </a>
               </p>
             </div>

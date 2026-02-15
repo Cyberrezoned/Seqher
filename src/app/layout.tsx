@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { PT_Sans } from 'next/font/google';
 
 import './globals.css';
-import { cn } from '@/lib/utils';
+ import { cn } from '@/lib/utils';
 import { Providers } from '@/app/providers';
 import { getHtmlLangFromCookies } from '@/lib/i18n/locale';
 import { getSiteOrigin } from '@/lib/seo/site';
@@ -39,12 +39,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const htmlLang = getHtmlLangFromCookies(cookieStore);
 
   return (
