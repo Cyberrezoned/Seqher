@@ -143,7 +143,7 @@ export default function Header() {
 
   const countryNavItems: NavItem[] = isCanada
     ? [
-        { label: messages.home, href: '/', isActive: pathname === '/ca', icon: Home },
+        { label: messages.home, href: '/', isActive: pathname === '/', icon: Home },
         { label: messages.aboutUs, href: '/ca#purpose', isActive: pathname === '/ca', icon: Info },
         { label: messages.volunteer, href: '/ca/volunteer', isActive: pathname.startsWith('/ca/volunteer'), icon: HeartHandshake },
         {
@@ -157,7 +157,7 @@ export default function Header() {
         { label: messages.donate, href: '/ca/donate', isActive: pathname.startsWith('/ca/donate'), icon: HandCoins },
       ]
     : [
-        { label: messages.home, href: '/ng', isActive: pathname === '/ng', icon: Home },
+        { label: messages.home, href: '/', isActive: pathname === '/', icon: Home },
         { label: messages.aboutUs, href: '/ng/about', isActive: pathname.startsWith('/ng/about'), icon: Info },
         { label: messages.volunteer, href: '/ng/volunteer', isActive: pathname.startsWith('/ng/volunteer'), icon: HeartHandshake },
         {
