@@ -57,7 +57,8 @@ export default function AboutPage() {
   const contact = {
     name: 'Omeiza Segun Samuel',
     role: 'Executive Director',
-    phones: ['+2348064454657', '+2349020484873'],
+    nigeriaPhones: ['+2348064454657', '+2349020484873'],
+    canadaPhone: '+1 (437) 717-2446',
     executiveDirectorEmail: (process.env.NEXT_PUBLIC_EXECUTIVE_DIRECTOR_EMAIL || 'info@seqher.org') as string,
     ceoEmail: (process.env.NEXT_PUBLIC_CEO_EMAIL || '') as string,
     generalEmail: 'info@seqher.org',
@@ -415,14 +416,20 @@ export default function AboutPage() {
                   </p>
                   <div className="mt-4 space-y-2 text-sm">
                     <div>
-                      <span className="text-muted-foreground">Phone:</span>{' '}
+                      <span className="text-muted-foreground">Phone (Nigeria Office):</span>{' '}
                       <div className="mt-1 flex flex-col gap-1">
-                        {contact.phones.map((p) => (
+                        {contact.nigeriaPhones.map((p) => (
                           <a key={p} className="text-primary hover:underline" href={`tel:${p.replace(/\s+/g, '')}`}>
                             {p}
                           </a>
                         ))}
                       </div>
+                    </div>
+                    <div className="pt-2">
+                      <span className="text-muted-foreground">Phone (Canada Office):</span>{' '}
+                      <a className="text-primary hover:underline" href={`tel:${contact.canadaPhone.replace(/\s+/g, '')}`}>
+                        {contact.canadaPhone}
+                      </a>
                     </div>
                     <div className="pt-1">
                       <span className="text-muted-foreground">Executive Director Email:</span>{' '}
